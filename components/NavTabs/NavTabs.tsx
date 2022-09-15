@@ -13,17 +13,17 @@ export function NavTabs() {
 
             <Tabs.Panel value={"first"}>
                 <Grid>
-                    <Grid.Col span={4}>
+                    <Grid.Col lg={4} md={6}>
                         <Container size={400} px="xs">
                             <PostCard {...PostData} />
                         </Container>
                     </Grid.Col>
-                    <Grid.Col span={4}>
+                    <Grid.Col lg={4} md={6}>
                         <Container size={400} px="xs">
                             <PostCard {...PostData} />
                         </Container>
                     </Grid.Col>
-                    <Grid.Col span={4}>
+                    <Grid.Col lg={4} md={6}>
                         <Container size={400} px="xs">
                             <PostCard {...PostData} />
                         </Container>
