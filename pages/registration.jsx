@@ -1,13 +1,17 @@
 import {Registration} from "../components/Registration";
 import {Container, Center} from "@mantine/core";
 
+/*
+* name
+* imageUri
+* description or about yourself
+* */
+
 const UserRegistration = () => {
     return (
-        <Center style={{ width: 1550, height: 700}}>
-            <Container size={"md"} px={"lg"} py={"lg"}>
-                <Registration/>
-            </Container>
-        </Center>
+        <Container size="xs">
+            <Registration/>
+        </Container>
     )
 }
 

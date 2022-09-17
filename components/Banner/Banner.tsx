@@ -1,5 +1,6 @@
-import { createStyles, Card, Avatar, Text, Group, Button, Center } from '@mantine/core';
+import {createStyles, Card, Avatar, Text, Group, Button, Center, Stack} from '@mantine/core';
 import stats from "./stats.json"
+import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -19,8 +20,8 @@ interface UserCardImageProps {
     stats: { label: string; value: string }[];
 }
 
-export function Banner({ image, avatar, name, job, stats }: UserCardImageProps) {
-    const { classes, theme } = useStyles();
+export function Banner({image, avatar, name, job, stats}: UserCardImageProps) {
+    const {classes, theme} = useStyles();
 
     const items = stats.map((stat) => (
         <div key={stat.label}>
@@ -35,8 +36,8 @@ export function Banner({ image, avatar, name, job, stats }: UserCardImageProps) 
 
     return (
         <Card p="xl" className={classes.card}>
-            <Card.Section sx={{ backgroundImage: `url(${image})`, height: 225 }} />
-            <Avatar src={avatar} size={160} radius={80} mx="auto" mt={-30} className={classes.avatar} />
+            <Card.Section sx={{backgroundImage: `url(${image})`, height: 225}}/>
+            <Avatar src={avatar} size={160} radius={80} mx="auto" mt={-30} className={classes.avatar}/>
             <Text align="center" size="lg" weight={500} mt="sm">
                 {name}
             </Text>
@@ -46,17 +47,49 @@ export function Banner({ image, avatar, name, job, stats }: UserCardImageProps) 
             <Group mt="md" position="center" spacing={30}>
                 {items}
             </Group>
-            <Center>
-                <Button
-
-                    radius="md"
-                    mt="xl"
-                    size="md"
-                    color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                >
-                    Follow
-                </Button>
+            <Stack m={"md"}>
+                <Center mb={0}>
+                    <Button
+                        radius="md"
+                        mt="xl"
+                        size="md"
+                        fullWidth={false}
+                        variant="gradient" gradient={{from: 'indigo', to: 'cyan'}}
+                        color={theme.colorScheme === 'dark' ? undefined : 'dark'}
+                    >
+                        Follow
+                    </Button>
+                </Center>
+                <Center mt={0}>
+                    <Link href={"/create-organisation"} passHref>
+                        <Button
+                            component={"a"}
+                            radius="md"
+                            mt="xl"
+                            size="md"
+                            variant={"gradient"}
+                            gradient={{from: 'teal', to: 'blue', deg: 60}}
+                            color={theme.colorScheme === 'dark' ? undefined : 'dark'}
+                        >
+                            Create Organisation
+                        </Button>
+                    </Link>
+                </Center><Center mt={0}>
+                <Link href={"/create-project"} passHref>
+                    <Button
+                        component={"a"}
+                        radius="md"
+                        mt="xl"
+                        size="md"
+                        variant={"gradient"}
+                        gradient={{from: 'indigo', to: 'cyan'}}
+                        color={theme.colorScheme === 'dark' ? undefined : 'dark'}
+                    >
+                        Create Project
+                    </Button>
+                </Link>
             </Center>
+            </Stack>
         </Card>
     );
 }

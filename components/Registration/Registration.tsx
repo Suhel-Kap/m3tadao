@@ -1,7 +1,20 @@
 import {useState} from 'react'
-import {Stepper, Button, Group, TextInput, Code, Title, Center, Checkbox, Container} from '@mantine/core'
+import {
+    Stepper,
+    Button,
+    Group,
+    TextInput,
+    Code,
+    Title,
+    Checkbox,
+    Container,
+    Tooltip,
+    Input,
+    Textarea
+} from '@mantine/core'
 import {useForm} from '@mantine/form'
 import {ImageInput} from "../ImageInput";
+import {IconAlertCircle, IconBrandTwitter, IconBrandGithub, IconWorldWww} from "@tabler/icons";
 
 export function Registration() {
     const [active, setActive] = useState(0)
@@ -13,11 +26,10 @@ export function Registration() {
     const form = useForm({
         initialValues: {
             name: '',
+            description: '',
             website: '',
             github: '',
             twitter: '',
-            skills: [],
-            interests: [],
         },
 
         validate: (values) => {
@@ -55,26 +67,61 @@ export function Registration() {
 
     return (
         <>
-            <Stepper active={active} breakpoint="sm" style={{ marginTop: 75}}>
-                <Stepper.Step label="First step" description="Your name and profile picture">
-                    <Title order={4}>Your Name</Title>
-                    <TextInput placeholder="Your Name" {...form.getInputProps('name')} />
+            <Stepper active={active} breakpoint="sm" style={{marginTop: 75}}>
+                <Stepper.Step label="Basic Info">
                     <Title order={4}>Your Profile Picture</Title>
                     <ImageInput width={600} height={300} onChange={setImage} value={image}/>
+                    <Title order={4}>Your Name <span style={{color: "red"}}>*</span></Title>
+                    <TextInput required placeholder="Your Name" {...form.getInputProps('name')} />
+                    <Title order={4}>Something About Yourself <span style={{color: "red"}}>*</span></Title>
+                    <Textarea required placeholder="I am a web3 enthusiast..." {...form.getInputProps('description')} />
                 </Stepper.Step>
 
-                <Stepper.Step label="Second step" description="Social media">
+                <Stepper.Step label="Social Media">
                     <Title order={4}>Your Banner</Title>
                     <ImageInput width={600} height={300} onChange={setBanner} value={banner}/>
                     <Title order={4}>Your Website</Title>
-                    <TextInput placeholder="Your Website" {...form.getInputProps('website')} />
+                    <Input
+                        icon={<IconWorldWww size={16}/>}
+                        placeholder="Your Website"
+                        {...form.getInputProps('website')}
+                        rightSection={
+                            <Tooltip label="This is public" position="top-end" withArrow>
+                                <div>
+                                    <IconAlertCircle size={18} style={{display: 'block', opacity: 0.5}}/>
+                                </div>
+                            </Tooltip>
+                        }
+                    />
                     <Title order={4}>Your Github</Title>
-                    <TextInput placeholder="Your Github" {...form.getInputProps('github')} />
+                    <Input
+                        icon={<IconBrandGithub size={16}/>}
+                        placeholder="Your GitHub"
+                        {...form.getInputProps('github')}
+                        rightSection={
+                            <Tooltip label="This is public" position="top-end" withArrow>
+                                <div>
+                                    <IconAlertCircle size={18} style={{display: 'block', opacity: 0.5}}/>
+                                </div>
+                            </Tooltip>
+                        }
+                    />
                     <Title order={4}>Your Twitter</Title>
-                    <TextInput placeholder="Your Twitter" {...form.getInputProps('twitter')} />
+                    <Input
+                        icon={<IconBrandTwitter size={16}/>}
+                        placeholder="Your twitter"
+                        {...form.getInputProps('twitter')}
+                        rightSection={
+                            <Tooltip label="This is public" position="top-end" withArrow>
+                                <div>
+                                    <IconAlertCircle size={18} style={{display: 'block', opacity: 0.5}}/>
+                                </div>
+                            </Tooltip>
+                        }
+                    />
                 </Stepper.Step>
 
-                <Stepper.Step label="Final step" description="Your skills and interests">
+                <Stepper.Step label="Your skills and interests">
                     <Container p={"sm"} m={"md"}>
                         <Checkbox.Group
                             value={skills}
@@ -114,6 +161,8 @@ export function Registration() {
                     Completed! Form values:
                     <Code block mt="xl">
                         {JSON.stringify(form.values, null, 2)}
+                        {JSON.stringify(skills, null, 2)}
+                        {JSON.stringify(interests, null, 2)}
                     </Code>
                 </Stepper.Completed>
             </Stepper>
@@ -125,6 +174,7 @@ export function Registration() {
                     </Button>
                 )}
                 {active !== 3 && <Button onClick={nextStep}>Next step</Button>}
+                {active === 3 && <Button onClick={() => console.log("submit todo")}>Confirm</Button>}
             </Group>
         </>
     );
