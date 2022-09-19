@@ -3,11 +3,12 @@ import {Stepper, Button, Group, TextInput, Code, Title, Text, List, Stack, Toolt
 import {useForm, zodResolver} from '@mantine/form'
 import {ImageInput} from "../ImageInput"
 import {schema} from "./schema"
-import {NameInput} from "../NameInput/NameInput"
+import {NameInput} from "../NameInput"
 import {AddressInput} from "../AddressInput";
 import {useListState} from "@mantine/hooks";
 import {MemberList} from "../MemberList";
 import {IconAlertCircle, IconWorldWww} from "@tabler/icons";
+import {graphql} from "@valist/sdk";
 
 export function CreateOrganisation() {
     const [active, setActive] = useState(0)

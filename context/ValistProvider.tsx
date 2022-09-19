@@ -12,7 +12,7 @@ import {
 
 // default to read-only polygon mainnet
 const defaultProvider = new providers.JsonRpcProvider('https://rpc.valist.io');
-const defaultClient = createReadOnly(defaultProvider, {chainId: 137});
+const defaultClient = createReadOnly(defaultProvider, {chainId: 80001});
 
 export const ValistContext = React.createContext<Client>(defaultClient);
 

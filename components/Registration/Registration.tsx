@@ -27,6 +27,7 @@ export function Registration() {
         initialValues: {
             name: '',
             description: '',
+            designation: '',
             website: '',
             github: '',
             twitter: '',
@@ -72,7 +73,10 @@ export function Registration() {
                     <Title order={4}>Your Profile Picture</Title>
                     <ImageInput width={600} height={300} onChange={setImage} value={image}/>
                     <Title order={4}>Your Name <span style={{color: "red"}}>*</span></Title>
-                    <TextInput required placeholder="Your Name" {...form.getInputProps('name')} />
+                    <TextInput required placeholder="Your Name" {...form.getInputProps('name')} /><Title order={4}>Your
+                    Designation <span style={{color: "red"}}>*</span></Title>
+                    <TextInput required
+                               placeholder="Student / web3 developer / full stack engineer" {...form.getInputProps('designation')} />
                     <Title order={4}>Something About Yourself <span style={{color: "red"}}>*</span></Title>
                     <Textarea required placeholder="I am a web3 enthusiast..." {...form.getInputProps('description')} />
                 </Stepper.Step>

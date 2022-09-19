@@ -66,7 +66,11 @@ export function CreateProject() {
     return (
         <>
             <Stepper active={active} breakpoint="sm" style={{marginTop: 75}}>
-                <Stepper.Step label="Basic" description={"This is your public project info."}>
+                <Stepper.Step label="Basic Info">
+                	<Title mt="lg">Basic Info</Title>
+                        <Text color="dimmed">
+                            This is your public project info.
+                        </Text>
                     <Title order={4}>Project Image</Title>
                     <ImageInput width={600} height={300} onChange={setImage} value={image}/>
                     <Title order={4}>Project Name (cannot be changed) <span style={{color: "red"}}>*</span></Title>
@@ -112,7 +116,7 @@ export function CreateProject() {
                     />
                 </Stepper.Step>
 
-                <Stepper.Step label="Description" description={"This is your public project info."}>
+                <Stepper.Step label="Description">
                     <Stack style={{maxWidth: 784}}>
                         <Title mt="lg">Descriptions</Title>
                         <Text color="dimmed">
@@ -142,7 +146,7 @@ export function CreateProject() {
                     </Stack>
                 </Stepper.Step>
 
-                <Stepper.Step label="Members" description="Members of this organisation">
+                <Stepper.Step label="Members">
                     <Stack style={{maxWidth: 784}}>
                         <Title mt="lg">Members</Title>
                         <Text color={"dimmed"}>
@@ -164,7 +168,7 @@ export function CreateProject() {
                     </Stack>
                 </Stepper.Step>
 
-                <Stepper.Step label="Media" description="Media Info">
+                <Stepper.Step label="Media">
                     <Stack style={{maxWidth: 784}}>
                         <Title mt="lg">Media</Title>
                         <Text color="dimmed">

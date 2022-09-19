@@ -1,6 +1,9 @@
-import {useContext, useEffect, useState} from "react";
-import { AsyncInput } from "../AsyncInput";
-import {ValistContext} from "../../context/ValistProvider";
+import {useEffect, useState} from "react"
+import {AsyncInput} from "../AsyncInput"
+import {graphql} from "@valist/sdk"
+import {useRouter} from "next/router";
+import {GraphqlQuery} from "@valist/sdk/dist/graphql";
+import {useAccount} from "wagmi";
 
 export interface NameInputProps {
     parentId: string | number;
@@ -9,15 +12,37 @@ export interface NameInputProps {
     error?: string;
     label?: string;
     placeholder?: string;
+    query: string;
+    variables: object;
     required?: boolean;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 export function NameInput(props: NameInputProps) {
-    const [loading, setLoading] = useState(false);
-    const [exists, setExists] = useState(false);
-    const [error, setError] = useState<string>();
-    const valist = useContext(ValistContext);
+    const [loading, setLoading] = useState(false)
+    const [exists, setExists] = useState(false)
+    const [error, setError] = useState<string>()
+    const [query, setQuery] = useState<GraphqlQuery>()
+    const router = useRouter()
+    useEffect(() => {
+        console.log(props.value)
+        if(router.pathname === "/create-organisation") {
+            setQuery({
+                query: graphql.ACCOUNTS_SEARCH__QUERY,
+                variables: {
+                    search: props.value,
+                }
+            })
+        }
+        if(router.pathname === "/create-project"){
+            setQuery({
+                query: graphql.ACCOUNT_PROJECT_QUERY,
+                variables: {
+                    accountID: "fdsfsf",
+                }
+            })
+        }
+    }, [router])
 
     useEffect(() => {
         setLoading(false);
@@ -27,28 +52,23 @@ export function NameInput(props: NameInputProps) {
         if (!props.value) return;
         setLoading(true);
 
-        const id = valist.generateID(props.parentId, props.value);
-        console.log(id);
-        const value = props.value;
-        console.log("value", value);
-
         const timeout = setTimeout(() => {
             // this uses the same contract method for accounts, projects, and releases
-            valist
-                .accountExists(id)
-                .catch((err: any) => {
-                    setError(err.message);
-                })
-                .then((_exists) => {
-                    if (value === props.value) setExists(!!_exists);
-                })
-                .finally(() => {
-                    if (value === props.value) setLoading(false);
-                });
+            console.log(query)
+            graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
+                console.log(res)
+                if (res.data.accounts.length > 0) {
+                    setError("Name already exists");
+                    setExists(true);
+                } else {
+                    setError(undefined);
+                    setExists(false);
+                }
+            }).finally(() => setLoading(false))
         }, 1000);
 
         return () => clearTimeout(timeout);
-    }, [props.value, props.parentId, valist]);
+    }, [props.value, props.parentId]);
 
     useEffect(() => {
         if (exists) {

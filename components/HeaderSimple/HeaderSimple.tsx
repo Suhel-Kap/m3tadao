@@ -1,21 +1,23 @@
 import {useState} from 'react';
-import {createStyles, Header, Container, Group, Burger, Paper, Transition, Title} from '@mantine/core';
+import {createStyles, Header, Container, Group, Burger, Paper, Transition, Title, Stack} from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
 import {DarkModeToggle} from "../DarkModeToggle";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
+import Link from 'next/link';
+import {useRouter} from "next/router";
 
 const HEADER_HEIGHT = 60;
 const links = [
     {
-        "link": "/about",
+        "link": "/create-organisation",
         "label": "Organisation"
     },
     {
-        "link": "/pricing",
+        "link": "/create-project",
         "label": "Projects"
     },
     {
-        "link": "/learn",
+        "link": "/user-profile",
         "label": "Settings"
     },
 
@@ -48,6 +50,7 @@ const useStyles = createStyles((theme) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: '100%',
+        maxWidth: 1200,
     },
 
     links: {
@@ -92,42 +95,51 @@ const useStyles = createStyles((theme) => ({
 
 
 export function HeaderSimple() {
+    const router = useRouter()
+    const currentPath = router.pathname
     const [opened, {toggle, close}] = useDisclosure(false);
-    const [active, setActive] = useState(links[0].link);
+    const [active, setActive] = useState(currentPath || null);
     const {classes, cx} = useStyles();
 
     const items = links.map((link) => (
-        <a
-            key={link.label}
-            href={link.link}
-            className={cx(classes.link, {[classes.linkActive]: active === link.link})}
-            onClick={(event) => {
-                event.preventDefault();
-                setActive(link.link);
-                close();
-            }}
-        >
-            {link.label}
-        </a>
+        <Link href={link.link} key={link.label}>
+            <a
+                key={link.label}
+                className={cx(classes.link, {[classes.linkActive]: active === link.link})}
+                onClick={(event) => {
+                    event.preventDefault();
+                    setActive(link.link);
+                    router.push(link.link)
+                    close();
+                }}
+            >
+                {link.label}
+            </a>
+        </Link>
     ));
 
     return (
         <Header height={HEADER_HEIGHT} mb={0} className={classes.root}>
             <Container className={classes.header}>
-                <Title order={3}>M3tadao</Title>
+                <Link href={"/"}>
+                        <Title style={{ cursor: "pointer", marginRight: "7.5%"}} order={3}>M3tadao</Title>
+                </Link>
                 <Group spacing={5} className={classes.links}>
                     {items}
                 </Group>
-                <Group position={"right"}>
+                <Group position={"right"} className={classes.links}>
+                    <DarkModeToggle/>
                     <ConnectButton showBalance={false}/>
-                <DarkModeToggle  />
                 </Group>
                 <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm"/>
-
                 <Transition transition="pop-top-right" duration={200} mounted={opened}>
                     {(styles) => (
                         <Paper className={classes.dropdown} withBorder style={styles}>
                             {items}
+                            <Stack pl={"2%"} align={"flex-start"} justify={"flex-start"}>
+                                <DarkModeToggle/>
+                                <ConnectButton showBalance={false}/>
+                            </Stack>
                         </Paper>
                     )}
                 </Transition>

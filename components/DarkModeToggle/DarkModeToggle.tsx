@@ -1,11 +1,21 @@
-import { useMantineColorScheme, ActionIcon, Group } from '@mantine/core';
+import {useMantineColorScheme, ActionIcon, Group, createStyles} from '@mantine/core';
 import { IconSun, IconMoonStars } from '@tabler/icons';
+
+const useStyle = createStyles((theme) => ({
+    responsive: {
+        [theme.fn.smallerThan('md')]: {
+            marginTop: 0,
+            marginBottom: 0,
+        },
+    }
+}))
 
 export function DarkModeToggle() {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const {classes, cx} = useStyle()
 
     return (
-        <Group position="center" my="xl">
+        <Group position="center" my="xl" className={classes.responsive}>
             <ActionIcon
                 onClick={() => toggleColorScheme()}
                 size="lg"
