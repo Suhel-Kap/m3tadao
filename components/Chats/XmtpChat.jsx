@@ -1,10 +1,7 @@
-import { Client } from "@xmtp/xmtp-js"
-import { Wallet } from "ethers"
-import { useEffect, useRef, useState } from "react"
-import { useSigner } from "wagmi"
-import { ContentTypeId } from "@xmtp/xmtp-js"
-import { ContentCodec, EncodedContent } from "@xmtp/xmtp-js"
-import { ScrollArea } from "@mantine/core"
+import {Client, ContentTypeId} from "@xmtp/xmtp-js"
+import {useEffect, useRef, useState} from "react"
+import {useSigner} from "wagmi"
+import {ScrollArea} from "@mantine/core"
 
 export class GroupMessageCodec {
     constructor(authorityId, typeId) {
@@ -31,8 +28,7 @@ export class GroupMessageCodec {
 
     decode(content) {
         const bytes = new TextDecoder().decode(content.content)
-        const json = JSON.parse(bytes)
-        return json
+        return JSON.parse(bytes)
     }
 }
 
@@ -42,7 +38,7 @@ export default function XmtpChat() {
     const [xmtp, setXmtp] = useState()
     const [groupMessageCodec, setGroupMessageCodec] = useState()
     const [isInitialized, setIsInitialized] = useState(false)
-    const groupMembers = [
+    let groupMembers = [
         "0x0de82DCC40B8468639251b089f8b4A4400022e04",
         "0x9e03C44b5A09db89bf152F8C5500dF3360c1C5bF",
         "0x044B595C9b94A17Adc489bD29696af40ccb3E4d2",
@@ -64,23 +60,23 @@ export default function XmtpChat() {
     }
 
     const isGroupMessage = (message) => {
-        return message.contentType.typeId == "group message"
+        return message.contentType.typeId === "group message"
     }
 
     const onNewGroupMessage = (message) => {
         setGroupChats((currentChats) => {
             for (const msg of currentChats) {
-                if (msg.id == message.id) {
+                if (msg.id === message.id) {
                     return currentChats
                 }
             }
-            if (currentChats && currentChats.length != 0) {
+            if (currentChats && currentChats.length !== 0) {
                 return [...currentChats, message]
             } else {
                 return [message]
             }
         })
-        bottomDivRef.current.scrollIntoView({ behavior: "smooth" })
+        bottomDivRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
     useEffect(() => {
@@ -123,7 +119,7 @@ export default function XmtpChat() {
             /*
              * Stream new conversations
              */
-            for (const member of groupMembers) {
+            for await (const member of groupMembers) {
                 listenForConversation(member)
             }
         } catch (error) {
@@ -145,7 +141,7 @@ export default function XmtpChat() {
     }
 
     const loadConversation = async (conversation) => {
-        // // TODO This might be a bug in XMTP, reach out to them.
+        // TODO This might be a bug in XMTP, reach out to them.
         // await new Promise((_) => setTimeout(_, 2000))
         const messages = await conversation.messages({ pageSize: 100 })
 
@@ -159,7 +155,7 @@ export default function XmtpChat() {
 
     return (
         <div>
-            <ScrollArea style={{ height: 500 }}>
+            <ScrollArea style={{ height: "65vh" }}>
                 <div style={{ backgroundColor: "yellow" }}>
                     <p>Custom Group Message</p>
                     {groupChats &&
