@@ -1,6 +1,7 @@
-import {Tabs, Grid, Container} from '@mantine/core'
-import {PostCard} from "../PostCard";
+import { Tabs, Grid, Container } from "@mantine/core"
+import { PostCard } from "../PostCard"
 import PostData from "../PostCard/data.json"
+import XmtpChat from "../Chats/XmtpChat"
 
 export function NavTabs() {
     return (
@@ -31,7 +32,7 @@ export function NavTabs() {
                 </Grid>
             </Tabs.Panel>
             <Tabs.Panel value={"second"}>
-                <p>second Tab</p>
+                <XmtpChat />
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>
                 <p>third Tab</p>
