@@ -7,6 +7,7 @@ import {useClipboard} from "@mantine/hooks";
 import {useRouter} from "next/router";
 import {CommentInput} from "../CommentInput";
 import {CommentContent} from "../CommentContent/CommentContent";
+import Head from "next/head";
 
 export function Posts() {
     const {theme} = useStyles()
@@ -15,6 +16,9 @@ export function Posts() {
 
     return (
         <Layout>
+            <Head>
+                <title>Post Title - m3tadao</title>
+            </Head>
             <Container style={{maxWidth: 800}}>
                 <Title mt={"sm"}>
                     Posts
