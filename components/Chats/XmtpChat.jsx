@@ -1,10 +1,11 @@
-import { Client } from "@xmtp/xmtp-js"
-import { Wallet } from "ethers"
-import { useEffect, useRef, useState } from "react"
-import { useSigner } from "wagmi"
-import { ContentTypeId } from "@xmtp/xmtp-js"
-import { ContentCodec, EncodedContent } from "@xmtp/xmtp-js"
-import { ScrollArea } from "@mantine/core"
+import {Client, ContentTypeId} from "@xmtp/xmtp-js"
+import {useEffect, useRef, useState} from "react"
+import {useSigner} from "wagmi"
+import {ActionIcon, Center, Group, Paper, ScrollArea, Stack} from "@mantine/core"
+import {ChevronDown} from "tabler-icons-react";
+import {useInView} from "react-intersection-observer";
+import {ChatMessage} from "../ChatMessage";
+import {ChatBox} from "../ChatBox";
 
 export class GroupMessageCodec {
     constructor(authorityId, typeId) {
@@ -31,18 +32,31 @@ export class GroupMessageCodec {
 
     decode(content) {
         const bytes = new TextDecoder().decode(content.content)
-        const json = JSON.parse(bytes)
-        return json
+        return JSON.parse(bytes)
     }
 }
 
-export default function XmtpChat() {
+export default function XmtpChat({setXmtp}) {
     const [groupChats, setGroupChats] = useState([])
-    const { data: signer, isError, isLoading } = useSigner()
-    const [xmtp, setXmtp] = useState()
+    const {data: signer, isError, isLoading} = useSigner()
+    // const [xmtp, setXmtp] = useState()
     const [groupMessageCodec, setGroupMessageCodec] = useState()
     const [isInitialized, setIsInitialized] = useState(false)
-    const groupMembers = [
+    const [id, setId] = useState("")
+    const [hidden, setHidden] = useState(true)
+    const dummy = useRef(null)
+    const {ref, inView} = useInView({
+        delay: 600,
+        threshold: 1
+    })
+
+    function goBot() {
+        dummy.current?.scrollIntoView({behavior: "smooth"});
+        setHidden(true);
+        setId("");
+    }
+
+    let groupMembers = [
         "0x0de82DCC40B8468639251b089f8b4A4400022e04",
         "0x9e03C44b5A09db89bf152F8C5500dF3360c1C5bF",
         "0x044B595C9b94A17Adc489bD29696af40ccb3E4d2",
@@ -64,23 +78,23 @@ export default function XmtpChat() {
     }
 
     const isGroupMessage = (message) => {
-        return message.contentType.typeId == "group message"
+        return message.contentType.typeId === "group message"
     }
 
     const onNewGroupMessage = (message) => {
         setGroupChats((currentChats) => {
             for (const msg of currentChats) {
-                if (msg.id == message.id) {
+                if (msg.id === message.id) {
                     return currentChats
                 }
             }
-            if (currentChats && currentChats.length != 0) {
+            if (currentChats && currentChats.length !== 0) {
                 return [...currentChats, message]
             } else {
                 return [message]
             }
         })
-        bottomDivRef.current.scrollIntoView({ behavior: "smooth" })
+        bottomDivRef.current?.scrollIntoView({behavior: "smooth"})
     }
 
     useEffect(() => {
@@ -116,6 +130,7 @@ export default function XmtpChat() {
              * Load all existing conversations and messages
              */
             const conversations = await client.conversations.list()
+            console.log(conversations)
             for (const conversation of conversations) {
                 loadConversation(conversation)
             }
@@ -145,9 +160,9 @@ export default function XmtpChat() {
     }
 
     const loadConversation = async (conversation) => {
-        // // TODO This might be a bug in XMTP, reach out to them.
+        // TODO This might be a bug in XMTP, reach out to them.
         // await new Promise((_) => setTimeout(_, 2000))
-        const messages = await conversation.messages({ pageSize: 100 })
+        const messages = await conversation.messages({pageSize: 100})
 
         for (const message of messages) {
             if (isGroupMessage(message) && !groupChats.includes(message)) {
@@ -158,31 +173,50 @@ export default function XmtpChat() {
     }
 
     return (
-        <div>
-            <ScrollArea style={{ height: 500 }}>
-                <div style={{ backgroundColor: "yellow" }}>
-                    <p>Custom Group Message</p>
-                    {groupChats &&
-                        groupChats.map((chat) => (
-                            <div key={chat.id}>
-                                <p>{chat.senderAddress}</p>
-                                <p>{chat.content}</p>
-                            </div>
-                        ))}
-                    <div style={{ float: "left", clear: "both" }} ref={bottomDivRef}></div>
-                </div>
-            </ScrollArea>
-            <div>
-                <label htmlFor="groupMsgInput">msg: </label>
-                <input id="groupMsgInput" ref={groupMsgInputRef} />
-                <button
-                    onClick={() => {
-                        sendGroupMessage()
-                    }}
-                >
-                    Send Group Message
-                </button>
-            </div>
-        </div>
+        <Center>
+            <Stack sx={{height: "65vh"}} p={0}>
+                <ScrollArea p={"xs"} sx={{height: "65vh"}} scrollbarSize={1}>
+                    <Stack>
+                        <Group hidden={inView} position="center" pt="xs">
+                            <Paper
+                                shadow="md"
+                                radius="xl"
+                                withBorder
+                                p={0}
+                                sx={{ position: "absolute", top: "95%" }}
+                            >
+                                <ActionIcon color="violet" radius="xl" onClick={goBot}>
+                                    <ChevronDown />
+                                </ActionIcon>
+                            </Paper>
+                        </Group>
+                        <Center>
+                            <Stack sx={(theme) => ({
+                                width: "50vw",
+                                maxWidth: "60vw",
+                                [theme.fn.smallerThan("md")]: {
+                                    width: "100%",
+                                }
+                            })}>
+                                {groupChats ?
+                                    groupChats.map((message, index) => {
+                                        return (
+                                            <div key={index}>
+                                                <ChatMessage senderAddress={message.senderAddress}
+                                                             content={message.content}/>
+                                            </div>
+                                        )
+                                    }) : "Wow so empty"
+                                }
+                            </Stack>
+                        </Center>
+                        <div style={{float: "left", clear: "both"}} ref={bottomDivRef}></div>
+                        <div ref={ref}></div>
+                        <div ref={dummy}></div>
+                    </Stack>
+                </ScrollArea>
+                <ChatBox fn={goBot} inputRef={groupMsgInputRef} sendGroupMessage={sendGroupMessage}/>
+            </Stack>
+        </Center>
     )
 }

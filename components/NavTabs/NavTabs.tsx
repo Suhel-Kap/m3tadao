@@ -1,15 +1,17 @@
-import {Tabs, Grid, Container} from '@mantine/core'
+import {Tabs, Grid, Container, Title} from '@mantine/core'
 import {PostCard} from "../PostCard";
 import PostData from "../PostCard/data.json"
-import XmtpChat from "../Chats/XmtpChat"
 import {ChatRoom} from "../ChatRoom";
+import {DirectChat} from "../DirectChat";
+import {useState} from "react";
 
 export function NavTabs() {
+    const [active, setActive] = useState()
     return (
-        <Tabs variant="outline" defaultValue="first">
+        <Tabs variant="outline" defaultValue="first" onTabChange={(event) => {setActive(event)}}>
             <Tabs.List grow position="center" mb={75}>
                 <Tabs.Tab value="first">Posts</Tabs.Tab>
-                <Tabs.Tab value="second">Second tab</Tabs.Tab>
+                <Tabs.Tab value="second">Your Chats</Tabs.Tab>
                 <Tabs.Tab value="third">Third tab</Tabs.Tab>
             </Tabs.List>
 
@@ -33,10 +35,13 @@ export function NavTabs() {
                 </Grid>
             </Tabs.Panel>
             <Tabs.Panel value={"second"}>
-                <p>second Tab</p>
+                <Title order={4} align={"center"} mb={"lg"} mt={0}>
+                    Your Conversations
+                </Title>
+                {active === "second" ? <ChatRoom /> : null}
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>
-                <p>third Tab</p>
+               Hello
             </Tabs.Panel>
         </Tabs>
     )

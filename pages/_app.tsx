@@ -8,6 +8,7 @@ import {SessionProvider} from "next-auth/react"
 import {chain, configureChains, createClient, WagmiConfig} from "wagmi"
 import {alchemyProvider} from "wagmi/providers/alchemy"
 import {publicProvider} from "wagmi/providers/public"
+import {useHotkeys, useLocalStorage} from "@mantine/hooks";
 
 const {chains, provider, webSocketProvider} = configureChains(
     [
@@ -45,10 +46,19 @@ const getSiweMessageOptions = () => ({
 
 
 export default function App(props: AppProps) {
-    const {Component, pageProps} = props
-    const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
+
+    const { Component, pageProps } = props;
+
+    const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+        key: 'mantine-color-scheme',
+        defaultValue: 'light',
+        getInitialValueInEffect: true,
+    });
+
     const toggleColorScheme = (value?: ColorScheme) =>
-        setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
+        setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+    useHotkeys([['mod+J', () => toggleColorScheme()]]);
 
     return (
         <WagmiConfig client={wagmiClient}>

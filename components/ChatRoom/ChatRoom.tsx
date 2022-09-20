@@ -1,41 +1,60 @@
-import {ActionIcon, Group, Paper, ScrollArea, Stack} from "@mantine/core";
-import {useInView} from "react-intersection-observer";
-import {ChevronDown} from "tabler-icons-react";
-import {useRef, useState} from "react";
+import {Grid, Text, NavLink, Center} from "@mantine/core";
+import {useState} from "react";
+import {IconChevronRight} from "@tabler/icons";
+import XmtpChat from "../Chats/XmtpChat"
+import {DirectChat} from "../DirectChat";
 
-export function ChatRoom(){
-    const [id, setId] = useState("")
-    const [hidden, setHidden] = useState(true)
-    const dummy = useRef<HTMLDivElement>(null)
-    const { ref, inView } = useInView({
-        delay: 600,
-        threshold: 1
-    })
+export function ChatRoom() {
+    const [active, setActive] = useState(0)
+    const [xmtp, setXmtp] = useState()
+    const data = [
+        {
+            title: "Chat Room 1",
+            groupId: "1234",
+            groupChat: true
+        },
+        {
+            title: "Chat Room 2",
+            groupId: "1235",
+            groupChat: true
+        },
+        {
+            title: "Chat Room 3",
+            otherUser: "0x0de82DCC40B8468639251b089f8b4A4400022e04",
+            groupChat: false
+        }
+    ]
 
-    function goBot() {
-        dummy.current?.scrollIntoView({ behavior: "smooth" });
-        setHidden(true);
-        setId("");
-    }
+    const items = data.map((item, index) => (
+        <NavLink
+            sx={(theme) => ({width: "85%", [theme.fn.smallerThan("md")]: {width: "100%"}})}
+            key={item.groupId || item.otherUser}
+            active={index === active}
+            label={item.title}
+            rightSection={<IconChevronRight size={14} stroke={1.5}/>}
+            onClick={() => setActive(index)}/>
+    ))
+
 
     return (
-        <>
-        <h1>Chat Room</h1>
-            <Stack sx={{height: "65vh"}} p={0}>
-                <ScrollArea p={"xs"} sx={{height: "65vh"}} scrollbarSize={1}>
-                    <Stack>
-                        <Group hidden={inView} position={"center"} pt={"xs"}>
-                            <Paper shadow={"md"} p={0} withBorder radius={"xl"} sx={{ position: "absolute", top: "95%" }}>
-                                <ActionIcon radius={"xl"} onClick={goBot}>
-                                    <ChevronDown />
-                                </ActionIcon>
-                            </Paper>
-                        </Group>
-
-
-                    </Stack>
-                </ScrollArea>
-            </Stack>
-        </>
+        <Center sx={(theme) => ({
+            [theme.fn.smallerThan("md")]: {
+                width: "100%",
+            }
+        })}>
+            <Grid>
+                <Grid.Col lg={3} md={2}>
+                    {items}
+                </Grid.Col>
+                <Grid.Col lg={9} md={10}>
+                    <Text>
+                        {/*<XmtpChat groupId={data[active].groupId}/>*/}
+                        {/*<XmtpChat />*/}
+                        {/*<DirectChat otherUser={"0x0de82DCC40B8468639251b089f8b4A4400022e04"} />*/}
+                        {data[active].groupChat ? <XmtpChat setXmtp={setXmtp} /> : (xmtp && <DirectChat xmtp={xmtp} otherUser={data[active].otherUser} />)}
+                    </Text>
+                </Grid.Col>
+            </Grid>
+        </Center>
     )
 }
