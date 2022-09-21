@@ -1,11 +1,11 @@
-import {Client, ContentTypeId} from "@xmtp/xmtp-js"
+import {ContentTypeId} from "@xmtp/xmtp-js"
 import {useEffect, useRef, useState} from "react"
 import {useSigner} from "wagmi"
 import {ActionIcon, Center, Group, Paper, ScrollArea, Stack} from "@mantine/core"
-import {ChevronDown} from "tabler-icons-react";
-import {useInView} from "react-intersection-observer";
-import {ChatMessage} from "../ChatMessage";
-import {ChatBox} from "../ChatBox";
+import {ChevronDown} from "tabler-icons-react"
+import {useInView} from "react-intersection-observer"
+import {ChatMessage} from "../ChatMessage"
+import {ChatBox} from "../ChatBox"
 
 export class GroupMessageCodec {
     constructor(authorityId, typeId) {
@@ -36,7 +36,7 @@ export class GroupMessageCodec {
     }
 }
 
-export default function XmtpChat({setXmtp}) {
+export default function XmtpChat({xmtp}) {
     const [groupChats, setGroupChats] = useState([])
     const {data: signer, isError, isLoading} = useSigner()
     // const [xmtp, setXmtp] = useState()
@@ -47,13 +47,13 @@ export default function XmtpChat({setXmtp}) {
     const dummy = useRef(null)
     const {ref, inView} = useInView({
         delay: 600,
-        threshold: 1
+        threshold: 1,
     })
 
     function goBot() {
-        dummy.current?.scrollIntoView({behavior: "smooth"});
-        setHidden(true);
-        setId("");
+        dummy.current?.scrollIntoView({behavior: "smooth"})
+        setHidden(true)
+        setId("")
     }
 
     let groupMembers = [
@@ -116,14 +116,14 @@ export default function XmtpChat({setXmtp}) {
 
     const setup = async () => {
         try {
-            const gmc = new GroupMessageCodec("123", "group message")
-            setGroupMessageCodec(gmc)
-            // Create the client with your wallet. This will connect to the XMTP development network by default
-            const client = await Client.create(signer, {
-                codecs: [gmc],
-            })
-            setXmtp(client)
-
+            // const gmc = new GroupMessageCodec("123", "group message")
+            // setGroupMessageCodec(gmc)
+            // // Create the client with your wallet. This will connect to the XMTP development network by default
+            // const client = await Client.create(signer, {
+            //     codecs: [gmc],
+            // })
+            // setXmtp(client)
+            const client = xmtp
             if (client === null) return
 
             /*
@@ -183,31 +183,35 @@ export default function XmtpChat({setXmtp}) {
                                 radius="xl"
                                 withBorder
                                 p={0}
-                                sx={{ position: "absolute", top: "95%" }}
+                                sx={{position: "absolute", top: "95%"}}
                             >
                                 <ActionIcon color="violet" radius="xl" onClick={goBot}>
-                                    <ChevronDown />
+                                    <ChevronDown/>
                                 </ActionIcon>
                             </Paper>
                         </Group>
                         <Center>
-                            <Stack sx={(theme) => ({
-                                width: "50vw",
-                                maxWidth: "60vw",
-                                [theme.fn.smallerThan("md")]: {
-                                    width: "100%",
-                                }
-                            })}>
-                                {groupChats ?
-                                    groupChats.map((message, index) => {
+                            <Stack
+                                sx={(theme) => ({
+                                    width: "50vw",
+                                    maxWidth: "60vw",
+                                    [theme.fn.smallerThan("md")]: {
+                                        width: "100%",
+                                    },
+                                })}
+                            >
+                                {groupChats
+                                    ? groupChats.map((message, index) => {
                                         return (
                                             <div key={index}>
-                                                <ChatMessage senderAddress={message.senderAddress}
-                                                             content={message.content}/>
+                                                <ChatMessage
+                                                    senderAddress={message.senderAddress}
+                                                    content={message.content}
+                                                />
                                             </div>
                                         )
-                                    }) : "Wow so empty"
-                                }
+                                    })
+                                    : "Wow so empty"}
                             </Stack>
                         </Center>
                         <div style={{float: "left", clear: "both"}} ref={bottomDivRef}></div>
@@ -215,7 +219,11 @@ export default function XmtpChat({setXmtp}) {
                         <div ref={dummy}></div>
                     </Stack>
                 </ScrollArea>
-                <ChatBox fn={goBot} inputRef={groupMsgInputRef} sendGroupMessage={sendGroupMessage}/>
+                <ChatBox
+                    fn={goBot}
+                    inputRef={groupMsgInputRef}
+                    sendGroupMessage={sendGroupMessage}
+                />
             </Stack>
         </Center>
     )

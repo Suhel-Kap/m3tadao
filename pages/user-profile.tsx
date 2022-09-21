@@ -9,13 +9,13 @@ import {useRouter} from "next/router";
 import {Layout} from "../components/Layout";
 
 const UserProfile: NextPage = () => {
-    const {isConnected} = useAccount()
+    const {isConnected, isDisconnected, status} = useAccount()
     const router = useRouter()
     useEffect(() => {
         if (!isConnected) {
             router.push("/")
         }
-    }, [isConnected])
+    }, [isConnected, isDisconnected, status])
 
     return (
         <>

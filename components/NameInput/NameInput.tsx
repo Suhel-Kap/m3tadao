@@ -1,9 +1,8 @@
 import {useEffect, useState} from "react"
 import {AsyncInput} from "../AsyncInput"
 import {graphql} from "@valist/sdk"
-import {useRouter} from "next/router";
-import {GraphqlQuery} from "@valist/sdk/dist/graphql";
-import {useAccount} from "wagmi";
+import {useRouter} from "next/router"
+import {GraphqlQuery} from "@valist/sdk/dist/graphql"
 
 export interface NameInputProps {
     parentId: string | number;
@@ -26,7 +25,7 @@ export function NameInput(props: NameInputProps) {
     const router = useRouter()
     useEffect(() => {
         console.log(props.value)
-        if(router.pathname === "/create-organisation") {
+        if(router.pathname === "/create-organisation" || router.pathname === "/create-release") { // TODO: fix this
             setQuery({
                 query: graphql.ACCOUNTS_SEARCH__QUERY,
                 variables: {
@@ -55,6 +54,12 @@ export function NameInput(props: NameInputProps) {
         const timeout = setTimeout(() => {
             // this uses the same contract method for accounts, projects, and releases
             console.log(query)
+            if(router.pathname === "/create-release"){ // TODO: fix this
+                setError(undefined)
+                setExists(false)
+                setLoading(false)
+                return
+            }
             graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
                 console.log(res)
                 if (res.data.accounts.length > 0) {

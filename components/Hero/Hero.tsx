@@ -1,6 +1,7 @@
 import {createStyles, Image, Container, Title, Button, Group, Text, List, ThemeIcon,} from '@mantine/core';
 import {IconCheck} from '@tabler/icons';
 import {ConnectButton} from "@rainbow-me/rainbowkit";
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
     inner: {
@@ -62,11 +63,11 @@ export function Hero() {
                 <div className={classes.inner}>
                     <div className={classes.content}>
                         <Title className={classes.title}>
-                            A <span className={classes.highlight}>modern</span> React <br/> components library
+                            <span className={classes.highlight}>M3tadao</span>
                         </Title>
                         <Text color="dimmed" mt="md">
-                            Build fully functional accessible web applications faster than ever – Mantine includes
-                            more than 120 customizable components and hooks to cover you in any situation
+                            A decentralised social network for web3 creators. Developers, designers, artists everyone is
+                            welcome on our platform to create the next big thing seamlessly.
                         </Text>
 
                         <List
@@ -80,24 +81,23 @@ export function Hero() {
                             }
                         >
                             <List.Item>
-                                <b>TypeScript based</b> – build type safe applications, all components and hooks
-                                export types
+                                <b>Build Together</b> – collaborate with other creators to build the next big thing
                             </List.Item>
                             <List.Item>
-                                <b>Free and open source</b> – all packages have MIT license, you can use Mantine in
-                                any project
+                                <b>Network</b> – connect with other creators and build your network
                             </List.Item>
                             <List.Item>
-                                <b>No annoying focus ring</b> – focus ring will appear only when user navigates with
-                                keyboard
+                                <b>Grow</b> – enhance your skills by working with other creators
                             </List.Item>
                         </List>
 
                         <Group mt={30}>
-                            <ConnectButton showBalance={false} />
-                            <Button variant="default" radius="md" size="md" className={classes.control}>
-                                Source code
-                            </Button>
+                            <ConnectButton showBalance={false}/>
+                            <Link href={"https://github.com/Suhel-Kap/m3tadao"} passHref>
+                                <Button component={"a"} target={"_blank"} variant="default" radius="md" size="md" className={classes.control}>
+                                    Source code
+                                </Button>
+                            </Link>
                         </Group>
                     </div>
                     <Image src={"./hero.svg"} className={classes.image} width={"150%"}/>

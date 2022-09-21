@@ -74,21 +74,37 @@ export function Banner({image, avatar, name, job, stats}: UserCardImageProps) {
                             Create Organisation
                         </Button>
                     </Link>
-                </Center><Center mt={0}>
-                <Link href={"/create-project"} passHref>
-                    <Button
-                        component={"a"}
-                        radius="md"
-                        mt="xl"
-                        size="md"
-                        variant={"gradient"}
-                        gradient={{from: 'indigo', to: 'cyan'}}
-                        color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                    >
-                        Create Project
-                    </Button>
-                </Link>
-            </Center>
+                </Center>
+                <Center mt={0}>
+                    <Link href={"/create-project"} passHref>
+                        <Button
+                            component={"a"}
+                            radius="md"
+                            mt="xl"
+                            size="md"
+                            variant={"gradient"}
+                            gradient={{from: 'indigo', to: 'cyan'}}
+                            color={theme.colorScheme === 'dark' ? undefined : 'dark'}
+                        >
+                            Create Project
+                        </Button>
+                    </Link>
+                </Center>
+                <Center mt={0}>
+                    <Link href={"/create-release"} passHref>
+                        <Button
+                            component={"a"}
+                            radius="md"
+                            mt="xl"
+                            size="md"
+                            variant={"gradient"}
+                            gradient={{from: 'cyan', to: 'indigo'}}
+                            color={theme.colorScheme === 'dark' ? undefined : 'dark'}
+                        >
+                            Create Release
+                        </Button>
+                    </Link>
+                </Center>
             </Stack>
         </Card>
     );
