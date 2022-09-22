@@ -36,7 +36,7 @@ export function Banner({image, avatar, name, job, stats}: UserCardImageProps) {
 
     return (
         <Card p="xl" className={classes.card}>
-            <Card.Section sx={{backgroundImage: `url(${image})`, height: 225}}/>
+            <Card.Section sx={(theme) => ({backgroundImage: `url(${image})`, height: 225, [theme.fn.smallerThan("md")]: {height: 150}})}/>
             <Avatar src={avatar} size={160} radius={80} mx="auto" mt={-30} className={classes.avatar}/>
             <Text align="center" size="lg" weight={500} mt="sm">
                 {name}
@@ -76,7 +76,7 @@ export function Banner({image, avatar, name, job, stats}: UserCardImageProps) {
                     </Link>
                 </Center>
                 <Center mt={0}>
-                    <Link href={"/create-project"} passHref>
+                    <Link href={"/project"} passHref>
                         <Button
                             component={"a"}
                             radius="md"

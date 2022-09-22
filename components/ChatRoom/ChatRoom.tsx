@@ -1,4 +1,4 @@
-import {Grid, Text, NavLink, Center} from "@mantine/core"
+import {Grid, Text, NavLink, Center, Title} from "@mantine/core"
 import {Client, ContentTypeId} from "@xmtp/xmtp-js"
 import {useEffect, useState} from "react"
 import {IconChevronRight} from "@tabler/icons"
@@ -37,7 +37,7 @@ export class GroupMessageCodec {
 
 export function ChatRoom() {
     const [active, setActive] = useState(0)
-    const {data: signer, isError, isLoading} = useSigner()
+    const {data: signer, isLoading} = useSigner()
     const [xmtp, setXmtp] = useState()
     const data = [
         {
@@ -57,17 +57,6 @@ export function ChatRoom() {
         },
     ]
 
-    const items = data.map((item, index) => (
-        <NavLink
-            sx={(theme) => ({width: "85%", [theme.fn.smallerThan("md")]: {width: "100%"}})}
-            key={item.groupId || item.otherUser}
-            active={index === active}
-            label={item.title}
-            rightSection={<IconChevronRight size={14} stroke={1.5}/>}
-            onClick={() => setActive(index)}
-        />
-    ))
-
     useEffect(() => {
         if (signer) {
             initialize()
@@ -85,6 +74,17 @@ export function ChatRoom() {
             setXmtp(client)
         }
     }
+
+    const items = data.map((item, index) => (
+        <NavLink
+            sx={(theme) => ({width: "85%", [theme.fn.smallerThan("md")]: {width: "100%"}})}
+            key={item.groupId || item.otherUser}
+            active={index === active}
+            label={item.title}
+            rightSection={<IconChevronRight size={14} stroke={1.5}/>}
+            onClick={() => setActive(index)}
+        />
+    ))
 
     return (
         <Center

@@ -42,16 +42,6 @@ export function Registration() {
                             : null,
                 };
             }
-
-            if (active === 1) {
-                const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-                return {
-                    website: regex.test(values.website) ? null : 'Invalid website link',
-                    github: regex.test(values.github) ? null : 'Invalid github link',
-                    twitter: regex.test(values.twitter) ? null : 'Invalid twitter link',
-                };
-            }
-
             return {};
         },
     })

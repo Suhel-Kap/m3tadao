@@ -4,7 +4,7 @@ import {
 } from '@mantine/core'
 import {useForm, zodResolver} from '@mantine/form'
 import {ImageInput} from "../ImageInput"
-import {NameInput} from "../NameInput/NameInput"
+import {NameInput} from "../NameInput"
 import {AddressInput} from "../AddressInput";
 import {useListState} from "@mantine/hooks";
 import {MemberList} from "../MemberList";
@@ -66,25 +66,25 @@ export function CreateProject() {
     return (
         <>
             <Stepper active={active} breakpoint="sm" style={{marginTop: 75}}>
-                <Stepper.Step label="Basic Info">
+                <Stepper.Step my={"sm"} label="Basic Info">
                 	<Title mt="lg">Basic Info</Title>
                         <Text color="dimmed">
                             This is your public project info.
                         </Text>
-                    <Title order={4}>Project Image</Title>
+                    <Title my={"sm"} order={4}>Project Image</Title>
                     <ImageInput width={600} height={300} onChange={setImage} value={image}/>
-                    <Title order={4}>Project Name (cannot be changed) <span style={{color: "red"}}>*</span></Title>
+                    <Title my={"sm"} order={4}>Project Name (cannot be changed) <span style={{color: "red"}}>*</span></Title>
                     <NameInput
-                        parentId={80001}
+                        parentId={"fdsfsf"} // TODO: pass the organisation name here
                         required
                         placeholder="Unique Account Name"
                         {...form.getInputProps("projectName")}
                     />
-                    <Title order={4}>Display Name <span style={{color: "red"}}>*</span></Title>
+                    <Title my={"sm"} order={4}>Display Name <span style={{color: "red"}}>*</span></Title>
                     <TextInput placeholder="Display Name" {...form.getInputProps('displayName')} />
-                    <Title order={4}>Website</Title>
+                    <Title my={"sm"} order={4}>Website</Title>
                     <Input
-                        icon={<IconWorldWww size={16}/>}
+                        icon={<IconWorldWww size={16}/>} my={"sm"}
                         placeholder="Your Website"
                         {...form.getInputProps('website')}
                         rightSection={
@@ -95,7 +95,7 @@ export function CreateProject() {
                             </Tooltip>
                         }
                     />
-                    <Title order={4}>Type</Title>
+                    <Title my={"sm"} order={4}>Type</Title>
                     <Select
                         data={defaultTypes}
                         placeholder="Select type"
@@ -105,7 +105,7 @@ export function CreateProject() {
                         getCreateLabel={(query) => `+ Create ${query}`}
                         {...form.getInputProps("type")}
                     />
-                    <Title order={4}>Tags</Title>
+                    <Title my={"sm"} order={4}>Tags</Title>
                     <MultiSelect
                         data={defaultTags}
                         placeholder="Select tags"
@@ -157,10 +157,10 @@ export function CreateProject() {
                             <List.Item>Add or remove project members</List.Item>
                             <List.Item>Publish new releases</List.Item>
                         </List>
-                        <Title order={2}>Account Admins</Title>
+                        <Title order={2}>Project Member</Title>
                         <AddressInput onSubmit={addMember}/>
                         <MemberList
-                            label="Account Admin"
+                            label="Project Member"
                             members={members}
                             editable={true}
                             onRemove={removeMember}

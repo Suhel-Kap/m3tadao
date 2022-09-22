@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import {useEffect, useRef, useState} from "react"
 import {AsyncInput} from "../AsyncInput"
 import {graphql} from "@valist/sdk"
 import {useRouter} from "next/router"
@@ -24,7 +24,8 @@ export function NameInput(props: NameInputProps) {
     const [query, setQuery] = useState<GraphqlQuery>()
     const router = useRouter()
     useEffect(() => {
-        console.log(props.value)
+        const name = props.value
+        console.log("name", name)
         if(router.pathname === "/create-organisation" || router.pathname === "/create-release") { // TODO: fix this
             setQuery({
                 query: graphql.ACCOUNTS_SEARCH__QUERY,
@@ -35,13 +36,14 @@ export function NameInput(props: NameInputProps) {
         }
         if(router.pathname === "/create-project"){
             setQuery({
-                query: graphql.ACCOUNT_PROJECT_QUERY,
+                query: "\n query UniqueProject($project: String, $accountName: String){ accounts(where:{name: $accountName}){ projects(where: {name_contains: $project}){ id, name } }}\n",
                 variables: {
-                    accountID: "fdsfsf",
+                    project: name,
+                    accountName: props.parentId
                 }
             })
         }
-    }, [router])
+    }, [props.value])
 
     useEffect(() => {
         setLoading(false);
@@ -62,10 +64,20 @@ export function NameInput(props: NameInputProps) {
             }
             graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
                 console.log(res)
-                if (res.data.accounts.length > 0) {
-                    setError("Name already exists");
-                    setExists(true);
-                } else {
+                if (router.pathname === "/create-organisation" && res.data.accounts.length > 0) {
+                    setError("Name already exists")
+                    setExists(true)
+                }
+                else if (router.pathname === "/create-project" && res.data.accounts.length > 0) {
+                    if(res.data.accounts[0].projects.length > 0) {
+                        setError("Name already exists")
+                        setExists(true)
+                    } else {
+                        setError(undefined)
+                        setExists(false)
+                    }
+                }
+                else {
                     setError(undefined);
                     setExists(false);
                 }

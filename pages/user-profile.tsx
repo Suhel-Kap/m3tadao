@@ -7,6 +7,7 @@ import {useAccount} from "wagmi";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import {Layout} from "../components/Layout";
+import {Container, Stack} from "@mantine/core";
 
 const UserProfile: NextPage = () => {
     const {isConnected, isDisconnected, status} = useAccount()
@@ -24,8 +25,10 @@ const UserProfile: NextPage = () => {
                     <title>User Profile</title>
                     <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
                 </Head>
-                <Banner {...stats}/>
-                <NavTabs/>
+                <Stack m={"sm"} sx={{height: "100%"}}>
+                    <Banner {...stats}/>
+                    <NavTabs/>
+                </Stack>
             </Layout>
         </>
     )
