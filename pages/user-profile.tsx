@@ -3,11 +3,12 @@ import Head from 'next/head'
 import {Banner} from "../components/Banner";
 import {NavTabs} from "../components/NavTabs"
 import stats from "../components/Banner/stats.json"
-import {useAccount} from "wagmi";
+import {useAccount, useProvider, useSigner} from "wagmi";
 import {useEffect} from "react";
 import {useRouter} from "next/router";
 import {Layout} from "../components/Layout";
-import {Container, Stack} from "@mantine/core";
+import {Container, Stack} from "@mantine/core"
+import useSuperFluid from "../hooks/useSuperFluid"
 
 const UserProfile: NextPage = () => {
     const {isConnected, isDisconnected, status} = useAccount()
@@ -17,6 +18,11 @@ const UserProfile: NextPage = () => {
             router.push("/")
         }
     }, [isConnected, isDisconnected, status])
+    const {Main} = useSuperFluid()
+    const provider = useProvider()
+    const {data: signer, isLoading} = useSigner()
+
+
 
     return (
         <>
@@ -25,6 +31,14 @@ const UserProfile: NextPage = () => {
                     <title>User Profile</title>
                     <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
                 </Head>
+                {/*<button onClick={() => {*/}
+                {/*    console.log(isLoading)*/}
+                {/*    if (!isLoading){*/}
+                {/*        Main(provider, signer)*/}
+                {/*    }*/}
+                {/*}}>*/}
+                {/*    superfluid*/}
+                {/*</button>*/}
                 <Stack m={"sm"} sx={{height: "100%"}}>
                     <Banner {...stats}/>
                     <NavTabs/>
