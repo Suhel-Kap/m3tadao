@@ -121,7 +121,7 @@ export function HeaderSimple() {
     return (
         <Header height={HEADER_HEIGHT} mb={0} className={classes.root}>
             <Container className={classes.header}>
-                <Link href={"/"}>
+                <Link href={"/home"}>
                         <Title style={{ cursor: "pointer", marginRight: "7.5%"}} order={3}>M3tadao</Title>
                 </Link>
                 <Group spacing={5} className={classes.links}>

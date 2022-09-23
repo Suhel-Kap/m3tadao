@@ -28,7 +28,7 @@ const UserProfile: NextPage = () => {
         <>
             <Layout>
                 <Head>
-                    <title>User Profile</title>
+                    <title>Your Profile</title>
                     <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
                 </Head>
                 {/*<button onClick={() => {*/}

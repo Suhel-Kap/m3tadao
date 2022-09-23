@@ -1,11 +1,4 @@
-import {
-    AspectRatio,
-    Center,
-    Image,
-    Stack,
-    Text
-} from "@mantine/core"
-
+import {AspectRatio, Image, Stack, Text} from "@mantine/core"
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone"
 import { useElementSize } from "@mantine/hooks"
 import {ForwardedRef, useEffect, useState} from "react"

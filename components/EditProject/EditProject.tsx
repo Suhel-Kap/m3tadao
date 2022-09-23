@@ -11,6 +11,7 @@ import {schema} from "../CreateProject/schema";
 import {AddressInput} from "../AddressInput";
 import {MemberList} from "../MemberList";
 import {GalleryInput} from "../GalleryInput";
+import {DatePicker} from "@mantine/dates";
 
 export function EditProject() {
     const {address} = useAccount()
@@ -26,7 +27,8 @@ export function EditProject() {
     const defaultTags = [
         'game', 'protocol', 'application', 'utilities', 'storage', 'networks',
         'social', 'communication', 'nft', 'defi', 'media', 'music',
-    ];
+    ]
+    const requiredTags = ['finance', 'digital marketing', 'development', 'design', ...defaultTags]
 
     const defaultTypes = [
         'web', 'native', 'cli',
@@ -55,6 +57,11 @@ export function EditProject() {
             youTubeLink: "",
             tags: [],
             type: "",
+            reqTitle: '',
+            reqDescription: '',
+            reqTags: [],
+            reqPrice: '',
+            reqDeadline: '',
         },
     })
 
@@ -67,6 +74,7 @@ export function EditProject() {
                     <Tabs.Tab value="second">Description</Tabs.Tab>
                     <Tabs.Tab value="third">Members</Tabs.Tab>
                     <Tabs.Tab value="fourth">Media</Tabs.Tab>
+                    <Tabs.Tab value="fifth">Requirements</Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel p={"xs"} value="first">
@@ -98,7 +106,7 @@ export function EditProject() {
                         />
                     </Skeleton>
                     <Title my={"sm"} order={4}>Type</Title>
-                    <Skeleton visible={loading}>
+                    <Skeleton sx={{overflow: "visible", zIndex: 101}} visible={loading}>
                         <Select
                             data={defaultTypes}
                             value={types}
@@ -111,7 +119,7 @@ export function EditProject() {
                         />
                     </Skeleton>
                     <Title my={"sm"} order={4}>Tags</Title>
-                    <Skeleton visible={loading}>
+                    <Skeleton sx={{overflow: "visible", zIndex: 100}} visible={loading}>
                         <MultiSelect
                             data={defaultTags}
                             value={tags}
@@ -195,6 +203,26 @@ export function EditProject() {
                         <GalleryInput
                             onChange={setGallery}
                             value={gallery}
+                        />
+                    </Skeleton>
+                </Tabs.Panel>
+                <Tabs.Panel value="fifth">
+                    <Title my={"xs"} order={5}>Requirements Title</Title>
+                    <TextInput placeholder={"Requirements Title"} {...form.getInputProps('reqTitle')} />
+                    <Title my={"xs"} order={5}>Requirements Description</Title>
+                    <Textarea placeholder={"Requirements Description"} {...form.getInputProps('reqDescription')} />
+                    <Title my={"xs"} order={5}>Requirements Price</Title>
+                    <TextInput placeholder={"Requirements Price"} {...form.getInputProps('reqPrice')} />
+                    <Title my={"xs"} order={5}>Requirements Deadline</Title>
+                    <DatePicker placeholder={"Pick deadline"} {...form.getInputProps("reqDeadline")} />
+                    <Title my={"xs"} order={5}>Requirements Tags</Title>
+                    <Skeleton sx={{overflow: "visible", zIndex: 100}} visible={loading}>
+                        <MultiSelect
+                            data={requiredTags}
+                            mb={"xl"}
+                            placeholder="Select tags"
+                            searchable
+                            {...form.getInputProps("reqTags")}
                         />
                     </Skeleton>
                 </Tabs.Panel>

@@ -1,10 +1,11 @@
 import {useAccount} from "wagmi"
 import {
     Button,
-    Checkbox,
-    Container,
-    Input, List,
-    Skeleton, Stack,
+    Input,
+    List,
+    MultiSelect,
+    Skeleton,
+    Stack,
     Tabs,
     Text,
     Textarea,
@@ -12,11 +13,12 @@ import {
     Title,
     Tooltip
 } from "@mantine/core"
+import {DatePicker, DateRangePicker, DateRangePickerValue} from '@mantine/dates'
 import {useState} from "react"
 import {IconCheck} from "@tabler/icons"
 import {useForm, zodResolver} from "@mantine/form"
 import {ImageInput} from "../ImageInput"
-import {IconAlertCircle, IconBrandGithub, IconBrandTwitter, IconWorldWww} from "@tabler/icons"
+import {IconAlertCircle, IconWorldWww} from "@tabler/icons"
 import {showNotification} from '@mantine/notifications'
 import {useListState} from "@mantine/hooks";
 import {schema} from "../CreateOrganisation/schema";
@@ -29,9 +31,11 @@ export function EditOrganisation() {
     const [activeTab, setActiveTab] = useState("first")
     const [loading, setLoading] = useState(false)
     // TODO: Set user data as initial values
-    const [active, setActive] = useState(0)
     const [image, setImage] = useState<File>()
-    const [members, membersHandlers] = useListState<string>([]);
+    const [members, membersHandlers] = useListState<string>([])
+    const defaultTags = [
+        'finance', 'digital marketing', 'development', 'design', 'game', 'protocol', 'application', 'utilities', 'storage', 'networks', 'social', 'communication', 'nft', 'defi', 'media', 'music',
+    ]
 
     const removeMember = (member: string) => {
         membersHandlers.filter(
@@ -52,6 +56,11 @@ export function EditOrganisation() {
             displayName: '',
             website: '',
             description: '',
+            reqTitle: '',
+            reqDescription: '',
+            reqTags: [],
+            reqPrice: '',
+            reqDeadline: '',
         },
     })
 
@@ -62,6 +71,7 @@ export function EditOrganisation() {
                 <Tabs.List grow>
                     <Tabs.Tab value="first">Basic Info</Tabs.Tab>
                     <Tabs.Tab value="second">Members</Tabs.Tab>
+                    <Tabs.Tab value="third">Requirements</Tabs.Tab>
                 </Tabs.List>
 
                 <Tabs.Panel p={"xs"} value="first">
@@ -124,6 +134,26 @@ export function EditOrganisation() {
                             />
                         </Skeleton>
                     </Stack>
+                </Tabs.Panel>
+                <Tabs.Panel p={"xs"} value={"third"}>
+                    <Title my={"xs"} order={5}>Requirements Title</Title>
+                    <TextInput placeholder={"Requirements Title"} {...form.getInputProps('reqTitle')} />
+                    <Title my={"xs"} order={5}>Requirements Description</Title>
+                    <Textarea placeholder={"Requirements Description"} {...form.getInputProps('reqDescription')} />
+                    <Title my={"xs"} order={5}>Requirements Price</Title>
+                    <TextInput placeholder={"Requirements Price"} {...form.getInputProps('reqPrice')} />
+                    <Title my={"xs"} order={5}>Requirements Deadline</Title>
+                    <DatePicker placeholder={"Pick deadline"} {...form.getInputProps("reqDeadline")} />
+                    <Title my={"xs"} order={5}>Requirements Tags</Title>
+                    <Skeleton sx={{overflow: "visible", zIndex: 100}} visible={loading}>
+                        <MultiSelect
+                            data={defaultTags}
+                            mb={"xl"}
+                            placeholder="Select tags"
+                            searchable
+                            {...form.getInputProps("reqTags")}
+                        />
+                    </Skeleton>
                 </Tabs.Panel>
             </Tabs>
             <Button m={"sm"} onClick={() => {

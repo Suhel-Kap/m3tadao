@@ -1,4 +1,4 @@
-import {Tabs, Grid, Container, Title, Center} from '@mantine/core'
+import {Tabs, Grid, Container, Title, Center, Paper} from '@mantine/core'
 import {PostCard} from "../PostCard";
 import PostData from "../PostCard/data.json"
 import {ChatRoom} from "../ChatRoom";
@@ -19,37 +19,43 @@ export function NavTabs() {
             </Tabs.List>
 
             <Tabs.Panel value={"first"}>
-                <Grid>
-                    <Grid.Col lg={4} md={6}>
-                        <Link href={"/post"} passHref style={{cursor: "pointer"}}>
+                <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
+                    <Grid>
+                        <Grid.Col lg={4} md={6}>
+                            <Link href={"/post"} passHref style={{cursor: "pointer"}}>
+                                <Container size={400} px="xs">
+                                    <PostCard {...PostData} />
+                                </Container>
+                            </Link>
+                        </Grid.Col>
+                        <Grid.Col lg={4} md={6}>
                             <Container size={400} px="xs">
                                 <PostCard {...PostData} />
                             </Container>
-                        </Link>
-                    </Grid.Col>
-                    <Grid.Col lg={4} md={6}>
-                        <Container size={400} px="xs">
-                            <PostCard {...PostData} />
-                        </Container>
-                    </Grid.Col>
-                    <Grid.Col lg={4} md={6}>
-                        <Container size={400} px="xs">
-                            <PostCard {...PostData} />
-                        </Container>
-                    </Grid.Col>
-                </Grid>
+                        </Grid.Col>
+                        <Grid.Col lg={4} md={6}>
+                            <Container size={400} px="xs">
+                                <PostCard {...PostData} />
+                            </Container>
+                        </Grid.Col>
+                    </Grid>
+                </Paper>
             </Tabs.Panel>
             <Tabs.Panel value={"second"}>
                 <Title order={4} align={"center"} mb={"lg"} mt={0}>
                     Your Conversations
                 </Title>
-                {active === "second" ? <ChatRoom/> : null}
-                <Center>
-                    <Title order={6} color={"dimmed"}>Powered by XMTP</Title>
-                </Center>
+                <Paper shadow="xl" radius="lg" p="md">
+                    {active === "second" ? <ChatRoom/> : null}
+                    <Center>
+                        <Title order={6} color={"dimmed"}>Powered by XMTP</Title>
+                    </Center>
+                </Paper>
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>
-                <ManageProfile/>
+                <Paper shadow="xl" radius="lg" p="md">
+                    <ManageProfile/>
+                </Paper>
             </Tabs.Panel>
         </Tabs>
     )

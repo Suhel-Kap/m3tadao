@@ -8,6 +8,7 @@ import {EditOrganisation} from "../components/EditOrganisation";
 import {ChatRoom} from "../components/ChatRoom";
 import Link from "next/link";
 import {MemberCard} from "../components/MemberCard";
+import {CreatePost} from "../components/CreatePost";
 
 const data = [
     {
@@ -76,6 +77,9 @@ const Organisation = () => {
                     </Button>
                 </Link>
             </Group>
+            <Center m={"xl"} p={"lg"}>
+                <CreatePost />
+            </Center>
             <Tabs variant="outline" defaultValue={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List grow position="center" mb={75}>
                     <Tabs.Tab value="first">Projects</Tabs.Tab>
@@ -83,54 +87,65 @@ const Organisation = () => {
                     <Tabs.Tab value="third">Manage Organisation</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value={"first"}>
-                    <Center my={"md"}  sx={{width: "100%"}}>
-                        <Grid>
-                            <Grid.Col lg={10}>
-                                <Container>
-                                    <SimpleGrid cols={2} spacing={"xs"} breakpoints={[
-                                        { maxWidth: 'lg', cols: 2, spacing: 'md' },
-                                        { maxWidth: 'sm', cols: 1, spacing: 'sm' },
-                                    ]}>
-                                        <Link href={"/create-project"} passHref>
-                                            <Grid.Col>
-                                                <Paper radius="md" withBorder p="lg" sx={(theme) => ({
-                                                    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
-                                                    cursor: "pointer",
-                                                })}>
-                                                    <Stack py={"13%"}>
-                                                        <Center>
-                                                            <IconPlus size={128}/>
-                                                        </Center>
-                                                        <Center>
-                                                            <Text weight={700} size={"xl"}>Create Project</Text>
-                                                        </Center>
-                                                    </Stack>
-                                                </Paper>
-                                            </Grid.Col>
-                                        </Link>
-                                        {projects}
-                                    </SimpleGrid>
-                                </Container>
-                            </Grid.Col>
-                            <Grid.Col lg={2}>
-                                <Text weight={700}>Members</Text>
-                                {
-                                    memberData.map((member, index) => {
-                                        return (
-                                            <MemberCard address={member.address} name={member.name}/>
-                                        )
-                                    })
-                                }
-                            </Grid.Col>
-                        </Grid>
-                    </Center>
+                    <Container size={"xl"} mb={"xl"}>
+                        <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
+                            <Center my={"md"} sx={{width: "100%"}}>
+                                <Grid>
+                                    <Grid.Col lg={10}>
+                                        <Container>
+                                            <SimpleGrid cols={2} spacing={"xs"} breakpoints={[
+                                                {maxWidth: 'lg', cols: 2, spacing: 'md'},
+                                                {maxWidth: 'sm', cols: 1, spacing: 'sm'},
+                                            ]}>
+                                                <Link href={"/create-project"} passHref>
+                                                    <Grid.Col>
+                                                        <Paper radius="md" withBorder p="lg" sx={(theme) => ({
+                                                            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+                                                            cursor: "pointer",
+                                                        })}>
+                                                            <Stack py={"13%"}>
+                                                                <Center>
+                                                                    <IconPlus size={128}/>
+                                                                </Center>
+                                                                <Center>
+                                                                    <Text weight={700} size={"xl"}>Create Project</Text>
+                                                                </Center>
+                                                            </Stack>
+                                                        </Paper>
+                                                    </Grid.Col>
+                                                </Link>
+                                                {projects}
+                                            </SimpleGrid>
+                                        </Container>
+                                    </Grid.Col>
+                                    <Grid.Col lg={2}>
+                                        <Text weight={700}>Members</Text>
+                                        {
+                                            memberData.map((member, index) => {
+                                                return (
+                                                    <MemberCard address={member.address} name={member.name}/>
+                                                )
+                                            })
+                                        }
+                                    </Grid.Col>
+                                </Grid>
+                            </Center>
+                        </Paper>
+                    </Container>
                 </Tabs.Panel>
                 <Tabs.Panel value={"second"}>
-                    <ChatRoom/>
+                    <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
+                        <ChatRoom/>
+                        <Center>
+                            <Title order={6} color={"dimmed"}>Powered by XMTP</Title>
+                        </Center>
+                    </Paper>
                 </Tabs.Panel>
                 <Tabs.Panel value={"third"}>
                     <Container>
-                        <EditOrganisation/>
+                        <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
+                            <EditOrganisation/>
+                        </Paper>
                     </Container>
                 </Tabs.Panel>
             </Tabs>

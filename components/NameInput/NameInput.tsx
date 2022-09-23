@@ -25,7 +25,6 @@ export function NameInput(props: NameInputProps) {
     const router = useRouter()
     useEffect(() => {
         const name = props.value
-        console.log("name", name)
         if(router.pathname === "/create-organisation" || router.pathname === "/create-release") { // TODO: fix this
             setQuery({
                 query: graphql.ACCOUNTS_SEARCH__QUERY,
@@ -55,7 +54,6 @@ export function NameInput(props: NameInputProps) {
 
         const timeout = setTimeout(() => {
             // this uses the same contract method for accounts, projects, and releases
-            console.log(query)
             if(router.pathname === "/create-release"){ // TODO: fix this
                 setError(undefined)
                 setExists(false)
@@ -63,7 +61,6 @@ export function NameInput(props: NameInputProps) {
                 return
             }
             graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
-                console.log(res)
                 if (router.pathname === "/create-organisation" && res.data.accounts.length > 0) {
                     setError("Name already exists")
                     setExists(true)
