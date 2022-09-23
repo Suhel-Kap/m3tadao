@@ -1,9 +1,9 @@
 import {AppProps} from 'next/app'
 import {ColorScheme, ColorSchemeProvider, MantineProvider} from '@mantine/core'
-import {useState} from "react"
+import {NotificationsProvider} from '@mantine/notifications'
 import "@rainbow-me/rainbowkit/styles.css"
-import {RainbowKitSiweNextAuthProvider, GetSiweMessageOptions} from "@rainbow-me/rainbowkit-siwe-next-auth"
-import {RainbowKitProvider, getDefaultWallets, connectorsForWallets, Theme, darkTheme} from "@rainbow-me/rainbowkit"
+import {RainbowKitSiweNextAuthProvider} from "@rainbow-me/rainbowkit-siwe-next-auth"
+import {RainbowKitProvider, getDefaultWallets, connectorsForWallets, darkTheme} from "@rainbow-me/rainbowkit"
 import {SessionProvider} from "next-auth/react"
 import {chain, configureChains, createClient, WagmiConfig} from "wagmi"
 import {alchemyProvider} from "wagmi/providers/alchemy"
@@ -47,7 +47,7 @@ const getSiweMessageOptions = () => ({
 
 export default function App(props: AppProps) {
 
-    const { Component, pageProps } = props;
+    const {Component, pageProps} = props;
 
     const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
         key: 'mantine-color-scheme',
@@ -70,7 +70,9 @@ export default function App(props: AppProps) {
                     })} chains={chains} appInfo={metadaoAppInfo} modalSize={"compact"}>
                         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                             <MantineProvider withGlobalStyles withNormalizeCSS theme={{colorScheme}}>
-                                <Component {...pageProps} />
+                                <NotificationsProvider>
+                                    <Component {...pageProps} />
+                                </NotificationsProvider>
                             </MantineProvider>
                         </ColorSchemeProvider>
                     </RainbowKitProvider>

@@ -15,17 +15,13 @@ import {
 import { useForm } from "@mantine/form"
 import { ImageInput } from "../ImageInput"
 import { IconAlertCircle, IconBrandTwitter, IconBrandGithub, IconWorldWww } from "@tabler/icons"
-import { useAccount, useContractEvent } from "wagmi"
-import useContract from "../../hooks/useContract"
 
 export function Registration() {
-    const { createLensProfile } = useContract()
     const [active, setActive] = useState(0)
     const [image, setImage] = useState<File>()
     const [banner, setBanner] = useState<File>()
     const [skills, setSkills] = useState<string[]>([])
     const [interests, setInterests] = useState<string[]>([])
-    const { address: useAddress } = useAccount()
 
     const form = useForm({
         initialValues: {
@@ -46,16 +42,6 @@ export function Registration() {
                             : null,
                 }
             }
-
-            if (active === 1) {
-                const regex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/
-                return {
-                    website: regex.test(values.website) ? null : "Invalid website link",
-                    github: regex.test(values.github) ? null : "Invalid github link",
-                    twitter: regex.test(values.twitter) ? null : "Invalid twitter link",
-                }
-            }
-
             return {}
         },
     })
@@ -69,35 +55,6 @@ export function Registration() {
         })
 
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current))
-
-    const handleSubmit = async () => {
-        // userAddress,
-        // handle,
-        // imageURI,
-        // followNFTURI,
-        // description,
-        // github,
-        // twitter,
-        // website,
-        // profileURI
-        const formValuesToSubmit = JSON.stringify(form.values, null, 2)
-        const skillsToSubmit = JSON.stringify(skills, null, 2)
-        const interestsToSubmit = JSON.stringify(interests, null, 2)
-        const tx = await createLensProfile(
-            useAddress,
-            form.values.name,
-            "https://bafybeiccvnw7mg24h7yrzst743gl5jymwxi52hnmvm2gvec5bwxso2wv2e.ipfs.w3s.link/image",
-            "https://bafybeiccvnw7mg24h7yrzst743gl5jymwxi52hnmvm2gvec5bwxso2wv2e.ipfs.w3s.link/image",
-            form.values.description,
-            form.values.github,
-            form.values.twitter,
-            form.values.website,
-            "https://bafybeiccvnw7mg24h7yrzst743gl5jymwxi52hnmvm2gvec5bwxso2wv2e.ipfs.w3s.link/image"
-        )
-        console.log(tx)
-        const response = await tx.wait()
-        console.log(response)
-    }
 
     return (
         <>
@@ -233,7 +190,9 @@ export function Registration() {
                     </Button>
                 )}
                 {active !== 3 && <Button onClick={nextStep}>Next step</Button>}
-                {active === 3 && <Button onClick={() => handleSubmit()}>Confirm</Button>}
+                {active === 3 && (
+                    <Button onClick={() => console.log("submit todo")}>Confirm</Button>
+                )}
             </Group>
         </>
     )

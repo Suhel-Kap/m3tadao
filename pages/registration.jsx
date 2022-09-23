@@ -1,5 +1,6 @@
 import {Registration} from "../components/Registration";
 import {Container, Center} from "@mantine/core";
+import Head from "next/head";
 
 /*
 * name
@@ -9,9 +10,14 @@ import {Container, Center} from "@mantine/core";
 
 const UserRegistration = () => {
     return (
-        <Container size="xs">
-            <Registration/>
-        </Container>
+        <>
+            <Head>
+                <title>Registration - m3tadao</title>
+            </Head>
+            <Container size="xs">
+                <Registration/>
+            </Container>
+        </>
     )
 }
 
