@@ -15,6 +15,8 @@ import {
 import { useForm } from "@mantine/form"
 import { ImageInput } from "../ImageInput"
 import { IconAlertCircle, IconBrandTwitter, IconBrandGithub, IconWorldWww } from "@tabler/icons"
+import useContract from "../../hooks/useContract"
+import { useAccount } from "wagmi"
 
 export function Registration() {
     const [active, setActive] = useState(0)
@@ -22,6 +24,8 @@ export function Registration() {
     const [banner, setBanner] = useState<File>()
     const [skills, setSkills] = useState<string[]>([])
     const [interests, setInterests] = useState<string[]>([])
+    const { address } = useAccount()
+    const { createLensProfile } = useContract()
 
     const form = useForm({
         initialValues: {
@@ -191,7 +195,24 @@ export function Registration() {
                 )}
                 {active !== 3 && <Button onClick={nextStep}>Next step</Button>}
                 {active === 3 && (
-                    <Button onClick={() => console.log("submit todo")}>Confirm</Button>
+                    <Button
+                        onClick={() =>
+                            createLensProfile(
+                                address,
+                                form.values.name,
+                                image,
+                                banner,
+                                form.values.description,
+                                form.values.github,
+                                form.values.twitter,
+                                form.values.website,
+                                interests,
+                                skills
+                            )
+                        }
+                    >
+                        Confirm
+                    </Button>
                 )}
             </Group>
         </>

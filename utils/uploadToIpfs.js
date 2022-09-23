@@ -1,4 +1,5 @@
 const { Web3Storage, File } = require("web3.storage")
+
 export const uploadFileToIpfs = async (file, name) => {
     const files = [new File([file], name)]
     const client = new Web3Storage({ token: process.env.NEXT_PUBLIC_WEB3STORAGE_TOKEN })

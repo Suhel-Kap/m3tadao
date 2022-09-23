@@ -21,6 +21,20 @@
         "type": "error"
     },
     {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "previousOwner",
+                "type": "address"
+            },
+            { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+    },
+    {
         "inputs": [
             {
                 "components": [
@@ -53,8 +67,9 @@
                                 "type": "string"
                             },
                             { "internalType": "uint256", "name": "profID", "type": "uint256" },
+                            { "internalType": "string", "name": "profHex", "type": "string" },
                             { "internalType": "string", "name": "description", "type": "string" },
-                            { "internalType": "string", "name": "groupID", "type": "string" },
+                            { "internalType": "string", "name": "externalURIs", "type": "string" },
                             { "internalType": "string", "name": "profileURI", "type": "string" }
                         ],
                         "internalType": "struct DataTypes.ProfTableStruct",
@@ -78,7 +93,7 @@
                 "components": [
                     { "internalType": "address", "name": "posterAddress", "type": "address" },
                     { "internalType": "uint256", "name": "postID", "type": "uint256" },
-                    { "internalType": "uint256", "name": "accountID", "type": "uint256" },
+                    { "internalType": "string", "name": "accountID", "type": "string" },
                     { "internalType": "string", "name": "metadataTable", "type": "string" },
                     { "internalType": "string", "name": "postDescription", "type": "string" },
                     { "internalType": "string", "name": "postTitle", "type": "string" },
@@ -98,14 +113,16 @@
         "inputs": [
             {
                 "components": [
-                    { "internalType": "uint256", "name": "accountID", "type": "uint256" },
                     { "internalType": "address", "name": "founderAddress", "type": "address" },
+                    { "internalType": "uint256", "name": "id", "type": "uint256" },
+                    { "internalType": "uint256", "name": "accountID", "type": "uint256" },
                     { "internalType": "string", "name": "accountHex", "type": "string" },
                     { "internalType": "string", "name": "accountName", "type": "string" },
                     { "internalType": "string", "name": "metaURI", "type": "string" },
                     { "internalType": "string", "name": "AccountType", "type": "string" },
-                    { "internalType": "string", "name": "groupID", "type": "string" },
+                    { "internalType": "string", "name": "requirements", "type": "string" },
                     { "internalType": "string", "name": "imageURI", "type": "string" },
+                    { "internalType": "string", "name": "bannerURI", "type": "string" },
                     { "internalType": "string", "name": "metadataTable", "type": "string" },
                     { "internalType": "string", "name": "description", "type": "string" },
                     { "internalType": "address[]", "name": "members", "type": "address[]" }
@@ -125,6 +142,7 @@
             {
                 "components": [
                     { "internalType": "address", "name": "sender", "type": "address" },
+                    { "internalType": "uint256", "name": "id", "type": "uint256" },
                     { "internalType": "uint256", "name": "releaseID", "type": "uint256" },
                     { "internalType": "uint256", "name": "projectID", "type": "uint256" },
                     { "internalType": "string", "name": "metadataTable", "type": "string" },
@@ -151,6 +169,7 @@
             {
                 "components": [
                     { "internalType": "address", "name": "sender", "type": "address" },
+                    { "internalType": "uint256", "name": "id", "type": "uint256" },
                     { "internalType": "uint256", "name": "accountID", "type": "uint256" },
                     { "internalType": "uint256", "name": "projectID", "type": "uint256" },
                     { "internalType": "string", "name": "metadataTable", "type": "string" },
@@ -173,6 +192,30 @@
         "type": "function"
     },
     {
+        "inputs": [
+            { "internalType": "uint256", "name": "accountID", "type": "uint256" },
+            { "internalType": "uint256", "name": "postID", "type": "uint256" }
+        ],
+        "name": "deletePost",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getAccountTableURI",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getPostTableURI",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "getProjectTableURI",
         "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
@@ -181,7 +224,14 @@
     },
     {
         "inputs": [],
-        "name": "getUserTableName",
+        "name": "getReleaseTableURI",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getUserTableURI",
         "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
         "stateMutability": "view",
         "type": "function"
@@ -197,16 +247,41 @@
         "type": "function"
     },
     {
-        "inputs": [{ "internalType": "string", "name": "newBaseURI", "type": "string" }],
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "string", "name": "baseURI", "type": "string" }],
         "name": "setBaseURI",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [
-            { "internalType": "uint256", "name": "_accountID", "type": "uint256" },
-            { "internalType": "string", "name": "_metaURI", "type": "string" }
+            { "internalType": "uint256", "name": "accountID", "type": "uint256" },
+            { "internalType": "string", "name": "imageURL", "type": "string" },
+            { "internalType": "string", "name": "bannerURI", "type": "string" },
+            { "internalType": "string", "name": "metaURI", "type": "string" },
+            { "internalType": "string", "name": "description", "type": "string" },
+            { "internalType": "string", "name": "requirements", "type": "string" }
         ],
         "name": "updateAccountMetadata",
         "outputs": [],
@@ -215,8 +290,22 @@
     },
     {
         "inputs": [
-            { "internalType": "uint256", "name": "_projectID", "type": "uint256" },
-            { "internalType": "string", "name": "_metaURI", "type": "string" }
+            { "internalType": "uint256", "name": "profileId", "type": "uint256" },
+            { "internalType": "string", "name": "imageURI", "type": "string" },
+            { "internalType": "string", "name": "profileURI", "type": "string" },
+            { "internalType": "string", "name": "externalURIs", "type": "string" }
+        ],
+        "name": "updateProfileMetadata",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "projectID", "type": "uint256" },
+            { "internalType": "string", "name": "imageURI", "type": "string" },
+            { "internalType": "string", "name": "metaURI", "type": "string" },
+            { "internalType": "string", "name": "description", "type": "string" }
         ],
         "name": "updateProjectMetadata",
         "outputs": [],

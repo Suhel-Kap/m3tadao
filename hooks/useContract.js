@@ -1,6 +1,15 @@
 import { ethers } from "ethers"
 import { m3taDaoAbi, contractAddresses } from "../constants/"
 import { useSigner } from "wagmi"
+import { uploadFileToIpfs, uploadJsonToIpfs } from "../utils/uploadToIpfs"
+
+const isJsonEmpty = (jsonObj) => {
+    return (
+        jsonObj &&
+        Object.keys(jsonObj).length === 0 &&
+        Object.getPrototypeOf(jsonObj) === Object.prototype
+    )
+}
 
 const useContract = () => {
     const { data: signer, isError, isLoading } = useSigner()
@@ -8,81 +17,76 @@ const useContract = () => {
     const createLensProfile = async (
         userAddress,
         handle,
-        imageURI,
-        followNFTURI,
+        image,
+        banner,
+        // followNFTURI,
         description,
         github,
         twitter,
         website,
-        profileURI
+        interests,
+        skills
+        // profileURI
     ) => {
-        console.log("13")
-        const groupID = { website, twitter, github }
-        //     name: '',
-        //     description: '',
-        //     designation: '',
-        //     skills: [],
-        //     interests: [],
-        //     image: '',
-        //     banner: ''
+        const externalJson = { website, twitter, github, interests, skills }
+        let externalURIs
+        if (isJsonEmpty(externalJson)) {
+            externalURIs = ""
+        } else {
+            externalURIs = await uploadJsonToIpfs(externalJson, "json")
+        }
+        console.log("externalURIs", externalURIs)
+
+        let profileURI
+        if (banner) {
+            profileURI = await uploadFileToIpfs(banner, "image")
+        } else {
+            profileURI = ""
+        }
+        console.log("profileURI", profileURI)
+
+        let imageURI
+        if (image) {
+            imageURI = await uploadFileToIpfs(image, "image")
+        } else {
+            imageURI = ""
+        }
+
+        console.log("imageURI", imageURI)
+        const followNFTURI = ""
+        console.log(signer)
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
             m3taDaoAbi,
             signer
         )
-        console.log(m3taDaoContractInstance)
-        console.log("14")
-        console.log(userAddress)
-        const inputStruct = {
-            to: userAddress,
-            handle: handle,
-            imageURI: imageURI,
-            followModule: "0x0000000000000000000000000000000000000000",
-            followModuleInitData: [],
-            followNFTURI: followNFTURI,
-        }
 
-        const inputStruct2 = {
-            metadataTable: "dont care",
-            profID: 0,
-            description: description,
-            groupID: JSON.stringify(groupID),
-            profileURI: JSON.stringify(profileURI),
-        }
-        const finalCreateProfileInput = {
-            inputStruct,
-            inputStruct2,
-        }
-        console.log("15")
         var tx = await m3taDaoContractInstance.createLensProfile(
             [
                 [
                     userAddress,
-                    "handle894357",
+                    handle,
                     imageURI,
                     "0x0000000000000000000000000000000000000000",
                     "0x",
                     followNFTURI,
                 ],
-                ["dont care", 0, description, JSON.stringify(groupID), JSON.stringify(profileURI)],
+                ["", 0, "", description, externalURIs, profileURI],
             ],
             { gasLimit: 5000000 }
         )
-        // var tx = await m3taDaoContractInstance.getProjectTableURI()
         return tx
     }
 
     const createProjectAccount = async (
-        accountID,
-        founderAddress,
-        accountHex,
         accountName,
         metaURI,
         AccountType,
-        groupID,
+        requirements,
         imageURI,
-        metadataTable,
+        bannerURI,
         description,
+        // we should add into the members the contract address of metadao to be able to make updates
         members
     ) => {
         const m3taDaoContractInstance = new ethers.Contract(
@@ -92,16 +96,19 @@ const useContract = () => {
         )
 
         const accountStruct = [
-            accountID,
-            founderAddress,
-            accountHex,
+            (founderAddress = "0x0000000000000000000000000000000000000000"),
+            (id = "0"),
+            (accountID = "0"),
+            (accountHex = "a"),
             accountName,
             metaURI,
             AccountType,
-            groupID,
+            requirements,
             imageURI,
-            metadataTable,
+            bannerURI,
+            (metadataTable = "a"),
             description,
+            // we should add into the members the contract address of metadao to be able to make updates
             members,
         ]
 
@@ -112,16 +119,13 @@ const useContract = () => {
     }
 
     const createSubProject = async (
-        sender,
         accountID,
-        projectID,
-        metadataTable,
-        projectHex,
         projectName,
         metaURI,
         projectType,
         imageURI,
         description,
+        // we should add into the members the contract address of metadao to be able to make updates
         members
     ) => {
         const m3taDaoContractInstance = new ethers.Contract(
@@ -131,11 +135,12 @@ const useContract = () => {
         )
 
         const ProjectStruct = [
-            sender,
+            (sender = "0x0000000000000000000000000000000000000000"),
+            (id = 0),
             accountID,
-            projectID,
-            metadataTable,
-            projectHex,
+            (projectID = "1"),
+            (metadataTable = "a"),
+            (projectHex = "e"),
             projectName,
             metaURI,
             projectType,
@@ -151,11 +156,7 @@ const useContract = () => {
     }
 
     const createRelease = async (
-        sender,
-        releaseID,
         projectID,
-        metadataTable,
-        releaseHex,
         releaseName,
         metaURI,
         releaseType,
@@ -170,11 +171,12 @@ const useContract = () => {
         )
 
         const ReleaseStruct = [
-            sender,
-            releaseID,
+            (sender = "0x0000000000000000000000000000000000000000"),
+            (id = "0"),
+            (releaseID = "0"),
             projectID,
-            metadataTable,
-            releaseHex,
+            (metadataTable = "a"),
+            (releaseHex = "a"),
             releaseName,
             metaURI,
             releaseType,
@@ -187,11 +189,45 @@ const useContract = () => {
         return tx
     }
 
+    const createPost = async (accountID, postDescription, postTitle, postGalery) => {
+        const m3taDaoContractInstance = new ethers.Contract(
+            contractAddresses.m3taDao,
+            m3taDaoAbi,
+            signer
+        )
+
+        const PostStruct = [
+            (posterAddress = "0x0000000000000000000000000000000000000000"),
+            (postID = "0"),
+            accountID,
+            (metadataTable = "a"),
+            postDescription,
+            postTitle,
+            postGalery,
+        ]
+
+        var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
+        return tx
+    }
+
+    const deletePost = async (accountID, postID) => {
+        const m3taDaoContractInstance = new ethers.Contract(
+            contractAddresses.m3taDao,
+            m3taDaoAbi,
+            signer
+        )
+
+        var tx = await m3taDaoContractInstance.createPost(accountID, postID, { gasLimit: 5000000 })
+        return tx
+    }
+
     return {
         createLensProfile,
         createProjectAccount,
         createSubProject,
         createRelease,
+        createPost,
+        deletePost,
     }
 }
 
