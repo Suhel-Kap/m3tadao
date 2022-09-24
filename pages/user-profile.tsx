@@ -72,7 +72,12 @@ const UserProfile: NextPage = () => {
         // const externalProfileData: any = await response.json()
         // console.log(externalProfileData)
         const externalProfileData = {
-            website: 'abc', twitter: '', github: '', interests: [], skills: [], designation: "student"
+            website: 'https://valist.io',
+            twitter: 'https://twitter.com',
+            github: 'https://github.com',
+            interests: ['defi', 'nfts'],
+            skills: ['development', 'game', 'development'],
+            designation: "student"
         }
         setStats((oldStats) => ({...oldStats, ...externalProfileData}))
     }

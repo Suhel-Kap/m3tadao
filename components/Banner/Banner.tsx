@@ -1,6 +1,6 @@
-import {createStyles, Card, Avatar, Text, Group, Button, Center, Stack} from '@mantine/core';
-import stats from "./stats.json"
-import Link from "next/link";
+import {createStyles, Card, ActionIcon, Avatar, Text, Group, Button, Center, Stack, Badge, Title} from '@mantine/core';
+import Link from "next/link"
+import {IconBrandGithub, IconBrandTwitter, IconWorldWww} from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -25,7 +25,18 @@ interface UserCardImageProps {
     designation: string;
 }
 
-export function Banner({image, avatar, name, designation, stats}: UserCardImageProps) {
+export function Banner({
+                           image,
+                           avatar,
+                           name,
+                           designation,
+                           stats,
+                           website,
+                           interests,
+                           skills,
+                           github,
+                           twitter
+                       }: UserCardImageProps) {
     const {classes, theme} = useStyles();
 
     const items = stats.map((stat) => (
@@ -38,6 +49,17 @@ export function Banner({image, avatar, name, designation, stats}: UserCardImageP
             </Text>
         </div>
     ));
+
+    const skillBadges = skills?.map((skill) => (
+        <Badge color={"red"}>
+            {skill}
+        </Badge>
+    ))
+    const interestBadges = interests?.map((interest) => (
+        <Badge color={"green"}>
+            {interest}
+        </Badge>
+    ))
 
     return (
         <Card p="xl" className={classes.card}>
@@ -55,9 +77,52 @@ export function Banner({image, avatar, name, designation, stats}: UserCardImageP
             <Text align="center" size="sm" color="dimmed">
                 {designation}
             </Text>
+            <Group mt={"md"} position={"center"} spacing={30}>
+                {twitter && <Link href={twitter ? twitter : "https://twitter.com"} passHref>
+                    <ActionIcon component={"a"} target={"_blank"}>
+                        <IconBrandTwitter size={32}/>
+                    </ActionIcon>
+                </Link>}
+                {github && <Link href={github ? github : "https://github.com"} passHref>
+                    <ActionIcon component={"a"} target={"_blank"}>
+                        <IconBrandGithub size={32}/>
+                    </ActionIcon>
+                </Link>}
+                {website && <Link href={website ? website : "#"} passHref>
+                    <ActionIcon component={"a"} target={"_blank"}>
+                        <IconWorldWww size={32}/>
+                    </ActionIcon>
+                </Link>}
+            </Group>
             <Group mt="md" position="center" spacing={30}>
                 {items}
             </Group>
+            <Stack mt={"lg"}>
+                <Center>
+                    <Title order={5}>Skills</Title>
+                </Center>
+                <Center>
+                    <Group mt={"xs"} position={"center"} spacing={20} sx={(theme) => ({
+                        width: "25%", [theme.fn.smallerThan("sm")]: {
+                            width: "100%"
+                        }
+                    })}>
+                        {skillBadges}
+                    </Group>
+                </Center>
+                <Center>
+                    <Title order={5}>Interests</Title>
+                </Center>
+                <Center>
+                    <Group mt={"xs"} position={"center"} spacing={20} sx={(theme) => ({
+                        width: "25%", [theme.fn.smallerThan("sm")]: {
+                            width: "100%"
+                        }
+                    })}>
+                        {interestBadges}
+                    </Group>
+                </Center>
+            </Stack>
             <Stack m={"md"}>
                 <Center mb={0}>
                     <Button
@@ -70,51 +135,6 @@ export function Banner({image, avatar, name, designation, stats}: UserCardImageP
                     >
                         Follow
                     </Button>
-                </Center>
-                <Center mt={0}>
-                    <Link href={"/create-organisation"} passHref>
-                        <Button
-                            component={"a"}
-                            radius="md"
-                            mt="xl"
-                            size="md"
-                            variant={"gradient"}
-                            gradient={{from: 'teal', to: 'blue', deg: 60}}
-                            color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                        >
-                            Create Organisation
-                        </Button>
-                    </Link>
-                </Center>
-                <Center mt={0}>
-                    <Link href={"/project"} passHref>
-                        <Button
-                            component={"a"}
-                            radius="md"
-                            mt="xl"
-                            size="md"
-                            variant={"gradient"}
-                            gradient={{from: 'indigo', to: 'cyan'}}
-                            color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                        >
-                            Create Project
-                        </Button>
-                    </Link>
-                </Center>
-                <Center mt={0}>
-                    <Link href={"/create-release"} passHref>
-                        <Button
-                            component={"a"}
-                            radius="md"
-                            mt="xl"
-                            size="md"
-                            variant={"gradient"}
-                            gradient={{from: 'cyan', to: 'indigo'}}
-                            color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                        >
-                            Create Release
-                        </Button>
-                    </Link>
                 </Center>
             </Stack>
         </Card>
