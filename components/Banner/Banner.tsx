@@ -16,11 +16,16 @@ interface UserCardImageProps {
     image: string;
     avatar: string;
     name: string;
-    job: string;
     stats: { label: string; value: string }[];
+    website: string;
+    twitter: string;
+    github: string;
+    interests: string[];
+    skills: string[];
+    designation: string;
 }
 
-export function Banner({image, avatar, name, job, stats}: UserCardImageProps) {
+export function Banner({image, avatar, name, designation, stats}: UserCardImageProps) {
     const {classes, theme} = useStyles();
 
     const items = stats.map((stat) => (
@@ -36,13 +41,19 @@ export function Banner({image, avatar, name, job, stats}: UserCardImageProps) {
 
     return (
         <Card p="xl" className={classes.card}>
-            <Card.Section sx={(theme) => ({backgroundImage: `url(${image})`, height: 225, [theme.fn.smallerThan("md")]: {height: 150}})}/>
+            <Card.Section sx={(theme) => ({
+                backgroundImage: `url(${image})`,
+                height: 225,
+                [theme.fn.smallerThan("md")]: {
+                    height: 150
+                }
+            })}/>
             <Avatar src={avatar} size={160} radius={80} mx="auto" mt={-30} className={classes.avatar}/>
             <Text align="center" size="lg" weight={500} mt="sm">
                 {name}
             </Text>
             <Text align="center" size="sm" color="dimmed">
-                {job}
+                {designation}
             </Text>
             <Group mt="md" position="center" spacing={30}>
                 {items}

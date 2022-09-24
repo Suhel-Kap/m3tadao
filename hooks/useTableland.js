@@ -34,7 +34,7 @@ const useTableland = () => {
         // [ { name: 'name' }, { name: 'id' } ]
         console.log(rows)
         // [ [ 'Bobby Tables', 0 ], [ 'Molly Tables', 1 ] ]
-        return rows.length != 0
+        return rows.length !== 0
     }
 
     const getUserData = async () => {

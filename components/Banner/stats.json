@@ -1,19 +1,19 @@
 {
-  "image": "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80",
-  "avatar": "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80",
-  "name": "Bill Headbanger",
-  "job": "Fullstack engineer",
+  "image": "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+  "avatar": "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+  "name": "Loading...",
+  "job": "Loading...",
   "stats": [
     {
-      "value": "34K",
+      "value": "...",
       "label": "Followers"
     },
     {
-      "value": "187",
+      "value": "...",
       "label": "Follows"
     },
     {
-      "value": "1.6K",
+      "value": "...",
       "label": "Posts"
     }
   ]
