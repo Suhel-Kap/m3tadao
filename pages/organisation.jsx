@@ -9,46 +9,10 @@ import {ChatRoom} from "../components/ChatRoom";
 import Link from "next/link";
 import {MemberCard} from "../components/MemberCard";
 import {CreatePost} from "../components/CreatePost";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import {fetchOrganisationDetails} from "../constants/graphql/queries"
-import { graphql } from "@valist/sdk";
-
-const data = [
-    {
-        avatar: "https://img.freepik.com/free-vector/cute-owl-wearing-earmuffs-cartoon-icon-illustration_138676-2701.jpg?w=740&t=st=1663785103~exp=1663785703~hmac=b32e960a6a1d75f639dde13fe4aef0cd679d58d17b0362cad4d6f6b787f214e8",
-        name: "m3tadao",
-        shortDescription: " tempor incididunt ut labore et dolore magna aliqua",
-    },
-    {
-        avatar: "https://img.freepik.com/free-vector/cute-owl-wearing-earmuffs-cartoon-icon-illustration_138676-2701.jpg?w=740&t=st=1663785103~exp=1663785703~hmac=b32e960a6a1d75f639dde13fe4aef0cd679d58d17b0362cad4d6f6b787f214e8",
-        name: "moog3",
-        shortDescription: "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    },
-    {
-        avatar: "https://img.freepik.com/free-vector/cute-owl-wearing-earmuffs-cartoon-icon-illustration_138676-2701.jpg?w=740&t=st=1663785103~exp=1663785703~hmac=b32e960a6a1d75f639dde13fe4aef0cd679d58d17b0362cad4d6f6b787f214e8",
-        name: "m3tadao",
-        shortDescription: "lorem  ipsum dolor sit amet consectetur adipiscingipsum dolor sit amet consectetur adipiscingipsum dolor sit amet consectetur adipiscingipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    },
-    {
-        avatar: "https://img.freepik.com/free-vector/cute-owl-wearing-earmuffs-cartoon-icon-illustration_138676-2701.jpg?w=740&t=st=1663785103~exp=1663785703~hmac=b32e960a6a1d75f639dde13fe4aef0cd679d58d17b0362cad4d6f6b787f214e8",
-        name: "moog3",
-        shortDescription: "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    },
-]
-const memberData = [
-    {
-        address: "0x0000000000000001234500000000000000000000",
-        name: "person1"
-    },
-    {
-        address: "0x0321000000000000000000000000000000000000",
-        name: "person2"
-    },
-    {
-        address: "0x0000000000000000000000000000000007770000",
-        name: "person3"
-    }
-]
+import {graphql} from "@valist/sdk"
+import {m3taDao} from "../constants/contractAddresses.json"
 
 const Organisation = () => {
     const [activeTab, setActiveTab] = useState("first")
@@ -58,14 +22,14 @@ const Organisation = () => {
     const [name, setName] = useState("")
     const router = useRouter()
 
-    useEffect(()=>{
+    useEffect(() => {
         initialize()
+    }, [router.query])
 
-    },[])
-
-    const initialize = async()=>{
+    const initialize = async () => {
         const accHex = router.query.accHex
-        
+        console.log(accHex)
+
         const query = {
             query: fetchOrganisationDetails,
             variables: {
@@ -74,11 +38,11 @@ const Organisation = () => {
         }
 
         // const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data.accounts
-        const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data.account
-        console.log("graphRes",graphRes)
+        const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data?.account
+        console.log("graphRes", graphRes)
         setName(graphRes.name)
         setProjectsData(graphRes.projects)
-        setMembers(graphRes.members)
+        setMembers(graphRes.members.filter(mem => mem.id !== m3taDao))
     }
 
     const projects = projectsData.map((project, index) => {
@@ -110,15 +74,15 @@ const Organisation = () => {
                     Welcome to {name} 👋
                 </Title>
                 <Button.Group>
-                        <Button
-                            radius="md"
-                            mt="xl"
-                            size="md"
-                            variant={"light"}
-                            onClick={() => setIsModalOpen(true)}
-                        >
-                            New Post
-                        </Button>
+                    <Button
+                        radius="md"
+                        mt="xl"
+                        size="md"
+                        variant={"light"}
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        New Post
+                    </Button>
                     <Link href={"/create-organisation"} passHref>
                         <Button
                             component={"a"}
@@ -177,7 +141,7 @@ const Organisation = () => {
                                         {
                                             members.map((member, index) => {
                                                 return (
-                                                    <MemberCard address={member.id} name="Admin" />
+                                                    <MemberCard address={member.id} name="Admin"/>
                                                 )
                                             })
                                         }
@@ -198,7 +162,9 @@ const Organisation = () => {
                 <Tabs.Panel value={"third"}>
                     <Container>
                         <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
-                            <EditOrganisation/>
+                            <EditOrganisation members={Object.keys(members).map(function (key) {
+                                return members[key].id
+                            })}/>
                         </Paper>
                     </Container>
                 </Tabs.Panel>

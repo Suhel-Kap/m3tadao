@@ -13,8 +13,8 @@ import {
     Title,
     Tooltip
 } from "@mantine/core"
-import {DatePicker, DateRangePicker, DateRangePickerValue} from '@mantine/dates'
-import {useState} from "react"
+import {DatePicker} from '@mantine/dates'
+import {useEffect, useState} from "react"
 import {IconCheck} from "@tabler/icons"
 import {useForm, zodResolver} from "@mantine/form"
 import {ImageInput} from "../ImageInput"
@@ -26,16 +26,23 @@ import {NameInput} from "../NameInput";
 import {AddressInput} from "../AddressInput";
 import {MemberList} from "../MemberList";
 
-export function EditOrganisation() {
+export function EditOrganisation(props) {
     const {address} = useAccount()
     const [activeTab, setActiveTab] = useState("first")
     const [loading, setLoading] = useState(false)
     // TODO: Set user data as initial values
     const [image, setImage] = useState<File>()
-    const [members, membersHandlers] = useListState<string>([])
+    const [members, membersHandlers] = useListState<string>(props.members)
     const defaultTags = [
         'finance', 'digital marketing', 'development', 'design', 'game', 'protocol', 'application', 'utilities', 'storage', 'networks', 'social', 'communication', 'nft', 'defi', 'media', 'music',
     ]
+    
+    useEffect(() => {
+        membersHandlers.setState([...props.members])
+        // props.members.map((member) => {
+        //     membersHandlers.append(member)
+        // })
+    }, [props.members])
 
     const removeMember = (member: string) => {
         membersHandlers.filter(

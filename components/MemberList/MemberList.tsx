@@ -7,9 +7,9 @@ import {
 } from '@mantine/core';
 
 import * as Icon from 'tabler-icons-react';
-import { Address } from '../Address';
-import { Identicon } from '../Identicon';
-import { List } from '../List';
+import {Address} from '../Address';
+import {Identicon} from '../Identicon';
+import {List} from '../List';
 
 export interface MemberListProps {
     label: string;
@@ -32,14 +32,14 @@ export function MemberList(props: MemberListProps) {
         <List>
             {props.members.map((mem: string, idx: number) =>
                 <Group key={idx} noWrap>
-                    <Identicon value={mem} />
-                    <Stack spacing={0} style={{ flexGrow: 1 }}>
-                        <Address address={mem} />
+                    <Identicon value={mem}/>
+                    <Stack spacing={0} style={{flexGrow: 1}}>
+                        <Address address={mem}/>
                         <Text color={color}>{props.label}</Text>
                     </Stack>
-                    { props.editable && props.members.length > 0 &&
+                    {props.editable && props.members.length > 0 &&
                         <ActionIcon variant="transparent" onClick={() => remove(mem)}>
-                            <Icon.Trash color={color} />
+                            <Icon.Trash color={color}/>
                         </ActionIcon>
                     }
                 </Group>
