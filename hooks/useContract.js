@@ -1,7 +1,7 @@
-import { ethers } from "ethers"
-import { m3taDaoAbi, contractAddresses } from "../constants/"
-import { useSigner } from "wagmi"
-import { uploadFileToIpfs, uploadJsonToIpfs } from "../utils/uploadToIpfs"
+import {ethers} from "ethers"
+import {contractAddresses, m3taDaoAbi} from "../constants/"
+import {useSigner} from "wagmi"
+import {uploadFileToIpfs, uploadJsonToIpfs} from "../utils/uploadToIpfs"
 
 const isJsonEmpty = (jsonObj) => {
     return (
@@ -75,7 +75,7 @@ const useContract = () => {
             ],
             { gasLimit: 5000000 }
         )
-        return tx
+        return await tx.wait()
     }
 
     const createProjectAccount = async (

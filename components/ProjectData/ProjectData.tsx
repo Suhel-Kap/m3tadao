@@ -1,7 +1,8 @@
-import {Anchor, Paper, Table, Tabs, Text} from '@mantine/core'
+import {Anchor, Paper, SimpleGrid, Table, Tabs, Text} from '@mantine/core'
 import {StyledTabs} from '../StyledTabs'
 import {EditProject} from "../EditProject"
 import {MemberCard} from "../MemberCard";
+import {RequirementsCard} from "../RequirementsCard";
 
 const data = [
     {
@@ -45,12 +46,15 @@ export function ProjectData() {
     ))
 
     const memberRows = memberData.map((row) => (
-        <MemberCard address={row.address} name={row.name} />
+        <MemberCard address={row.address} name={row.name}/>
     ))
 
     return (
         <StyledTabs defaultValue={"readme"}>
             <Tabs.List my={"md"}>
+                <Tabs.Tab value={"requirements"}>
+                    Requirements
+                </Tabs.Tab>
                 <Tabs.Tab value="readme">
                     Readme
                 </Tabs.Tab>
@@ -64,6 +68,22 @@ export function ProjectData() {
                     Settings
                 </Tabs.Tab>
             </Tabs.List>
+            <Tabs.Panel value={"requirements"}>
+                <SimpleGrid cols={2} spacing={"md"} breakpoints={[{ maxWidth: 600, cols: 1, spacing: 'sm' },]}>
+                    <RequirementsCard
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
+                        title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
+                        badges={["Defi", "Design", "Management"]}/>
+                    <RequirementsCard
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
+                        title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
+                        badges={["Defi", "Design", "Management"]}/>
+                    <RequirementsCard
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
+                        title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
+                        badges={["Defi", "Design", "Management"]}/>
+                </SimpleGrid>
+            </Tabs.Panel>
             <Tabs.Panel value={"readme"}>
                 <Paper shadow="xl" radius="lg" p="md">
                     <Text p={"md"}>

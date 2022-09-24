@@ -1,4 +1,4 @@
-import { useState } from "react"
+import {useState} from "react"
 import {
     Stepper,
     Button,
@@ -12,11 +12,13 @@ import {
     Input,
     Textarea,
 } from "@mantine/core"
-import { useForm } from "@mantine/form"
-import { ImageInput } from "../ImageInput"
-import { IconAlertCircle, IconBrandTwitter, IconBrandGithub, IconWorldWww } from "@tabler/icons"
+import {useForm} from "@mantine/form"
+import {ImageInput} from "../ImageInput"
+import {IconAlertCircle, IconBrandTwitter, IconBrandGithub, IconWorldWww, IconCheck} from "@tabler/icons"
 import useContract from "../../hooks/useContract"
-import { useAccount } from "wagmi"
+import {useAccount} from "wagmi"
+import {showNotification, updateNotification} from "@mantine/notifications";
+import {useRouter} from "next/router";
 
 export function Registration() {
     const [active, setActive] = useState(0)
@@ -24,8 +26,9 @@ export function Registration() {
     const [banner, setBanner] = useState<File>()
     const [skills, setSkills] = useState<string[]>([])
     const [interests, setInterests] = useState<string[]>([])
-    const { address } = useAccount()
-    const { createLensProfile } = useContract()
+    const {address} = useAccount()
+    const {createLensProfile} = useContract()
+    const router = useRouter()
 
     const form = useForm({
         initialValues: {
@@ -60,18 +63,62 @@ export function Registration() {
 
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current))
 
+    const handleSubmit = async () => {
+        showNotification({
+            id: 'load-data',
+            loading: true,
+            title: 'Registering you on m3tadao',
+            message: 'Please wait while we upload your images to web3.storage and create your lens profile',
+            autoClose: false,
+            disallowClose: true,
+        })
+        try{
+            await createLensProfile(
+                address,
+                form.values.name,
+                image,
+                banner,
+                form.values.description,
+                form.values.github,
+                form.values.twitter,
+                form.values.website,
+                interests,
+                skills
+            )
+            updateNotification({
+                id: 'load-data',
+                color: 'teal',
+                title: 'Success',
+                message: 'Registered successfully',
+                icon: <IconCheck size={16}/>,
+                autoClose: 2000,
+            })
+            router.push("/home")
+        } catch (e) {
+            updateNotification({
+                id: 'load-data',
+                color: 'red',
+                title: 'Error',
+                message: 'Failed to register',
+                icon: <IconAlertCircle size={16}/>,
+                autoClose: 2000,
+            })
+        }
+
+    }
+
     return (
         <>
-            <Stepper active={active} breakpoint="sm" style={{ marginTop: 75 }}>
+            <Stepper active={active} breakpoint="sm" style={{marginTop: 75}}>
                 <Stepper.Step label="Basic Info">
                     <Title order={4}>Your Profile Picture</Title>
-                    <ImageInput width={600} height={300} onChange={setImage} value={image} />
+                    <ImageInput width={600} height={300} onChange={setImage} value={image}/>
                     <Title order={4}>
-                        Your Name <span style={{ color: "red" }}>*</span>
+                        Your Name <span style={{color: "red"}}>*</span>
                     </Title>
                     <TextInput required placeholder="Your Name" {...form.getInputProps("name")} />
                     <Title order={4}>
-                        Your Designation <span style={{ color: "red" }}>*</span>
+                        Your Designation <span style={{color: "red"}}>*</span>
                     </Title>
                     <TextInput
                         required
@@ -79,7 +126,7 @@ export function Registration() {
                         {...form.getInputProps("designation")}
                     />
                     <Title order={4}>
-                        Something About Yourself <span style={{ color: "red" }}>*</span>
+                        Something About Yourself <span style={{color: "red"}}>*</span>
                     </Title>
                     <Textarea
                         required
@@ -90,10 +137,10 @@ export function Registration() {
 
                 <Stepper.Step label="Social Media">
                     <Title order={4}>Your Banner</Title>
-                    <ImageInput width={600} height={300} onChange={setBanner} value={banner} />
+                    <ImageInput width={600} height={300} onChange={setBanner} value={banner}/>
                     <Title order={4}>Your Website</Title>
                     <Input
-                        icon={<IconWorldWww size={16} />}
+                        icon={<IconWorldWww size={16}/>}
                         placeholder="Your Website"
                         {...form.getInputProps("website")}
                         rightSection={
@@ -101,7 +148,7 @@ export function Registration() {
                                 <div>
                                     <IconAlertCircle
                                         size={18}
-                                        style={{ display: "block", opacity: 0.5 }}
+                                        style={{display: "block", opacity: 0.5}}
                                     />
                                 </div>
                             </Tooltip>
@@ -109,7 +156,7 @@ export function Registration() {
                     />
                     <Title order={4}>Your Github</Title>
                     <Input
-                        icon={<IconBrandGithub size={16} />}
+                        icon={<IconBrandGithub size={16}/>}
                         placeholder="Your GitHub"
                         {...form.getInputProps("github")}
                         rightSection={
@@ -117,7 +164,7 @@ export function Registration() {
                                 <div>
                                     <IconAlertCircle
                                         size={18}
-                                        style={{ display: "block", opacity: 0.5 }}
+                                        style={{display: "block", opacity: 0.5}}
                                     />
                                 </div>
                             </Tooltip>
@@ -125,7 +172,7 @@ export function Registration() {
                     />
                     <Title order={4}>Your Twitter</Title>
                     <Input
-                        icon={<IconBrandTwitter size={16} />}
+                        icon={<IconBrandTwitter size={16}/>}
                         placeholder="Your twitter"
                         {...form.getInputProps("twitter")}
                         rightSection={
@@ -133,7 +180,7 @@ export function Registration() {
                                 <div>
                                     <IconAlertCircle
                                         size={18}
-                                        style={{ display: "block", opacity: 0.5 }}
+                                        style={{display: "block", opacity: 0.5}}
                                     />
                                 </div>
                             </Tooltip>
@@ -152,11 +199,11 @@ export function Registration() {
                             spacing="xl"
                             size="md"
                         >
-                            <Checkbox value="development" label="Development" />
-                            <Checkbox value="design" label="Design" />
-                            <Checkbox value="dim" label="Digital Marketing" />
-                            <Checkbox value="pm" label="Project Management" />
-                            <Checkbox value="fm" label="Finance Management" />
+                            <Checkbox value="development" label="Development"/>
+                            <Checkbox value="design" label="Design"/>
+                            <Checkbox value="dim" label="Digital Marketing"/>
+                            <Checkbox value="pm" label="Project Management"/>
+                            <Checkbox value="fm" label="Finance Management"/>
                         </Checkbox.Group>
                     </Container>
                     <Container>
@@ -169,11 +216,11 @@ export function Registration() {
                             spacing="xl"
                             size="md"
                         >
-                            <Checkbox value="nft" label="NFTs" />
-                            <Checkbox value="defi" label="DeFi" />
-                            <Checkbox value="dao" label="DAOs" />
-                            <Checkbox value="crypto" label="Crypto" />
-                            <Checkbox value="did" label="DIDs" />
+                            <Checkbox value="nft" label="NFTs"/>
+                            <Checkbox value="defi" label="DeFi"/>
+                            <Checkbox value="dao" label="DAOs"/>
+                            <Checkbox value="crypto" label="Crypto"/>
+                            <Checkbox value="did" label="DIDs"/>
                         </Checkbox.Group>
                     </Container>
                 </Stepper.Step>
@@ -195,22 +242,7 @@ export function Registration() {
                 )}
                 {active !== 3 && <Button onClick={nextStep}>Next step</Button>}
                 {active === 3 && (
-                    <Button
-                        onClick={() =>
-                            createLensProfile(
-                                address,
-                                form.values.name,
-                                image,
-                                banner,
-                                form.values.description,
-                                form.values.github,
-                                form.values.twitter,
-                                form.values.website,
-                                interests,
-                                skills
-                            )
-                        }
-                    >
+                    <Button onClick={() => handleSubmit()}>
                         Confirm
                     </Button>
                 )}

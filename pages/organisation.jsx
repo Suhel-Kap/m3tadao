@@ -1,6 +1,6 @@
 import {Layout} from "../components/Layout";
 import Head from "next/head";
-import {Text, Container, Grid, Tabs, Title, Paper, Center, Stack, SimpleGrid, Button, Group} from "@mantine/core"
+import {Text, Container, Grid, Tabs, Title, Paper, Center, Stack, SimpleGrid, Button, Group, Modal} from "@mantine/core"
 import {ProjectCard} from "../components/ProjectCard"
 import {useState} from "react"
 import {IconPlus} from "@tabler/icons"
@@ -49,11 +49,25 @@ const memberData = [
 
 const Organisation = () => {
     const [activeTab, setActiveTab] = useState("first")
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const projects = data.map((project, index) => {
         return (
             <ProjectCard avatar={project.avatar} name={project.name} shortDescription={project.shortDescription}/>
         )
     })
+
+    const postModal = <Modal
+        opened={isModalOpen}
+        size="60%"
+        transition="fade"
+        transitionDuration={500}
+        transitionTimingFunction="ease"
+        title={<Title>Add a post</Title>}
+        onClose={() => setIsModalOpen(false)}>
+        <Center>
+            <CreatePost/>
+        </Center>
+    </Modal>
 
     return (
         <Layout>
@@ -64,22 +78,31 @@ const Organisation = () => {
                 <Title>
                     Welcome to your organisation 👋
                 </Title>
-                <Link href={"/create-organisation"} passHref>
-                    <Button
-                        component={"a"}
-                        radius="md"
-                        mt="xl"
-                        size="md"
-                        variant={"light"}
-                        // color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                    >
-                        New Organisation
-                    </Button>
-                </Link>
+                <Button.Group>
+                        <Button
+                            radius="md"
+                            mt="xl"
+                            size="md"
+                            variant={"light"}
+                            onClick={() => setIsModalOpen(true)}
+                        >
+                            New Post
+                        </Button>
+                    <Link href={"/create-organisation"} passHref>
+                        <Button
+                            component={"a"}
+                            radius="md"
+                            mt="xl"
+                            size="md"
+                            variant={"light"}
+                            // color={theme.colorScheme === 'dark' ? undefined : 'dark'}
+                        >
+                            New Organisation
+                        </Button>
+                    </Link>
+                </Button.Group>
             </Group>
-            <Center m={"xl"} p={"lg"}>
-                <CreatePost />
-            </Center>
+            {postModal}
             <Tabs variant="outline" defaultValue={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List grow position="center" mb={75}>
                     <Tabs.Tab value="first">Projects</Tabs.Tab>

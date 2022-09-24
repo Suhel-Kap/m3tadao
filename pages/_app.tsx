@@ -70,7 +70,7 @@ export default function App(props: AppProps) {
                     })} chains={chains} appInfo={metadaoAppInfo} modalSize={"compact"}>
                         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                             <MantineProvider withGlobalStyles withNormalizeCSS theme={{colorScheme}}>
-                                <NotificationsProvider>
+                                <NotificationsProvider position="top-right" zIndex={2077}>
                                     <Component {...pageProps} />
                                 </NotificationsProvider>
                             </MantineProvider>

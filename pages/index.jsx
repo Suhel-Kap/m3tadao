@@ -27,7 +27,7 @@ const Home = () => {
     const checkStatus = async () => {
         const isUserExists = await getUserExists()
         if (isUserExists) {
-            router.push("/user-profile")
+            router.push("/home")
         } else {
             router.push("/registration")
         }

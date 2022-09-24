@@ -9,11 +9,11 @@ import {useRouter} from "next/router";
 const HEADER_HEIGHT = 60;
 const links = [
     {
-        "link": "/organisation",
-        "label": "Organisation"
+        "link": "/organisations",
+        "label": "Organisations"
     },
     {
-        "link": "/project",
+        "link": "/projects",
         "label": "Projects"
     },
     {
