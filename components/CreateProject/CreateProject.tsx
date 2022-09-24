@@ -9,8 +9,11 @@ import {AddressInput} from "../AddressInput";
 import {useListState} from "@mantine/hooks";
 import {MemberList} from "../MemberList";
 import {schema} from "./schema";
-import {IconAlertCircle, IconWorldWww} from "@tabler/icons";
+import {IconAlertCircle, IconWorldWww, IconCheck} from "@tabler/icons";
 import {GalleryInput} from "../GalleryInput";
+import useContract from "../../hooks/useContract";
+import { showNotification, updateNotification } from '@mantine/notifications'
+import { useRouter } from 'next/router'
 
 export function CreateProject() {
     const [active, setActive] = useState(0)
@@ -18,6 +21,8 @@ export function CreateProject() {
     const [mainCapsule, setMainCapsule] = useState<File>();
     const [gallery, setGallery] = useState<File[]>([]);
     const [members, membersHandlers] = useListState<string>([]);
+    const { createSubProject } = useContract()
+    const router = useRouter()
     const defaultTags = [
         'game', 'protocol', 'application', 'utilities', 'storage', 'networks',
         'social', 'communication', 'nft', 'defi', 'media', 'music',
@@ -26,6 +31,52 @@ export function CreateProject() {
     const defaultTypes = [
         'web', 'native', 'cli',
     ];
+
+    const handleSubmit = async () => {
+        showNotification({
+            id: 'load-data',
+            loading: true,
+            title: 'Creating project',
+            message: 'Please wait while we create project for your organisation on Valist',
+            autoClose: false,
+            disallowClose: true,
+        })
+        try{
+            await createSubProject(
+                "id",
+                form.values.projectName,
+                form.values.type,
+                image,
+                form.values.description,
+                members,
+                form.values.displayName,
+                form.values.website,
+                form.values.shortDescription,
+                form.values.youTubeLink,
+                form.values.tags,
+
+            )
+            updateNotification({
+                id: 'load-data',
+                color: 'teal',
+                title: 'Success',
+                message: 'Project created successfully',
+                icon: <IconCheck size={16}/>,
+                autoClose: 2000,
+            })
+            router.push("/home")
+        } catch (e) {
+            updateNotification({
+                id: 'load-data',
+                color: 'red',
+                title: 'Error',
+                message: 'Failed to create organisation',
+                icon: <IconAlertCircle size={16}/>,
+                autoClose: 2000,
+            })
+        }
+
+    }
 
     const removeMember = (member: string) => {
         membersHandlers.filter(
@@ -218,7 +269,7 @@ export function CreateProject() {
                     </Button>
                 )}
                 {active !== 4 && <Button onClick={nextStep}>Next step</Button>}
-                {active === 4 && <Button onClick={() => console.log("submit todo")}>Confirm</Button>}
+                {active === 4 && <Button onClick={() => handleSubmit()}>Confirm</Button>}
             </Group>
         </>
     );
