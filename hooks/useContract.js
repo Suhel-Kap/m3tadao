@@ -137,7 +137,7 @@ const useContract = () => {
             "a",
             description,
             // we should add into the members the contract address of metadao to be able to make updates
-            members,
+            [...members, contractAddresses.m3taDao],
         ]
         var tx = await m3taDaoContractInstance.createProjectAccount(accountStruct, {
             gasLimit: 5000000,
@@ -180,7 +180,7 @@ const useContract = () => {
         var tx = await m3taDaoContractInstance.createSubProject(ProjectStruct, {
             gasLimit: 5000000,
         })
-        return tx
+        return await tx
     }
 
     const createRelease = async (
@@ -214,7 +214,7 @@ const useContract = () => {
         ]
 
         var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, {gasLimit: 5000000})
-        return tx
+        return await tx
     }
 
     const createPost = async (accountID, postDescription, postTitle, postGalery) => {
@@ -224,18 +224,26 @@ const useContract = () => {
             signer
         )
 
+        
+        let postGaleryURI
+        if (postGalery) {
+            postGaleryURI = await uploadFileToIpfs(postGalery, "image")
+        } else {
+            postGaleryURI = ""
+        }
+
         const PostStruct = [
-            (posterAddress = "0x0000000000000000000000000000000000000000"),
-            (postID = "0"),
+            address,
+            "0",
             accountID,
-            (metadataTable = "a"),
+            "a",
             postDescription,
             postTitle,
             postGalery,
         ]
 
         var tx = await m3taDaoContractInstance.createPost(PostStruct, {gasLimit: 5000000})
-        return tx
+        return await tx
     }
 
     const deletePost = async (accountID, postID) => {
@@ -246,7 +254,7 @@ const useContract = () => {
         )
 
         var tx = await m3taDaoContractInstance.createPost(accountID, postID, {gasLimit: 5000000})
-        return tx
+        return await  tx
     }
 
     return {

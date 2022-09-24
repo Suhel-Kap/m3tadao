@@ -2,12 +2,25 @@ import {Layout} from "../components/Layout";
 import Head from "next/head";
 import {Button, Center, Container, Skeleton} from "@mantine/core";
 import {DisplayGrid} from "../components/DisplayGrid";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Link from "next/link";
+import useTableland from "../hooks/useTableland";
 
 export default function Organisations() {
     const [onLoad, setOnLoad] = useState(true)
+    const {getOrganisationsData} = useTableland()
+    const [organisationsData, setOrganisationData] = useState([])
 
+    useEffect(()=>{
+        initialize()
+    },[])
+
+    const initialize = async()=>{
+        const organisationsDataFromTableland = await getOrganisationsData()
+        console.log("organisationsDataFromTableland",organisationsDataFromTableland)
+        setOrganisationData(organisationsDataFromTableland)
+        setOnLoad(true)
+    }
     return (
         <Layout>
             <Head>
@@ -36,7 +49,7 @@ export default function Organisations() {
                         </Link>
                     </Button.Group>
                 </Center>
-                <DisplayGrid onLoad={onLoad}/>
+                <DisplayGrid onLoad={onLoad} data={organisationsData} isOrganisations={true} />
             </Container>
         </Layout>
     )
