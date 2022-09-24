@@ -1,7 +1,7 @@
-import {ethers} from "ethers"
-import {contractAddresses, m3taDaoAbi} from "../constants/"
-import {useAccount, useSigner} from "wagmi"
-import {uploadFileToIpfs, uploadJsonToIpfs} from "../utils/uploadToIpfs"
+import { ethers } from "ethers"
+import { contractAddresses, m3taDaoAbi } from "../constants/"
+import { useAccount, useSigner } from "wagmi"
+import { uploadFileToIpfs, uploadJsonToIpfs } from "../utils/uploadToIpfs"
 
 const isJsonEmpty = (jsonObj) => {
     return (
@@ -12,8 +12,8 @@ const isJsonEmpty = (jsonObj) => {
 }
 
 const useContract = () => {
-    const {data: signer, isError, isLoading} = useSigner()
-    const {address} = useAccount()
+    const { data: signer, isError, isLoading } = useSigner()
+    const { address } = useAccount()
 
     const createLensProfile = async (
         userAddress,
@@ -22,6 +22,7 @@ const useContract = () => {
         banner,
         // followNFTURI,
         description,
+        designation,
         github,
         twitter,
         website,
@@ -29,7 +30,7 @@ const useContract = () => {
         skills
         // profileURI
     ) => {
-        const externalJson = {website, twitter, github, interests, skills}
+        const externalJson = { website, twitter, github, interests, skills, designation }
         let externalURIs
         if (isJsonEmpty(externalJson)) {
             externalURIs = ""
@@ -74,7 +75,7 @@ const useContract = () => {
                 ],
                 ["", 0, "", description, externalURIs, profileURI],
             ],
-            {gasLimit: 5000000}
+            { gasLimit: 5000000 }
         )
         return await tx.wait()
     }
@@ -96,7 +97,7 @@ const useContract = () => {
         } else {
             imageURI = ""
         }
-        const externalJson = {website, description, accountName, imageURI}
+        const externalJson = { website, description, accountName, imageURI }
         const metaURI = await uploadJsonToIpfs(externalJson, "json")
 
         const m3taDaoContractInstance = new ethers.Contract(
@@ -212,7 +213,7 @@ const useContract = () => {
             releaseURI,
         ]
 
-        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, { gasLimit: 5000000 })
         return tx
     }
 
@@ -233,7 +234,7 @@ const useContract = () => {
             postGalery,
         ]
 
-        var tx = await m3taDaoContractInstance.createPost(PostStruct, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
         return tx
     }
 
@@ -244,7 +245,7 @@ const useContract = () => {
             signer
         )
 
-        var tx = await m3taDaoContractInstance.createPost(accountID, postID, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createPost(accountID, postID, { gasLimit: 5000000 })
         return tx
     }
 

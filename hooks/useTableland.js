@@ -16,7 +16,8 @@ const isJsonEmpty = (jsonObj) => {
 
 const useTableland = () => {
     const { data: signer, isError, isLoading } = useSigner()
-    const { address } = useAccount()
+    // const { address } = useAccount()
+    const address = "0x9e03C44b5A09db89bf152F8C5500dF3360c1C5bF"
 
     const getUserExists = async () => {
         const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" })
@@ -36,8 +37,20 @@ const useTableland = () => {
         return rows.length != 0
     }
 
+    const getUserData = async () => {
+        const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" })
+        // console.log("address", address)
+        const { columns, rows } = await tableland.read(
+            `SELECT * FROM ${
+                tableNames["m3taUser"]
+            } WHERE ownerAddress='${address.toLowerCase()}';`
+        )
+        return rows[0]
+    }
+
     return {
         getUserExists,
+        getUserData,
     }
 }
 
