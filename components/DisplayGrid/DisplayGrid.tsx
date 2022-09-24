@@ -73,20 +73,20 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-export function DisplayGrid({onLoad}) {
+export function DisplayGrid({onLoad, data, isOrganisations}) {
     const {classes} = useStyles();
 
-    const cards = mockdata.map((article) => (
+    const cards = data && data.map((article) => (
         <Skeleton visible={onLoad}>
-            <Card key={article.title} p="md" radius="md" component="a" href="/organisation" className={classes.card}>
+            <Card key={article[1]} p="md" radius="md" component="a" href={isOrganisations ? `/organisation?accHex=${article[3]}` : `/project?accHex=${article[3]}`} className={classes.card}>
                 <AspectRatio mb={"xs"} ratio={1920 / 1080}>
-                    <Image src={article.image}/>
+                    <Image src={"https://" + article[6] + ".ipfs.w3s.link/image"}/>
                 </AspectRatio>
                 <Text className={classes.title} mt={5}>
-                    {article.title}
+                    {article[4]}
                 </Text>
                 <Text color="dimmed" size="sm" mt="md">
-                    {article.shortDescription}
+                    {article[9]}
                 </Text>
             </Card>
         </Skeleton>

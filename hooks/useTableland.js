@@ -48,9 +48,35 @@ const useTableland = () => {
         return rows[0]
     }
 
+    const getOrganisationData = async (organisationIdentifier) => {
+        const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" })
+        // console.log("address", address)
+        const { columns, rows } = await tableland.read(
+            `SELECT * FROM ${
+                tableNames["m3taOrganisation"]
+            } WHERE identifier='${organisationIdentifier}';`
+        )
+        return rows[0]
+    }
+
+    const getOrganisationsData = async () => {
+        const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" })
+        // console.log("address", address)
+        const { columns, rows } = await tableland.read(
+            `SELECT * FROM ${
+                tableNames["m3taOrganisation"]
+            };`
+        )
+        console.log(columns)
+        console.log(rows)
+        return rows
+    }
+
     return {
         getUserExists,
         getUserData,
+        getOrganisationData,
+        getOrganisationsData
     }
 }
 

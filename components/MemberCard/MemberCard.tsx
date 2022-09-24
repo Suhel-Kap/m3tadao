@@ -35,9 +35,9 @@ export function MemberCard({name, address}: UserButtonProps) {
                     <Avatar src={makeBlockie(address)} radius="xl"/>
 
                     <div style={{flex: 1}}>
-                        <Text size="lg" weight={700}>
+                        {name && <Text size="lg" weight={700}>
                             {name}
-                        </Text>
+                        </Text>}
 
                         <Tooltip transition="scale-y" closeDelay={500} transitionDuration={300} label={address}
                                  position="left-end" withArrow>

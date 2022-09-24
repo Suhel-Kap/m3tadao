@@ -2,13 +2,16 @@ import {Layout} from "../components/Layout";
 import Head from "next/head";
 import {Text, Container, Grid, Tabs, Title, Paper, Center, Stack, SimpleGrid, Button, Group, Modal} from "@mantine/core"
 import {ProjectCard} from "../components/ProjectCard"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {IconPlus} from "@tabler/icons"
 import {EditOrganisation} from "../components/EditOrganisation";
 import {ChatRoom} from "../components/ChatRoom";
 import Link from "next/link";
 import {MemberCard} from "../components/MemberCard";
 import {CreatePost} from "../components/CreatePost";
+import { useRouter } from "next/router";
+import {fetchOrganisationDetails} from "../constants/graphql/queries"
+import { graphql } from "@valist/sdk";
 
 const data = [
     {
@@ -50,7 +53,35 @@ const memberData = [
 const Organisation = () => {
     const [activeTab, setActiveTab] = useState("first")
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const projects = data.map((project, index) => {
+    const [projectsData, setProjectsData] = useState([])
+    const [members, setMembers] = useState([])
+    const [name, setName] = useState("")
+    const router = useRouter()
+
+    useEffect(()=>{
+        initialize()
+
+    },[])
+
+    const initialize = async()=>{
+        const accHex = router.query.accHex
+        
+        const query = {
+            query: fetchOrganisationDetails,
+            variables: {
+                accHex: accHex
+            }
+        }
+
+        // const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data.accounts
+        const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data.account
+        console.log("graphRes",graphRes)
+        setName(graphRes.name)
+        setProjectsData(graphRes.projects)
+        setMembers(graphRes.members)
+    }
+
+    const projects = projectsData.map((project, index) => {
         return (
             <ProjectCard avatar={project.avatar} name={project.name} shortDescription={project.shortDescription}/>
         )
@@ -76,7 +107,7 @@ const Organisation = () => {
             </Head>
             <Group position={"apart"} p={"xl"} mx={"xl"} my={"sm"}>
                 <Title>
-                    Welcome to your organisation 👋
+                    Welcome to {name} 👋
                 </Title>
                 <Button.Group>
                         <Button
@@ -144,9 +175,9 @@ const Organisation = () => {
                                     <Grid.Col lg={2}>
                                         <Text weight={700}>Members</Text>
                                         {
-                                            memberData.map((member, index) => {
+                                            members.map((member, index) => {
                                                 return (
-                                                    <MemberCard address={member.address} name={member.name}/>
+                                                    <MemberCard address={member.id} name="Admin" />
                                                 )
                                             })
                                         }
