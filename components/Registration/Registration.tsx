@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import {
     Stepper,
     Button,
@@ -29,6 +29,17 @@ export function Registration() {
     const {address} = useAccount()
     const {createLensProfile} = useContract()
     const router = useRouter()
+
+    const {isConnected,isDisconnected, status} = useAccount()
+
+    useEffect(() => {
+        console.log("checking")
+        console.log("isConnected", isConnected)
+        if(isConnected) {
+            router.push("/")
+        }
+        console.log("checked")
+    }, [status])
 
     const form = useForm({
         initialValues: {

@@ -9,6 +9,7 @@ import {chain, configureChains, createClient, WagmiConfig} from "wagmi"
 import {alchemyProvider} from "wagmi/providers/alchemy"
 import {publicProvider} from "wagmi/providers/public"
 import {useHotkeys, useLocalStorage} from "@mantine/hooks";
+import AuthWrapper from "../components/AuthenticationWrapper/AuthWrapper"
 
 const {chains, provider, webSocketProvider} = configureChains(
     [
@@ -47,7 +48,15 @@ const getSiweMessageOptions = () => ({
 
 export default function App(props: AppProps) {
 
-    const {Component, pageProps} = props;
+    const {Component, pageProps} = props
+    //
+    // const {isDisconnected, status} = useAccount()
+    //
+    // const router = useRouter()
+    // useEffect(() => {
+    //     if(isDisconnected)
+    //         router.push("/")
+    // }, [status])
 
     const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
         key: 'mantine-color-scheme',
@@ -71,7 +80,9 @@ export default function App(props: AppProps) {
                         <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
                             <MantineProvider withGlobalStyles withNormalizeCSS theme={{colorScheme}}>
                                 <NotificationsProvider position="top-right" zIndex={2077}>
-                                    <Component {...pageProps} />
+                                    <AuthWrapper>
+                                        <Component {...pageProps} />
+                                    </AuthWrapper>
                                 </NotificationsProvider>
                             </MantineProvider>
                         </ColorSchemeProvider>
