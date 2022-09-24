@@ -149,32 +149,61 @@ const useContract = () => {
     const createSubProject = async (
         accountID,
         projectName,
-        metaURI,
         projectType,
-        imageURI,
+        image,
         description,
         // we should add into the members the contract address of metadao to be able to make updates
-        members
+        members,
+        displayName,
+        website,
+        shortDescription,
+        youTubeLink,
+        tags,
     ) => {
+
+        let imageURI
+        if (image) {
+            imageURI = await uploadFileToIpfs(image, "image")
+        } else {
+            imageURI = ""
+        }
+
+        const metaURIObject = {displayName, description,website, youTubeLink, tags}
+        const metaURI = await uploadJsonToIpfs(externalJson, "json")
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
             m3taDaoAbi,
             signer
         )
 
+        // const ProjectStruct = [
+        //     (sender = "0x0000000000000000000000000000000000000000"),
+        //     (id = 0),
+        //     accountID,
+        //     (projectID = "1"),
+        //     (metadataTable = "a"),
+        //     (projectHex = "e"),
+        //     projectName,
+        //     metaURI,
+        //     projectType,
+        //     imageURI,
+        //     description,
+        //     members,
+        // ]
+
         const ProjectStruct = [
-            (sender = "0x0000000000000000000000000000000000000000"),
-            (id = 0),
+            address,
+            "0",
             accountID,
-            (projectID = "1"),
-            (metadataTable = "a"),
-            (projectHex = "e"),
+            "1",
+            "a",
+            "e",
             projectName,
             metaURI,
             projectType,
             imageURI,
-            description,
-            members,
+            shortDescription,
+            [...members, contractAddresses.m3taDao],
         ]
 
         var tx = await m3taDaoContractInstance.createSubProject(ProjectStruct, {
