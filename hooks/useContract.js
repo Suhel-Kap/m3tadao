@@ -1,6 +1,6 @@
 import {ethers} from "ethers"
 import {contractAddresses, m3taDaoAbi} from "../constants/"
-import {useSigner} from "wagmi"
+import {useAccount, useSigner} from "wagmi"
 import {uploadFileToIpfs, uploadJsonToIpfs} from "../utils/uploadToIpfs"
 
 const isJsonEmpty = (jsonObj) => {
@@ -12,7 +12,8 @@ const isJsonEmpty = (jsonObj) => {
 }
 
 const useContract = () => {
-    const { data: signer, isError, isLoading } = useSigner()
+    const {data: signer, isError, isLoading} = useSigner()
+    const {address} = useAccount()
 
     const createLensProfile = async (
         userAddress,
@@ -28,7 +29,7 @@ const useContract = () => {
         skills
         // profileURI
     ) => {
-        const externalJson = { website, twitter, github, interests, skills }
+        const externalJson = {website, twitter, github, interests, skills}
         let externalURIs
         if (isJsonEmpty(externalJson)) {
             externalURIs = ""
@@ -73,49 +74,75 @@ const useContract = () => {
                 ],
                 ["", 0, "", description, externalURIs, profileURI],
             ],
-            { gasLimit: 5000000 }
+            {gasLimit: 5000000}
         )
         return await tx.wait()
     }
 
     const createProjectAccount = async (
         accountName,
-        metaURI,
+        website, // website url
         AccountType,
-        requirements,
-        imageURI,
-        bannerURI,
+        requirements, // for now empty string
+        image,
+        bannerURI, // for now empty string
         description,
         // we should add into the members the contract address of metadao to be able to make updates
         members
     ) => {
+        let imageURI
+        if (image) {
+            imageURI = await uploadFileToIpfs(image, "image")
+        } else {
+            imageURI = ""
+        }
+        const externalJson = {website, description, accountName, imageURI}
+        const metaURI = await uploadJsonToIpfs(externalJson, "json")
+
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
             m3taDaoAbi,
             signer
         )
 
+        // const accountStruct = [
+        //     (founderAddress = "0x0000000000000000000000000000000000000000"),
+        //     (id = "0"),
+        //     (accountID = "0"),
+        //     (accountHex = "a"),
+        //     accountName,
+        //     metaURI,
+        //     AccountType,
+        //     requirements,
+        //     imageURI,
+        //     bannerURI,
+        //     (metadataTable = "a"),
+        //     description,
+        //     // we should add into the members the contract address of metadao to be able to make updates
+        //     members,
+        // ]
+
         const accountStruct = [
-            (founderAddress = "0x0000000000000000000000000000000000000000"),
-            (id = "0"),
-            (accountID = "0"),
-            (accountHex = "a"),
+            address,
+            "0",
+            "0",
+            "a",
             accountName,
             metaURI,
             AccountType,
             requirements,
             imageURI,
-            bannerURI,
-            (metadataTable = "a"),
+            "",
+            "a",
             description,
             // we should add into the members the contract address of metadao to be able to make updates
             members,
         ]
-
         var tx = await m3taDaoContractInstance.createProjectAccount(accountStruct, {
             gasLimit: 5000000,
         })
-        return tx
+
+        return await tx.wait()
     }
 
     const createSubProject = async (
@@ -185,7 +212,7 @@ const useContract = () => {
             releaseURI,
         ]
 
-        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, { gasLimit: 5000000 })
+        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, {gasLimit: 5000000})
         return tx
     }
 
@@ -206,7 +233,7 @@ const useContract = () => {
             postGalery,
         ]
 
-        var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
+        var tx = await m3taDaoContractInstance.createPost(PostStruct, {gasLimit: 5000000})
         return tx
     }
 
@@ -217,7 +244,7 @@ const useContract = () => {
             signer
         )
 
-        var tx = await m3taDaoContractInstance.createPost(accountID, postID, { gasLimit: 5000000 })
+        var tx = await m3taDaoContractInstance.createPost(accountID, postID, {gasLimit: 5000000})
         return tx
     }
 

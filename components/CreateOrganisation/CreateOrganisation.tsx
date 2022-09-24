@@ -7,13 +7,17 @@ import {NameInput} from "../NameInput"
 import {AddressInput} from "../AddressInput";
 import {useListState} from "@mantine/hooks";
 import {MemberList} from "../MemberList";
-import {IconAlertCircle, IconWorldWww} from "@tabler/icons";
-import {graphql} from "@valist/sdk";
+import {IconAlertCircle, IconCheck, IconWorldWww} from "@tabler/icons";
+import {showNotification, updateNotification} from "@mantine/notifications";
+import useContract from "../../hooks/useContract";
+import {useRouter} from "next/router";
 
 export function CreateOrganisation() {
     const [active, setActive] = useState(0)
     const [image, setImage] = useState<File>()
     const [members, membersHandlers] = useListState<string>([]);
+    const { createProjectAccount } = useContract()
+    const router = useRouter()
 
     const removeMember = (member: string) => {
         membersHandlers.filter(
@@ -46,6 +50,49 @@ export function CreateOrganisation() {
         });
 
     const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
+    const handleSubmit = async () => {
+        showNotification({
+            id: 'load-data',
+            loading: true,
+            title: 'Creating your organisation on m3tadao',
+            message: 'Please wait while we create your organisation on Valist',
+            autoClose: false,
+            disallowClose: true,
+        })
+        try{
+            await createProjectAccount(
+                form.values.accountName,
+                form.values.website,
+                "organisation",
+                "",
+                image,
+                "",
+                form.values.description,
+                members
+
+            )
+            updateNotification({
+                id: 'load-data',
+                color: 'teal',
+                title: 'Success',
+                message: 'Organisation created successfully',
+                icon: <IconCheck size={16}/>,
+                autoClose: 2000,
+            })
+            router.push("/home")
+        } catch (e) {
+            updateNotification({
+                id: 'load-data',
+                color: 'red',
+                title: 'Error',
+                message: 'Failed to create organisation',
+                icon: <IconAlertCircle size={16}/>,
+                autoClose: 2000,
+            })
+        }
+
+    }
 
     return (
         <>
@@ -119,7 +166,7 @@ export function CreateOrganisation() {
                     </Button>
                 )}
                 {active !== 2 && <Button onClick={nextStep}>Next step</Button>}
-                {active === 2 && <Button onClick={() => console.log("submit todo")}>Confirm</Button>}
+                {active === 2 && <Button onClick={() => handleSubmit()}>Confirm</Button>}
             </Group>
         </>
     );
