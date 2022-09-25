@@ -1,25 +1,25 @@
-import type {NextPage} from "next"
+import type { NextPage } from "next"
 import Head from "next/head"
-import {Banner} from "../components/Banner"
-import {NavTabs} from "../components/NavTabs"
+import { Banner } from "../components/Banner"
+import { NavTabs } from "../components/NavTabs"
 import defaultStats from "../components/Banner/stats.json"
-import {useAccount, useProvider, useSigner} from "wagmi"
-import {useEffect, useState} from "react"
-import {useRouter} from "next/router"
-import {Layout} from "../components/Layout"
-import {Stack} from "@mantine/core"
+import { useAccount, useProvider, useSigner } from "wagmi"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import { Layout } from "../components/Layout"
+import { Stack } from "@mantine/core"
 import useSuperFluid from "../hooks/useSuperFluid"
 import useTableland from "../hooks/useTableland"
-import {graphql} from "@valist/sdk"
-import {fetchUserProfile} from "../constants/graphql/queries"
+import { graphql } from "@valist/sdk"
+import { fetchUserProfile } from "../constants/graphql/queries"
 
 const UserProfile: NextPage = () => {
-    const {isConnected, isDisconnected, status} = useAccount()
+    const { isConnected, isDisconnected, status } = useAccount()
     const router = useRouter()
-    const {address} = useAccount()
+    const { address } = useAccount()
     const isOwner = address === router.query.address
     const [stats, setStats] = useState(defaultStats)
-    const {getUserData} = useTableland()
+    const { getUserData } = useTableland()
     useEffect(() => {
         if (!isConnected) {
             router.push("/")
@@ -38,45 +38,45 @@ const UserProfile: NextPage = () => {
             avatar: "https://" + user[4] + ".ipfs.w3s.link/image",
             name: user[3],
         }
-        setStats((oldStats) => ({...oldStats, ...userStats}))
+        setStats((oldStats) => ({ ...oldStats, ...userStats }))
 
         fetchExternalURIs(user[7])
 
         const query = {
             query: fetchUserProfile,
             variables: {
-                profHex: profileHex
-            }
+                profHex: profileHex,
+            },
         }
 
-
-        const graphRes = (await graphql.fetchGraphQL("https://api-mumbai.lens.dev/", query)).data.profiles.items[0].stats
+        const graphRes = (await graphql.fetchGraphQL("https://api-mumbai.lens.dev/", query)).data
+            .profiles.items[0].stats
         const lensStats = [
             {
-                "value": graphRes.totalFollowers,
-                label: "Followers"
+                value: graphRes.totalFollowers,
+                label: "Followers",
             },
             {
-                "value": graphRes.totalFollowing,
-                label: "Follows"
+                value: graphRes.totalFollowing,
+                label: "Follows",
             },
             {
-                "value": graphRes.totalPosts,
-                label: "Posts"
-            }
+                value: graphRes.totalPosts,
+                label: "Posts",
+            },
         ]
-        setStats((oldStats) => ({...oldStats, stats: lensStats}))
+        setStats((oldStats) => ({ ...oldStats, stats: lensStats }))
     }
 
     const fetchExternalURIs = async (cid: string) => {
         const response = await fetch("https://" + cid + ".ipfs.w3s.link/json")
         const externalProfileData = await response.json()
-        setStats((oldStats) => ({...oldStats, ...externalProfileData}))
+        setStats((oldStats) => ({ ...oldStats, ...externalProfileData }))
     }
 
-    const {Main} = useSuperFluid()
+    const { Main } = useSuperFluid()
     const provider = useProvider()
-    const {data: signer, isLoading} = useSigner()
+    const { data: signer, isLoading } = useSigner()
 
     return (
         <>
@@ -96,9 +96,9 @@ const UserProfile: NextPage = () => {
                 {/*}}>*/}
                 {/*    superfluid*/}
                 {/*</button>*/}
-                <Stack m={"sm"} sx={{height: "100%"}}>
+                <Stack m={"sm"} sx={{ height: "100%" }}>
                     <Banner {...stats} />
-                    <NavTabs isOwner={isOwner}/>
+                    <NavTabs isOwner={isOwner} />
                 </Stack>
             </Layout>
         </>

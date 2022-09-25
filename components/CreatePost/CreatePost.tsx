@@ -4,6 +4,7 @@ import { useForm } from "@mantine/form"
 import { showNotification, updateNotification } from "@mantine/notifications"
 import { useRouter } from "next/router"
 import useLens from "../../hooks/useLens"
+import useContract from "../../hooks/useContract"
 
 export function CreatePost() {
     const router = useRouter()
@@ -15,7 +16,7 @@ export function CreatePost() {
         },
     })
 
-    const { createLensPost } = useLens()
+    const { createLensPost } = useContract()
 
     const handleSubmit = async () => {
         showNotification({
@@ -28,10 +29,10 @@ export function CreatePost() {
         })
         try {
             const res = await createLensPost(
-                "0x483b",
+                "18491",
                 form.values.title,
-                form.values.image,
-                form.values.description
+                form.values.description,
+                form.values.image
             )
 
             console.log("res", res)
