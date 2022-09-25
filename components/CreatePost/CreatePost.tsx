@@ -1,10 +1,12 @@
-import {Button, Container, FileInput, Stack, Textarea, TextInput} from "@mantine/core"
-import {IconPhoto, IconCheck, IconAlertCircle} from "@tabler/icons"
-import {useForm} from "@mantine/form"
-import {showNotification, updateNotification} from "@mantine/notifications"
-import {useRouter} from "next/router"
+import { Button, Container, FileInput, Stack, Textarea, TextInput } from "@mantine/core"
+import { IconPhoto, IconCheck, IconAlertCircle } from "@tabler/icons"
+import { useForm } from "@mantine/form"
+import { showNotification, updateNotification } from "@mantine/notifications"
+import { useRouter, Router } from "next/router"
 import useLens from "../../hooks/useLens"
 import useContract from "../../hooks/useContract"
+import useTableland from "../../hooks/useTableland"
+import { useAccount } from "wagmi"
 
 export function CreatePost() {
     const router = useRouter()
@@ -16,20 +18,25 @@ export function CreatePost() {
         },
     })
 
-    const {createLensPost} = useContract()
+    const { address } = useAccount()
+
+    const { getUserData } = useTableland()
+    const { createLensPost } = useContract()
 
     const handleSubmit = async () => {
         showNotification({
             id: "load-data",
             loading: true,
-            title: "Creating post...",
-            message: "Please wait while we create your post",
+            title: "Creating project",
+            message: "Please wait while we create project for your organisation on Valist",
             autoClose: false,
             disallowClose: true,
         })
         try {
+            const userData: any = await getUserData(address)
+            console.log("id:", userData[1])
             const res = await createLensPost(
-                "18491",
+                userData[1],
                 form.values.title,
                 form.values.description,
                 form.values.image
@@ -41,20 +48,21 @@ export function CreatePost() {
                 id: "load-data",
                 color: "teal",
                 title: "Success",
-                message: "Post created successfully",
-                icon: <IconCheck size={16}/>,
+                message: "Project created successfully",
+                icon: <IconCheck size={16} />,
                 autoClose: 2000,
             })
 
-            router.push("/home")
+            router.reload()
+            // router.push("/home")
         } catch (e) {
             console.log(e)
             updateNotification({
                 id: "load-data",
                 color: "red",
                 title: "Error",
-                message: "Failed to create post",
-                icon: <IconAlertCircle size={16}/>,
+                message: "Failed to create organisation",
+                icon: <IconAlertCircle size={16} />,
                 autoClose: 2000,
             })
         }
@@ -87,7 +95,7 @@ export function CreatePost() {
             <FileInput
                 label="Image"
                 placeholder="Choose an image"
-                icon={<IconPhoto size={16}/>}
+                icon={<IconPhoto size={16} />}
                 accept="image/*"
                 {...form.getInputProps("image")}
             />
