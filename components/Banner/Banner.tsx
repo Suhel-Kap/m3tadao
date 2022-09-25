@@ -76,8 +76,8 @@ export function Banner({
         </div>
     ))
 
-    const skillBadges = skills?.map((skill) => <Badge color={"red"}>{skill}</Badge>)
-    const interestBadges = interests?.map((interest) => <Badge color={"green"}>{interest}</Badge>)
+    const skillBadges = skills?.map((skill, index) => <Badge key={index} color={"red"}>{skill}</Badge>)
+    const interestBadges = interests?.map((interest, index) => <Badge key={index} color={"green"}>{interest}</Badge>)
 
     const router = useRouter()
     const {optIn} = useEPNS()

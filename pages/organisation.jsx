@@ -47,7 +47,8 @@ const Organisation = () => {
     }
 
     const projects = projectsData.map((project, index) => {
-        return (<ProjectCard organisationName={name} projectId={project.id} avatar={project.avatar} name={project.name}
+        return (<ProjectCard key={index} organisationName={name} projectId={project.id} avatar={project.avatar}
+                             name={project.name}
                              shortDescription={project.shortDescription}/>)
     })
 
@@ -126,7 +127,7 @@ const Organisation = () => {
                                 <Grid.Col lg={2}>
                                     <Text weight={700}>Members</Text>
                                     {members.map((member, index) => {
-                                        return (<MemberCard address={member.id} name="Admin"/>)
+                                        return (<MemberCard key={index} address={member.id} name="Admin"/>)
                                     })}
                                 </Grid.Col>
                             </Grid>

@@ -23,7 +23,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
 
     const postCards = posts.map((post, index) => {
         return (
-            <Grid.Col lg={4} md={6}>
+            <Grid.Col key={index} lg={4} md={6}>
                 <Skeleton visible={isLoading} animate={true}>
                     <Container size={400} px="xs">
                         <PostCard

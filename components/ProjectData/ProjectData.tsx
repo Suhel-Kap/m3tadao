@@ -41,8 +41,8 @@ export function ProjectData(props: any) {
     ))
 
 
-    const memberRows = memberData.map((row) => (
-        <MemberCard address={row} name={"Project Admin"}/>
+    const memberRows = memberData.map((row, index) => (
+        <MemberCard address={row} name={"Project Admin"} key={index}/>
     ))
 
     return (
