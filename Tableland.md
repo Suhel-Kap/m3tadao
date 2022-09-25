@@ -25,7 +25,7 @@ created by our contract. Here is a query to take m3tadao current registed users
 => We are also introducing a Storage Contract to Store all of our SQL Statements so other contracts that Integrate Tableland does not have to 
 waste the contract limit size in bytes!!!
 
-=> The Query Contract is located in that address on mumbai testnet => 0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443
+=> The Query Contract is located in that address on mumbai testnet => [0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443](https://mumbai.polygonscan.com/address/0x469205fE9B115195BA73509FC6F8561c49b9E1e2#code)
        
 Tableland was a pretty nice integration because it gaves us the oportunity to index our signed user data by making a query with his wallet data.
 
