@@ -264,7 +264,7 @@ const useContract = () => {
         const PostStruct = [address, "0", accountID, "a", postDescription, postTitle, postGalery]
 
         var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
-        return await tx
+        return await tx.wait()
     }
 
     const deletePost = async (accountID, postID) => {
@@ -275,7 +275,7 @@ const useContract = () => {
         )
 
         var tx = await m3taDaoContractInstance.createPost(accountID, postID, { gasLimit: 5000000 })
-        return await tx
+        return await tx.wait()
     }
 
     const createLensPost = async (profId, postTitle, postDescription, image) => {
@@ -318,6 +318,13 @@ const useContract = () => {
             appId: "m3tadao.eth",
         }
 
+        // const jsonObj = {
+        //     title: postTitle,
+        //     description: postDescription,
+        //     image: imageURI,
+        //     appId: "m3tadao.eth",
+        // }
+
         const contentURI = await uploadJsonToIpfs(jsonObj, "json")
 
         const inputStruct = {
@@ -333,6 +340,28 @@ const useContract = () => {
         return await tx.wait()
     }
 
+    const getLensPostCount = async (profId) => {
+        const lensContractInstance = new ethers.Contract(contractAddresses.lens, lensAbi, signer)
+        console.log("profID", profId)
+        var tx = await lensContractInstance.getPubCount(profId, { gasLimit: 5000000 })
+        return tx.toString()
+    }
+
+    // pubId is probably count number
+    const getLensPost = async (profId, pubId) => {
+        const lensContractInstance = new ethers.Contract(contractAddresses.lens, lensAbi, signer)
+        console.log("profID", profId)
+        var tx = await lensContractInstance.getPub(profId, pubId, { gasLimit: 5000000 })
+        return tx.toString()
+    }
+
+    const createFollow = async (profileIDs) => {
+        const lensContractInstance = new ethers.Contract(contractAddresses.lens, lensAbi, signer)
+
+        var tx = await lensContractInstance.follow(profileIDs, [[]], { gasLimit: 5000000 })
+        return await tx.wait()
+    }
+
     return {
         createLensProfile,
         createProjectAccount,
@@ -341,6 +370,9 @@ const useContract = () => {
         createPost,
         deletePost,
         createLensPost,
+        getLensPostCount,
+        getLensPost,
+        createFollow,
     }
 }
 

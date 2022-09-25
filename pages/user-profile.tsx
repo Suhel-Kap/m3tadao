@@ -12,24 +12,28 @@ import useSuperFluid from "../hooks/useSuperFluid"
 import useTableland from "../hooks/useTableland"
 import { graphql } from "@valist/sdk"
 import { fetchUserProfile } from "../constants/graphql/queries"
+import useContract from "../hooks/useContract"
 
 const UserProfile: NextPage = () => {
     const { isConnected, isDisconnected, status } = useAccount()
     const router = useRouter()
     const { address } = useAccount()
+    const [profId, setProfId] = useState()
     const isOwner = address === router.query.address
     const [stats, setStats] = useState(defaultStats)
+    const [isPostCountFetched, setIsPostCountFetched] = useState(false)
     const { getUserData } = useTableland()
+    const { getLensPostCount } = useContract()
     useEffect(() => {
-        if (!isConnected) {
-            router.push("/")
+        if (router.query) {
+            initialize()
         }
-        initialize()
-    }, [])
+    }, [router.query])
 
     const initialize = async () => {
         const user = await getUserData(router.query.address)
         console.log(user)
+        setProfId(user[1])
         // const response = await fetch("https://" + user[7] + ".ipfs.w3s.link/json")
         // const externalProfileData: any = response.json()
         const profileHex = user[2]
@@ -39,7 +43,7 @@ const UserProfile: NextPage = () => {
             name: user[3],
         }
         setStats((oldStats) => ({ ...oldStats, ...userStats }))
-
+        fetchPostsCount(user[1])
         fetchExternalURIs(user[7])
 
         const query = {
@@ -66,6 +70,21 @@ const UserProfile: NextPage = () => {
             },
         ]
         setStats((oldStats) => ({ ...oldStats, stats: lensStats }))
+    }
+
+    const fetchPostsCount = async (profileId) => {
+        console.log("fetchTotalPosts")
+        const totalPosts = await getLensPostCount(profileId)
+        console.log("total post", totalPosts)
+        setStats((oldStats) => {
+            const stats = oldStats.stats
+            stats[2] = {
+                value: totalPosts,
+                label: "Posts",
+            }
+            return { ...oldStats, stats }
+        })
+        setIsPostCountFetched(true)
     }
 
     const fetchExternalURIs = async (cid: string) => {
@@ -98,7 +117,14 @@ const UserProfile: NextPage = () => {
                 {/*</button>*/}
                 <Stack m={"sm"} sx={{ height: "100%" }}>
                     <Banner {...stats} />
-                    <NavTabs isOwner={isOwner} />
+                    <NavTabs
+                        isOwner={isOwner}
+                        isPostCountFetched={isPostCountFetched}
+                        profId={profId}
+                        postCount={
+                            stats && stats.stats && stats.stats[2] ? stats.stats[2].value : 0
+                        }
+                    />
                 </Stack>
             </Layout>
         </>
