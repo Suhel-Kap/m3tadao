@@ -14,6 +14,7 @@ import {GalleryInput} from "../GalleryInput";
 import useContract from "../../hooks/useContract";
 import {showNotification, updateNotification} from '@mantine/notifications'
 import {useRouter} from 'next/router'
+import {useAccount} from "wagmi";
 
 export function CreateProject() {
     const [active, setActive] = useState(0)
@@ -31,8 +32,9 @@ export function CreateProject() {
     const defaultTypes = [
         'web', 'native', 'cli',
     ];
-
+    const {address} = useAccount()
     const handleSubmit = async () => {
+        addMember(address)
         console.log(form.values)
         showNotification({
             id: 'load-data',
