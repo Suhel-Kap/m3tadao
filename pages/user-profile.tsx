@@ -7,7 +7,7 @@ import {useAccount, useProvider, useSigner} from "wagmi"
 import {useEffect, useState} from "react"
 import {useRouter} from "next/router"
 import {Layout} from "../components/Layout"
-import {Container, Stack} from "@mantine/core"
+import {Stack} from "@mantine/core"
 import useSuperFluid from "../hooks/useSuperFluid"
 import useTableland from "../hooks/useTableland"
 import {graphql} from "@valist/sdk"
@@ -16,17 +16,19 @@ import {fetchUserProfile} from "../constants/graphql/queries"
 const UserProfile: NextPage = () => {
     const {isConnected, isDisconnected, status} = useAccount()
     const router = useRouter()
+    const {address} = useAccount()
+    const isOwner = address === router.query.address
     const [stats, setStats] = useState(defaultStats)
     const {getUserData} = useTableland()
     useEffect(() => {
-        // if (!isConnected) {
-        //     router.push("/")
-        // }
+        if (!isConnected) {
+            router.push("/")
+        }
         initialize()
     }, [])
 
     const initialize = async () => {
-        const user = await getUserData()
+        const user = await getUserData(router.query.address)
         console.log(user)
         // const response = await fetch("https://" + user[7] + ".ipfs.w3s.link/json")
         // const externalProfileData: any = response.json()
@@ -49,7 +51,6 @@ const UserProfile: NextPage = () => {
 
 
         const graphRes = (await graphql.fetchGraphQL("https://api-mumbai.lens.dev/", query)).data.profiles.items[0].stats
-        console.log(graphRes)
         const lensStats = [
             {
                 "value": graphRes.totalFollowers,
@@ -68,18 +69,8 @@ const UserProfile: NextPage = () => {
     }
 
     const fetchExternalURIs = async (cid: string) => {
-        // TODO: fetch from IPFS
-        // const response = await fetch("https://" + cid + ".ipfs.w3s.link/json")
-        // const externalProfileData: any = await response.json()
-        // console.log(externalProfileData)
-        const externalProfileData = {
-            website: 'https://valist.io',
-            twitter: 'https://twitter.com',
-            github: 'https://github.com',
-            interests: ['defi', 'nfts'],
-            skills: ['development', 'game', 'development'],
-            designation: "student"
-        }
+        const response = await fetch("https://" + cid + ".ipfs.w3s.link/json")
+        const externalProfileData = await response.json()
         setStats((oldStats) => ({...oldStats, ...externalProfileData}))
     }
 
@@ -107,7 +98,7 @@ const UserProfile: NextPage = () => {
                 {/*</button>*/}
                 <Stack m={"sm"} sx={{height: "100%"}}>
                     <Banner {...stats} />
-                    <NavTabs/>
+                    <NavTabs isOwner={isOwner}/>
                 </Stack>
             </Layout>
         </>

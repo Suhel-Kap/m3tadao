@@ -98,30 +98,38 @@ export function Banner({
                 {items}
             </Group>
             <Stack mt={"lg"}>
-                <Center>
-                    <Title order={5}>Skills</Title>
-                </Center>
-                <Center>
-                    <Group mt={"xs"} position={"center"} spacing={20} sx={(theme) => ({
-                        width: "25%", [theme.fn.smallerThan("sm")]: {
-                            width: "100%"
-                        }
-                    })}>
-                        {skillBadges}
-                    </Group>
-                </Center>
-                <Center>
-                    <Title order={5}>Interests</Title>
-                </Center>
-                <Center>
-                    <Group mt={"xs"} position={"center"} spacing={20} sx={(theme) => ({
-                        width: "25%", [theme.fn.smallerThan("sm")]: {
-                            width: "100%"
-                        }
-                    })}>
-                        {interestBadges}
-                    </Group>
-                </Center>
+                {skillBadges &&
+                    <>
+                        <Center>
+                            <Title order={5}>Skills</Title>
+                        </Center>
+                        <Center>
+                            <Group mt={"xs"} position={"center"} spacing={20} sx={(theme) => ({
+                                width: "25%", [theme.fn.smallerThan("sm")]: {
+                                    width: "100%"
+                                }
+                            })}>
+                                {skillBadges}
+                            </Group>
+                        </Center>
+                    </>
+                }
+                {interestBadges &&
+                    <>
+                        <Center>
+                            <Title order={5}>Interests</Title>
+                        </Center>
+                        <Center>
+                            <Group mt={"xs"} position={"center"} spacing={20} sx={(theme) => ({
+                                width: "25%", [theme.fn.smallerThan("sm")]: {
+                                    width: "100%"
+                                }
+                            })}>
+                                {interestBadges}
+                            </Group>
+                        </Center>
+                    </>
+                }
             </Stack>
             <Stack m={"md"}>
                 <Center mb={0}>

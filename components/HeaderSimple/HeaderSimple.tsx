@@ -5,23 +5,9 @@ import {DarkModeToggle} from "../DarkModeToggle";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import Link from 'next/link';
 import {useRouter} from "next/router";
+import {useAccount} from "wagmi";
 
 const HEADER_HEIGHT = 60;
-const links = [
-    {
-        "link": "/organisations",
-        "label": "Organisations"
-    },
-    {
-        "link": "/projects",
-        "label": "Projects"
-    },
-    {
-        "link": "/user-profile",
-        "label": "Settings"
-    },
-
-]
 
 const useStyles = createStyles((theme) => ({
     root: {
@@ -96,10 +82,27 @@ const useStyles = createStyles((theme) => ({
 
 export function HeaderSimple() {
     const router = useRouter()
+    const {address} = useAccount()
     const currentPath = router.pathname
     const [opened, {toggle, close}] = useDisclosure(false);
     const [active, setActive] = useState(currentPath || null);
-    const {classes, cx} = useStyles();
+    const {classes, cx} = useStyles()
+
+    const links = [
+        {
+            "link": "/organisations",
+            "label": "Organisations"
+        },
+        {
+            "link": "/projects",
+            "label": "Projects"
+        },
+        {
+            "link": `/user-profile?address=${address}`,
+            "label": "Settings"
+        },
+
+    ]
 
     const items = links.map((link) => (
         <Link href={link.link} key={link.label}>
@@ -122,7 +125,7 @@ export function HeaderSimple() {
         <Header height={HEADER_HEIGHT} mb={0} className={classes.root}>
             <Container className={classes.header}>
                 <Link href={"/home"}>
-                        <Title style={{ cursor: "pointer", marginRight: "7.5%"}} order={3}>M3tadao</Title>
+                    <Title style={{cursor: "pointer", marginRight: "7.5%"}} order={3}>M3tadao</Title>
                 </Link>
                 <Group spacing={5} className={classes.links}>
                     {items}
