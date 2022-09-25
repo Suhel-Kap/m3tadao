@@ -77,7 +77,7 @@ const useContract = () => {
                 ],
                 ["", 0, "", description, externalURIs, profileURI],
             ],
-            { gasLimit: 5000000 }
+            { gasLimit: 20000000 }
         )
         return await tx.wait()
     }
