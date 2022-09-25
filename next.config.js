@@ -6,20 +6,26 @@ const nextConfig = {
 
 module.exports = {
     ...nextConfig,
-    future: {
-        webpack5: true,
-    },
-    webpack(config) {
-        config.resolve.fallback = {
-            ...config.resolve.fallback,
-            fs: false,
-        }
+    webpack5: true,
+    webpack: (config) => {
+        config.resolve.fallback = { fs: false, path: false }
 
         return config
     },
-    images: {
-        unoptimized: true,
-    },
+    // future: {
+    //     webpack5: true,
+    // },
+    // webpack(config) {
+    //     config.resolve.fallback = {
+    //         ...config.resolve.fallback,
+    //         fs: false,
+    //     }
+
+    //     return config
+    // },
+    // images: {
+    //     unoptimized: true,
+    // },
     trailingSlash: true,
     typescript: {
         // !! WARN !!
