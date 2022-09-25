@@ -2,9 +2,11 @@ import { Button, Container, FileInput, Stack, Textarea, TextInput } from "@manti
 import { IconPhoto, IconCheck, IconAlertCircle } from "@tabler/icons"
 import { useForm } from "@mantine/form"
 import { showNotification, updateNotification } from "@mantine/notifications"
-import { useRouter } from "next/router"
+import { useRouter, Router } from "next/router"
 import useLens from "../../hooks/useLens"
 import useContract from "../../hooks/useContract"
+import useTableland from "../../hooks/useTableland"
+import { useAccount } from "wagmi"
 
 export function CreatePost() {
     const router = useRouter()
@@ -16,6 +18,9 @@ export function CreatePost() {
         },
     })
 
+    const { address } = useAccount()
+
+    const { getUserData } = useTableland()
     const { createLensPost } = useContract()
 
     const handleSubmit = async () => {
@@ -28,8 +33,10 @@ export function CreatePost() {
             disallowClose: true,
         })
         try {
+            const userData: any = await getUserData(address)
+            console.log("id:", userData[1])
             const res = await createLensPost(
-                "18491",
+                userData[1],
                 form.values.title,
                 form.values.description,
                 form.values.image
@@ -46,7 +53,8 @@ export function CreatePost() {
                 autoClose: 2000,
             })
 
-            router.push("/home")
+            router.reload()
+            // router.push("/home")
         } catch (e) {
             console.log(e)
             updateNotification({

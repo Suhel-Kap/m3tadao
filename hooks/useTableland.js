@@ -43,6 +43,8 @@ const useTableland = () => {
                 tableNames["m3taUser"]
             } WHERE ownerAddress='${userAddress.toLowerCase()}';`
         )
+        console.log(columns)
+        console.log(rows[0])
         return rows[0]
     }
 
@@ -60,6 +62,17 @@ const useTableland = () => {
         // console.log("address", address)
         const { columns, rows } = await tableland.read(
             `SELECT * FROM ${tableNames["m3taOrganisation"]};`
+        )
+        console.log(columns)
+        console.log(rows)
+        return rows
+    }
+
+    const getProjectsData = async () => {
+        const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" })
+        // console.log("address", address)
+        const { columns, rows } = await tableland.read(
+            `SELECT * FROM ${tableNames["m3taProject"]};`
         )
         console.log(columns)
         console.log(rows)
