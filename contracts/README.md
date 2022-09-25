@@ -6,15 +6,15 @@ the Contracts are deployed on polygon =>
 
 =>
 
-m3taQuery deployed to: 0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443
+m3taQuery deployed to: https://mumbai.polygonscan.com/address/0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443
 
-humanCheck deployed to: 0xD123e9928658A302F17CC24769D1b242A00EF360
+humanCheck deployed to: https://mumbai.polygonscan.com/address/0xD123e9928658A302F17CC24769D1b242A00EF360
 
-m3taUser deployed to: 0xFAAB901d79EF7c4c63dAb95c20eF82d9AEB56642
+m3taUser deployed to: https://mumbai.polygonscan.com/address/0xFAAB901d79EF7c4c63dAb95c20eF82d9AEB56642
 
-m3taDao deployed to: 0x28FB200c401BCc2eb407D29AeD6b5baE2D3F98C3
+m3taDao deployed to: https://mumbai.polygonscan.com/address/0x28FB200c401BCc2eb407D29AeD6b5baE2D3F98C3
 
-m3taSuperTreasure deployed to : 0x460359416efA9FB04690494572DF29caEEB68C01
+m3taSuperTreasure deployed to : https://mumbai.polygonscan.com/address/0x460359416efA9FB04690494572DF29caEEB68C01
 
 All the contracts are veryfied and just waiting u to Interact!!!
 
