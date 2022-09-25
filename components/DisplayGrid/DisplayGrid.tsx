@@ -88,7 +88,7 @@ export function DisplayGrid({onLoad, data, isOrganisations}) {
                     {article[4]}
                 </Text>
                 <Text color="dimmed" size="sm" mt="md">
-                    {article[9]}
+                    {article[9] || article[7]}
                 </Text>
             </Card>
         </Skeleton>

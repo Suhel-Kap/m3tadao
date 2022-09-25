@@ -42,7 +42,7 @@ const Organisation = () => {
         const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data?.account
         setName(graphRes.name)
         setProjectsData(graphRes.projects)
-        setMembers(graphRes.members.filter(mem => mem.id !== m3taDao))
+        setMembers(graphRes.members.filter(mem => mem.id !== m3taDao.toLowerCase()))
     }
 
     const projects = projectsData.map((project, index) => {

@@ -12,7 +12,7 @@ import {
     Title,
 } from "@mantine/core"
 import Link from "next/link"
-import { IconBrandGithub, IconBrandTwitter, IconWorldWww } from "@tabler/icons"
+import {IconBrandGithub, IconBrandTwitter, IconWorldWww} from "@tabler/icons"
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -35,21 +35,23 @@ interface UserCardImageProps {
     interests: string[]
     skills: string[]
     designation: string
+    isOwner: boolean
 }
 
 export function Banner({
-    image,
-    avatar,
-    name,
-    designation,
-    stats,
-    website,
-    interests,
-    skills,
-    github,
-    twitter,
-}: UserCardImageProps) {
-    const { classes, theme } = useStyles()
+                           image,
+                           avatar,
+                           name,
+                           designation,
+                           stats,
+                           website,
+                           interests,
+                           skills,
+                           github,
+                           twitter,
+                           isOwner
+                       }: UserCardImageProps) {
+    const {classes, theme} = useStyles()
     console.log("stats", stats)
 
     const items = stats.map((stat) => (
@@ -95,21 +97,21 @@ export function Banner({
                 {twitter && (
                     <Link href={twitter ? twitter : "https://twitter.com"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconBrandTwitter size={32} />
+                            <IconBrandTwitter size={32}/>
                         </ActionIcon>
                     </Link>
                 )}
                 {github && (
                     <Link href={github ? github : "https://github.com"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconBrandGithub size={32} />
+                            <IconBrandGithub size={32}/>
                         </ActionIcon>
                     </Link>
                 )}
                 {website && (
                     <Link href={website ? website : "#"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconWorldWww size={32} />
+                            <IconWorldWww size={32}/>
                         </ActionIcon>
                     </Link>
                 )}
@@ -163,7 +165,7 @@ export function Banner({
                     </>
                 )}
             </Stack>
-            <Stack m={"md"}>
+            {!isOwner && <Stack m={"md"}>
                 <Center mb={0}>
                     <Button
                         radius="md"
@@ -171,13 +173,13 @@ export function Banner({
                         size="md"
                         fullWidth={false}
                         variant="gradient"
-                        gradient={{ from: "indigo", to: "cyan" }}
+                        gradient={{from: "indigo", to: "cyan"}}
                         color={theme.colorScheme === "dark" ? undefined : "dark"}
                     >
                         Follow
                     </Button>
                 </Center>
-            </Stack>
+            </Stack>}
         </Card>
     )
 }

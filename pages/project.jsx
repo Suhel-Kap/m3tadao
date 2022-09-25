@@ -14,7 +14,7 @@ export default function Project() {
     const [data, setData] = useState(null)
     const [name, setName] = useState("project")
     useEffect(() => {
-        const projectId = router.query.projId
+        const projectId = router.query.accHex
         const query = {
             query: fetchProjectDetails,
             variables: {
