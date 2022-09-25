@@ -1,5 +1,6 @@
 {
-    "m3taDao": "0xc13f843fc1a2c4cee05ec99d5b312decb1a53462",
-    "lens": "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82",
-    "freeCollectModule": "0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c"
+  "m3taDao": "0xc13f843fc1a2c4cee05ec99d5b312decb1a53462",
+  "lens": "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82",
+  "freeCollectModule": "0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c",
+  "superfluid": "0x460359416efA9FB04690494572DF29caEEB68C01"
 }
