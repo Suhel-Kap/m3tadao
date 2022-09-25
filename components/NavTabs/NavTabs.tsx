@@ -1,19 +1,19 @@
-import { Tabs, Grid, Container, Title, Center, Paper } from "@mantine/core"
-import { PostCard } from "../PostCard"
+import {Tabs, Grid, Container, Title, Center, Paper} from "@mantine/core"
+import {PostCard} from "../PostCard"
 import PostData from "../PostCard/data.json"
-import { ChatRoom } from "../ChatRoom"
-import { useEffect, useState } from "react"
-import { ManageProfile } from "../ManageProfile"
+import {ChatRoom} from "../ChatRoom"
+import {useEffect, useState} from "react"
+import {ManageProfile} from "../ManageProfile"
 import Link from "next/link"
 import useContract from "../../hooks/useContract"
 
 const defaultActive = "first"
 
-export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
+export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
     console.log("postCount navtabs", postCount)
     const [active, setActive] = useState(defaultActive)
     const [posts, setPosts] = useState([])
-    const { getLensPost } = useContract()
+    const {getLensPost} = useContract()
     useEffect(() => {
         if (isPostCountFetched) {
             initializePosts()
@@ -33,7 +33,8 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
                 id: jsonObj.metadata_id,
                 title: jsonObj.content,
                 description: jsonObj.description,
-                image: "https://" + jsonObj.image + ".ipfs.w3s.link/json",
+                image: "https://" + jsonObj.image + ".ipfs.w3s.link/image",
+                authorAddress: jsonObj.address
             }
             setPosts((oldPosts) => [...oldPosts, post])
         }
@@ -60,7 +61,7 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
                 <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
                     <Grid>
                         <Grid.Col lg={4} md={6}>
-                            <Link href={"/post"} passHref style={{ cursor: "pointer" }}>
+                            <Link href={"/post"} passHref style={{cursor: "pointer"}}>
                                 <Container size={400} px="xs">
                                     <PostCard {...PostData} />
                                 </Container>
@@ -84,7 +85,7 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
                     Your Conversations
                 </Title>
                 <Paper shadow="xl" radius="lg" p="md">
-                    {active === "second" ? <ChatRoom isActive={active === "second"} /> : null}
+                    {active === "second" ? <ChatRoom isActive={active === "second"}/> : null}
                     <Center>
                         <Title order={6} color={"dimmed"}>
                             Powered by XMTP
@@ -94,7 +95,7 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>
                 <Paper shadow="xl" radius="lg" p="md">
-                    <ManageProfile />
+                    <ManageProfile/>
                 </Paper>
             </Tabs.Panel>
         </Tabs>

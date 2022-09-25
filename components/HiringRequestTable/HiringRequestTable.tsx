@@ -1,64 +1,42 @@
-import {Avatar, Table, Group, Text, ActionIcon, Menu, ScrollArea} from '@mantine/core';
-import {
-    IconMessages,
-    IconNote,
-    IconTrash,
-    IconDots, IconCheck, IconAlertCircle,
-} from '@tabler/icons'
-import makeBlockie from "ethereum-blockies-base64";
-import useSuperFluid from "../../hooks/useSuperFluid";
-import {useAccount, useProvider, useSigner} from "wagmi";
-import {showNotification, updateNotification} from "@mantine/notifications";
+import {Avatar, Table, Group, Text, ActionIcon, Menu, ScrollArea, Modal, Title, Center} from '@mantine/core';
+import {IconMessages, IconNote, IconTrash, IconDots,} from '@tabler/icons'
+import makeBlockie from "ethereum-blockies-base64"
+import {useState} from 'react';
+import {CreateStream} from '../CreateStream';
 
 interface UsersStackProps {
     data: { title: string; description: string; address: string; }[];
 }
 
 export function HiringRequestTable({someotheredata}: UsersStackProps) {
-    const {SendPlannedStream} = useSuperFluid()
-    const {data: signer} = useSigner()
-    const provider = useProvider()
-    const {address} = useAccount()
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [receiver, setReceiver] = useState("")
 
-    const sendStream = async () => {
-        showNotification({
-            id: "load-data",
-            loading: true,
-            title: "Sending Stream",
-            message:
-                "Please wait while we send the stream using superfluid",
-            autoClose: false,
-            disallowClose: true,
-        })
 
-        try {
-            await SendPlannedStream(provider, signer, address, "0x044B595C9b94A17Adc489bD29696af40ccb3E4d2", 0.016, 1)
-            updateNotification({
-                id: "load-data",
-                color: "teal",
-                title: "Success",
-                message: "Matic sent successfully",
-                icon: <IconCheck size={16}/>,
-                autoClose: 2000,
-            })
-        } catch (e) {
-            console.log(e)
-            updateNotification({
-                id: "load-data",
-                color: "red",
-                title: "Error",
-                message: "Failed to send Matic",
-                icon: <IconAlertCircle size={16}/>,
-                autoClose: 2000,
-            })
-        }
+    let postModal = <Modal
+        opened={isModalOpen}
+        size="60%"
+        transition="fade"
+        transitionDuration={500}
+        transitionTimingFunction="ease"
+        title={<Title>Send Stream</Title>}
+        onClose={() => setIsModalOpen(false)}>
+        <Center>
+            <CreateStream receiver={receiver}/>
+        </Center>
+    </Modal>
+
+    const handleClick = (address) => {
+        setReceiver(address)
+        setIsModalOpen(true)
     }
-
+    
+    // TODO: set data to actual end
     const data = [
         {
             title: "some title",
             description: "some description",
-            address: "0x0000000000000000000000000000000000000000",
+            address: "0x044B595C9b94A17Adc489bD29696af40ccb3E4d2",
         }
     ]
     const rows = data.map((item) => (
@@ -75,9 +53,6 @@ export function HiringRequestTable({someotheredata}: UsersStackProps) {
             </td>
             <td>
                 <Text size="sm">{item.title}</Text>
-                <Text size="xs" color="dimmed">
-                    Title
-                </Text>
             </td>
             <td>
                 <Text size="sm">{item.description}</Text>
@@ -92,7 +67,9 @@ export function HiringRequestTable({someotheredata}: UsersStackProps) {
                         </Menu.Target>
                         <Menu.Dropdown>
                             <Menu.Item icon={<IconMessages size={16} stroke={1.5}/>}>Send message</Menu.Item>
-                            <Menu.Item onClick={sendStream} icon={<IconNote size={16} stroke={1.5}/>}>Start payment
+                            <Menu.Item onClick={() => handleClick(item.address)}
+                                       icon={<IconNote size={16} stroke={1.5}/>}>Start
+                                payment
                                 stream</Menu.Item>
                             <Menu.Item icon={<IconTrash size={16} stroke={1.5}/>} color="red">
                                 Terminate contract
@@ -104,11 +81,13 @@ export function HiringRequestTable({someotheredata}: UsersStackProps) {
         </tr>
     ));
 
-    return (
-        <ScrollArea sx={{overflow: "visible"}}>
-            <Table sx={{minWidth: 800}} verticalSpacing="md">
-                <tbody>{rows}</tbody>
-            </Table>
-        </ScrollArea>
+    return (<>
+            <ScrollArea sx={{overflow: "visible"}}>
+                <Table sx={{minWidth: 800}} verticalSpacing="md">
+                    <tbody>{rows}</tbody>
+                </Table>
+            </ScrollArea>
+            {postModal}
+        </>
     );
 }
