@@ -1,11 +1,11 @@
-import {ContentTypeId} from "@xmtp/xmtp-js"
-import {useEffect, useRef, useState} from "react"
-import {useSigner} from "wagmi"
-import {ActionIcon, Center, Group, Paper, ScrollArea, Stack} from "@mantine/core"
-import {ChevronDown} from "tabler-icons-react"
-import {useInView} from "react-intersection-observer"
-import {ChatMessage} from "../ChatMessage"
-import {ChatBox} from "../ChatBox"
+import { ContentTypeId } from "@xmtp/xmtp-js"
+import { useEffect, useRef, useState } from "react"
+import { useSigner } from "wagmi"
+import { ActionIcon, Center, Group, Paper, ScrollArea, Skeleton, Stack } from "@mantine/core"
+import { ChevronDown } from "tabler-icons-react"
+import { useInView } from "react-intersection-observer"
+import { ChatMessage } from "../ChatMessage"
+import { ChatBox } from "../ChatBox"
 
 export class GroupMessageCodec {
     constructor(authorityId, typeId) {
@@ -36,22 +36,23 @@ export class GroupMessageCodec {
     }
 }
 
-export default function XmtpChat({xmtp}) {
+export default function XmtpChat({ xmtp }) {
     const [groupChats, setGroupChats] = useState([])
-    const {data: signer, isError, isLoading} = useSigner()
+    const { data: signer, isError, isLoading } = useSigner()
+    const [isChatLoading, setIsChatLoading] = useState(true)
     // const [xmtp, setXmtp] = useState()
     const [groupMessageCodec, setGroupMessageCodec] = useState()
     const [isInitialized, setIsInitialized] = useState(false)
     const [id, setId] = useState("")
     const [hidden, setHidden] = useState(true)
     const dummy = useRef(null)
-    const {ref, inView} = useInView({
+    const { ref, inView } = useInView({
         delay: 600,
         threshold: 1,
     })
 
     function goBot() {
-        dummy.current?.scrollIntoView({behavior: "smooth"})
+        dummy.current?.scrollIntoView({ behavior: "smooth" })
         setHidden(true)
         setId("")
     }
@@ -94,7 +95,8 @@ export default function XmtpChat({xmtp}) {
                 return [message]
             }
         })
-        bottomDivRef.current?.scrollIntoView({behavior: "smooth"})
+        setIsChatLoading(false)
+        bottomDivRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
     useEffect(() => {
@@ -162,7 +164,7 @@ export default function XmtpChat({xmtp}) {
     const loadConversation = async (conversation) => {
         // TODO This might be a bug in XMTP, reach out to them.
         // await new Promise((_) => setTimeout(_, 2000))
-        const messages = await conversation.messages({pageSize: 100})
+        const messages = await conversation.messages({ pageSize: 100 })
 
         for (const message of messages) {
             if (isGroupMessage(message) && !groupChats.includes(message)) {
@@ -173,58 +175,60 @@ export default function XmtpChat({xmtp}) {
     }
 
     return (
-        <Center>
-            <Stack sx={{height: "65vh"}} p={0}>
-                <ScrollArea p={"xs"} sx={{height: "65vh"}} scrollbarSize={1}>
-                    <Stack>
-                        <Group hidden={inView} position="center" pt="xs">
-                            <Paper
-                                shadow="md"
-                                radius="xl"
-                                withBorder
-                                p={0}
-                                sx={{position: "absolute", top: "95%"}}
-                            >
-                                <ActionIcon color="violet" radius="xl" onClick={goBot}>
-                                    <ChevronDown/>
-                                </ActionIcon>
-                            </Paper>
-                        </Group>
-                        <Center>
-                            <Stack
-                                sx={(theme) => ({
-                                    width: "50vw",
-                                    maxWidth: "60vw",
-                                    [theme.fn.smallerThan("md")]: {
-                                        width: "100%",
-                                    },
-                                })}
-                            >
-                                {groupChats
-                                    ? groupChats.map((message, index) => {
-                                        return (
-                                            <div key={index}>
-                                                <ChatMessage
-                                                    senderAddress={message.senderAddress}
-                                                    content={message.content}
-                                                />
-                                            </div>
-                                        )
-                                    })
-                                    : "Wow so empty"}
-                            </Stack>
-                        </Center>
-                        <div style={{float: "left", clear: "both"}} ref={bottomDivRef}></div>
-                        <div ref={ref}></div>
-                        <div ref={dummy}></div>
-                    </Stack>
-                </ScrollArea>
-                <ChatBox
-                    fn={goBot}
-                    inputRef={groupMsgInputRef}
-                    sendGroupMessage={sendGroupMessage}
-                />
-            </Stack>
-        </Center>
+        <Skeleton visible={isChatLoading} animate={true}>
+            <Center>
+                <Stack sx={{ height: "65vh" }} p={0}>
+                    <ScrollArea p={"xs"} sx={{ height: "65vh" }} scrollbarSize={1}>
+                        <Stack>
+                            <Group hidden={inView} position="center" pt="xs">
+                                <Paper
+                                    shadow="md"
+                                    radius="xl"
+                                    withBorder
+                                    p={0}
+                                    sx={{ position: "absolute", top: "95%" }}
+                                >
+                                    <ActionIcon color="violet" radius="xl" onClick={goBot}>
+                                        <ChevronDown />
+                                    </ActionIcon>
+                                </Paper>
+                            </Group>
+                            <Center>
+                                <Stack
+                                    sx={(theme) => ({
+                                        width: "50vw",
+                                        maxWidth: "60vw",
+                                        [theme.fn.smallerThan("md")]: {
+                                            width: "100%",
+                                        },
+                                    })}
+                                >
+                                    {groupChats
+                                        ? groupChats.map((message, index) => {
+                                              return (
+                                                  <div key={index}>
+                                                      <ChatMessage
+                                                          senderAddress={message.senderAddress}
+                                                          content={message.content}
+                                                      />
+                                                  </div>
+                                              )
+                                          })
+                                        : "Wow so empty"}
+                                </Stack>
+                            </Center>
+                            <div style={{ float: "left", clear: "both" }} ref={bottomDivRef}></div>
+                            <div ref={ref}></div>
+                            <div ref={dummy}></div>
+                        </Stack>
+                    </ScrollArea>
+                    <ChatBox
+                        fn={goBot}
+                        inputRef={groupMsgInputRef}
+                        sendGroupMessage={sendGroupMessage}
+                    />
+                </Stack>
+            </Center>
+        </Skeleton>
     )
 }

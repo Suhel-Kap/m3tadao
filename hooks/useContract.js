@@ -1,7 +1,7 @@
-import {ethers} from "ethers"
-import {contractAddresses, m3taDaoAbi} from "../constants/"
-import {useAccount, useSigner} from "wagmi"
-import {uploadFileToIpfs, uploadJsonToIpfs} from "../utils/uploadToIpfs"
+import { ethers } from "ethers"
+import { contractAddresses, m3taDaoAbi } from "../constants/"
+import { useAccount, useSigner } from "wagmi"
+import { uploadFileToIpfs, uploadJsonToIpfs } from "../utils/uploadToIpfs"
 
 const isJsonEmpty = (jsonObj) => {
     return (
@@ -12,8 +12,8 @@ const isJsonEmpty = (jsonObj) => {
 }
 
 const useContract = () => {
-    const {data: signer, isError, isLoading} = useSigner()
-    const {address} = useAccount()
+    const { data: signer, isError, isLoading } = useSigner()
+    const { address } = useAccount()
 
     const createLensProfile = async (
         userAddress,
@@ -30,7 +30,7 @@ const useContract = () => {
         skills
         // profileURI
     ) => {
-        const externalJson = {website, twitter, github, interests, skills, designation}
+        const externalJson = { website, twitter, github, interests, skills, designation }
         let externalURIs
         if (isJsonEmpty(externalJson)) {
             externalURIs = ""
@@ -75,7 +75,7 @@ const useContract = () => {
                 ],
                 ["", 0, "", description, externalURIs, profileURI],
             ],
-            {gasLimit: 5000000}
+            { gasLimit: 5000000 }
         )
         return await tx.wait()
     }
@@ -97,7 +97,7 @@ const useContract = () => {
         } else {
             imageURI = ""
         }
-        const externalJson = {website, description, accountName, imageURI}
+        const externalJson = { website, description, accountName, imageURI }
         const metaURI = await uploadJsonToIpfs(externalJson, "json")
 
         const m3taDaoContractInstance = new ethers.Contract(
@@ -158,9 +158,8 @@ const useContract = () => {
         website,
         shortDescription,
         youTubeLink,
-        tags,
+        tags
     ) => {
-
         let imageURI
         if (image) {
             imageURI = await uploadFileToIpfs(image, "image")
@@ -168,7 +167,7 @@ const useContract = () => {
             imageURI = ""
         }
 
-        const metaURIObject = {displayName, description,website, youTubeLink, tags}
+        const metaURIObject = { displayName, description, website, youTubeLink, tags }
         const metaURI = await uploadJsonToIpfs(externalJson, "json")
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
@@ -242,10 +241,11 @@ const useContract = () => {
             releaseURI,
         ]
 
-        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, { gasLimit: 5000000 })
         return await tx
     }
 
+    // create post for organisation
     const createPost = async (accountID, postDescription, postTitle, postGalery) => {
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
@@ -253,7 +253,6 @@ const useContract = () => {
             signer
         )
 
-        
         let postGaleryURI
         if (postGalery) {
             postGaleryURI = await uploadFileToIpfs(postGalery, "image")
@@ -261,17 +260,55 @@ const useContract = () => {
             postGaleryURI = ""
         }
 
-        const PostStruct = [
-            address,
-            "0",
-            accountID,
-            "a",
-            postDescription,
-            postTitle,
-            postGalery,
-        ]
+        const PostStruct = [address, "0", accountID, "a", postDescription, postTitle, postGalery]
 
-        var tx = await m3taDaoContractInstance.createPost(PostStruct, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
+        return await tx
+    }
+
+    // create post for individual using lens
+    const createLensPost = async (accountID, postDescription, postTitle, image) => {
+        let imageURI
+        if (image) {
+            imageURI = await uploadFileToIpfs(image, "image")
+        } else {
+            imageURI = ""
+        }
+
+        const ipfsResult = await uploadJsonToIpfs({
+            version: "1.0.0",
+            mainContentFocus: "TEXT_ONLY",
+            metadata_id: uuidv4(),
+            description: description,
+            locale: "en-US",
+            content: "Content",
+            external_url: null,
+            image: imageURI,
+            imageMimeType: null,
+            name: postTitle,
+            attributes: [],
+            tags: [],
+            appId: "m3tadao.eth",
+        })
+
+        const m3taDaoContractInstance = new ethers.Contract(
+            contractAddresses.m3taDao,
+            m3taDaoAbi,
+            signer
+        )
+
+        const inputStruct = {
+            profileId: 1,
+            contentURI: "https://ipfs.io/ipfs/Qmby8QocUU2sPZL46rZeMctAuF5nrCc7eR1PPkooCztWPz",
+            collectModule: freeCollectModuleAddr,
+            collectModuleInitData: defaultAbiCoder.encode(["bool"], [true]),
+            referenceModule: ZERO_ADDRESS,
+            referenceModuleInitData: [],
+        }
+
+        const PostStruct = [address, "0", accountID, "a", postDescription, postTitle, postGalery]
+
+        var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
         return await tx
     }
 
@@ -282,8 +319,8 @@ const useContract = () => {
             signer
         )
 
-        var tx = await m3taDaoContractInstance.createPost(accountID, postID, {gasLimit: 5000000})
-        return await  tx
+        var tx = await m3taDaoContractInstance.createPost(accountID, postID, { gasLimit: 5000000 })
+        return await tx
     }
 
     return {
