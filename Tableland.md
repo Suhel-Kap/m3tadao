@@ -20,7 +20,12 @@ created by our contract. Here is a query to take m3tadao current registed users
        and also make a planned Automated streams between contributors! 
        The hiring table is located here: 
        https://testnet.tableland.network/query?s=SELECT%20*%20FROM%20M3taHire_80001_3143
-       
+
+
+=> We are also introducing a Storage Contract to Store all of our SQL Statements so other contracts that Integrate Tableland does not have to 
+waste the contract limit size in bytes!!!
+
+=> The Query Contract is located in that address on mumbai testnet => 0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443
        
 Tableland was a pretty nice integration because it gaves us the oportunity to index our signed user data by making a query with his wallet data.
 
