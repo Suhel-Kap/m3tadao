@@ -6,11 +6,11 @@ module.exports = {
     solidity: "0.8.12",
     networks: {
         mumbai: {
-            url: `Provider URL for mumbai Testnet`,
-            accounts: ["Your Wallet Private Key"],
+            url: `https://polygon-mumbai.g.alchemy.com/v2/"Your Alchemy API Key`,
+            accounts: ["Your wallet PK"],
         },
     },
     etherscan: {
-        apiKey: "Your etherscan API Key",
+        apiKey: "Mumbai scan API Key",
     },
 }
