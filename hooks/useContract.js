@@ -142,7 +142,7 @@ const useContract = () => {
             [...members, contractAddresses.m3taDao],
         ]
         var tx = await m3taDaoContractInstance.createProjectAccount(accountStruct, {
-            gasLimit: 5000000,
+            gasLimit: 20000000,
         })
 
         return await tx.wait()
@@ -185,7 +185,7 @@ const useContract = () => {
         )
 
         var tx = await m3taDaoContractInstance.updateAccountMetadata(accountID, requirementsURI, {
-            gasLimit: 5000000,
+            gasLimit: 20000000,
         })
 
         return await tx.wait()
@@ -251,7 +251,7 @@ const useContract = () => {
         ]
 
         var tx = await m3taDaoContractInstance.createSubProject(ProjectStruct, {
-            gasLimit: 5000000,
+            gasLimit: 20000000,
         })
         return await tx.wait()
     }
@@ -414,7 +414,7 @@ const useContract = () => {
         )
 
         var tx = await valistContractInstance.addAccountMember(accountID, newUserWalletAddress, {
-            gasLimit: 5000000,
+            gasLimit: 20000000,
         })
         return await tx.wait()
     }
@@ -429,7 +429,7 @@ const useContract = () => {
         var tx = await valistContractInstance.removeAccountMember(
             accountID,
             newUserWalletAddress,
-            { gasLimit: 5000000 }
+            { gasLimit: 20000000 }
         )
         return await tx.wait()
     }
