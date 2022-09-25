@@ -41,19 +41,13 @@ export function ChatRoom() {
     const [xmtp, setXmtp] = useState()
     const data = [
         {
-            title: "Chat Room 1",
+            title: "General Chat",
             groupId: "1234",
-            groupChat: true,
-        },
-        {
-            title: "Chat Room 2",
-            groupId: "1235",
             groupChat: true,
         },
         {
             title: "Chat Room 3",
             otherUser: "0x0de82DCC40B8468639251b089f8b4A4400022e04",
-            groupChat: false,
         },
     ]
 

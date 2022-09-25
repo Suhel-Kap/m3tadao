@@ -1,8 +1,9 @@
-import {Anchor, Paper, SimpleGrid, Table, Tabs, Text} from '@mantine/core'
+import {Anchor, Paper, SimpleGrid, Skeleton, Table, Tabs, Text} from '@mantine/core'
 import {StyledTabs} from '../StyledTabs'
 import {EditProject} from "../EditProject"
 import {MemberCard} from "../MemberCard";
 import {RequirementsCard} from "../RequirementsCard";
+import {useEffect, useState} from "react";
 
 const data = [
     {
@@ -36,7 +37,16 @@ const memberData = [
     }
 ]
 
-export function ProjectData() {
+export function ProjectData(props: any) {
+    const propsData = props.data
+    const [loading, setLoading] = useState(true)
+    console.log("propsData1", propsData)
+
+    useEffect(() => {
+        if (propsData)
+            setLoading(false)
+    }, [props.data])
+
     const rows = data.map((row) => (
         <tr key={row.version}>
             <td>{row.version}</td>
@@ -45,6 +55,7 @@ export function ProjectData() {
         </tr>
     ))
 
+
     const memberRows = memberData.map((row) => (
         <MemberCard address={row.address} name={row.name}/>
     ))
@@ -52,11 +63,11 @@ export function ProjectData() {
     return (
         <StyledTabs defaultValue={"readme"}>
             <Tabs.List my={"md"}>
-                <Tabs.Tab value={"requirements"}>
-                    Requirements
-                </Tabs.Tab>
                 <Tabs.Tab value="readme">
                     Readme
+                </Tabs.Tab>
+                <Tabs.Tab value={"requirements"}>
+                    Requirements
                 </Tabs.Tab>
                 <Tabs.Tab value="versions">
                     Versions
@@ -69,7 +80,7 @@ export function ProjectData() {
                 </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value={"requirements"}>
-                <SimpleGrid cols={2} spacing={"md"} breakpoints={[{ maxWidth: 600, cols: 1, spacing: 'sm' },]}>
+                <SimpleGrid cols={2} spacing={"md"} breakpoints={[{maxWidth: 600, cols: 1, spacing: 'sm'},]}>
                     <RequirementsCard
                         description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
                         title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
@@ -85,17 +96,20 @@ export function ProjectData() {
                 </SimpleGrid>
             </Tabs.Panel>
             <Tabs.Panel value={"readme"}>
-                <Paper shadow="xl" radius="lg" p="md">
-                    <Text p={"md"}>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium assumenda at commodi
-                        deleniti eum expedita impedit, molestias natus nobis odit quae quis repellendus vel! Alias at
-                        debitis deleniti distinctio fugit, iusto laboriosam omnis optio placeat quos rem repellat
-                        repellendus tenetur totam unde veritatis voluptate! Aliquam, amet asperiores at beatae dicta
-                        dolore expedita in iure iusto labore maiores modi molestias nemo numquam omnis quaerat quasi
-                        quod, rerum tempora voluptatum! Animi aspernatur at distinctio dolor est eveniet excepturi
-                        laborum perferendis vero voluptatum.
-                    </Text>
-                </Paper>
+                <Skeleton animate={true} visible={loading}>
+                    <Paper shadow="xl" radius="lg" p="md">
+                        <Text p={"md"}>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium assumenda at commodi
+                            deleniti eum expedita impedit, molestias natus nobis odit quae quis repellendus vel! Alias
+                            at
+                            debitis deleniti distinctio fugit, iusto laboriosam omnis optio placeat quos rem repellat
+                            repellendus tenetur totam unde veritatis voluptate! Aliquam, amet asperiores at beatae dicta
+                            dolore expedita in iure iusto labore maiores modi molestias nemo numquam omnis quaerat quasi
+                            quod, rerum tempora voluptatum! Animi aspernatur at distinctio dolor est eveniet excepturi
+                            laborum perferendis vero voluptatum.
+                        </Text>
+                    </Paper>
+                </Skeleton>
             </Tabs.Panel>
             <Tabs.Panel value={"versions"}>
                 <Paper shadow="xl" radius="lg" p="md">

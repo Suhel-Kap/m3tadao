@@ -3,3 +3,5 @@ export const fetchUserProfile = "query userProfile($profHex: [ProfileId!]) { pro
 
 // query variables: accHex
 export const fetchOrganisationDetails = "query GetOrg($accHex: String){ account(id: $accHex){ id name metaURI members { id } projects { id name releases { id name metaURI } } } }"
+
+export const fetchProjectDetails = "query GetProj ($projId: String){ project(id: $projId){ id name metaURI members{ id } releases {id name metaURI }}}"

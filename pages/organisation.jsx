@@ -49,7 +49,8 @@ const Organisation = () => {
 
     const projects = projectsData.map((project, index) => {
         return (
-            <ProjectCard avatar={project.avatar} name={project.name} shortDescription={project.shortDescription}/>
+            <ProjectCard projectId={project.id} avatar={project.avatar} name={project.name}
+                         shortDescription={project.shortDescription}/>
         )
     })
 

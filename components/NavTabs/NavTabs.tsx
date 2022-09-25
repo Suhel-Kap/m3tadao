@@ -7,9 +7,9 @@ import {ManageProfile} from "../ManageProfile";
 import Link from "next/link";
 
 export function NavTabs() {
-    const [active, setActive] = useState()
+    const [active, setActive] = useState("second")
     return (
-        <Tabs variant="outline" defaultValue="first" onTabChange={(event) => {
+        <Tabs variant="outline" defaultValue="second" onTabChange={(event) => {
             setActive(event)
         }}>
             <Tabs.List grow position="center" mb={75}>
