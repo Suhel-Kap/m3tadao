@@ -32,7 +32,7 @@ const useContract = () => {
         skills
         // profileURI
     ) => {
-        const externalJson = {website, twitter, github, interests, skills, designation}
+        const externalJson = { website, twitter, github, interests, skills, designation }
         let externalURIs
         if (isJsonEmpty(externalJson)) {
             externalURIs = ""
@@ -150,11 +150,21 @@ const useContract = () => {
 
     const updateProjectAccountRequirements = async (
         accountID,
-        profHex,
-        hireTitle,
-        hireDescription
+        reqTitle,
+        reqDescription,
+        reqTags,
+        reqPrice,
+        reqDeadline
     ) => {
-        const requirementsURI = await uploadJsonToIpfs(requirements, "json")
+        const inputStruct = {
+            accountID,
+            reqTitle,
+            reqDescription,
+            reqTags,
+            reqPrice,
+            reqDeadline,
+        }
+        const requirementsURI = await uploadJsonToIpfs(inputStruct, "json")
 
         //     struct HireReqStruct
         // {
@@ -202,7 +212,7 @@ const useContract = () => {
             imageURI = ""
         }
 
-        const metaURIObject = {displayName, description, website, youTubeLink, tags}
+        const metaURIObject = { displayName, description, website, youTubeLink, tags }
         const metaURI = await uploadJsonToIpfs(metaURIObject, "json")
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
@@ -276,7 +286,7 @@ const useContract = () => {
             releaseURI,
         ]
 
-        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createRelease(ReleaseStruct, { gasLimit: 5000000 })
         return await tx
     }
 
@@ -296,7 +306,7 @@ const useContract = () => {
 
         const PostStruct = [address, "0", accountID, "a", postDescription, postTitle, postGalery]
 
-        var tx = await m3taDaoContractInstance.createPost(PostStruct, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createPost(PostStruct, { gasLimit: 5000000 })
         return await tx.wait()
     }
 
@@ -307,7 +317,7 @@ const useContract = () => {
             signer
         )
 
-        var tx = await m3taDaoContractInstance.createPost(accountID, postID, {gasLimit: 5000000})
+        var tx = await m3taDaoContractInstance.createPost(accountID, postID, { gasLimit: 5000000 })
         return await tx.wait()
     }
 
@@ -370,14 +380,14 @@ const useContract = () => {
             referenceModuleInitData: [],
         }
 
-        var tx = await lensContractInstance.post(inputStruct, {gasLimit: 5000000})
+        var tx = await lensContractInstance.post(inputStruct, { gasLimit: 5000000 })
         return await tx.wait()
     }
 
     const getLensPostCount = async (profId) => {
         const lensContractInstance = new ethers.Contract(contractAddresses.lens, lensAbi, signer)
         console.log("profID", profId)
-        var tx = await lensContractInstance.getPubCount(profId, {gasLimit: 5000000})
+        var tx = await lensContractInstance.getPubCount(profId, { gasLimit: 5000000 })
         return tx.toString()
     }
 
@@ -385,14 +395,14 @@ const useContract = () => {
     const getLensPost = async (profId, pubId) => {
         const lensContractInstance = new ethers.Contract(contractAddresses.lens, lensAbi, signer)
         console.log("profID", profId)
-        var tx = await lensContractInstance.getPub(profId, pubId, {gasLimit: 5000000})
+        var tx = await lensContractInstance.getPub(profId, pubId, { gasLimit: 5000000 })
         return tx.toString()
     }
 
     const createFollow = async (profileIDs) => {
         const lensContractInstance = new ethers.Contract(contractAddresses.lens, lensAbi, signer)
 
-        var tx = await lensContractInstance.follow(profileIDs, [[]], {gasLimit: 5000000})
+        var tx = await lensContractInstance.follow(profileIDs, [[]], { gasLimit: 5000000 })
         return await tx.wait()
     }
 
