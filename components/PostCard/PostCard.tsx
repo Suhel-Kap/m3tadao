@@ -21,40 +21,26 @@ const useStyles = createStyles((theme) => ({
 
 interface ArticleCardFooterProps {
     image: string;
-    category: string;
+    description: string;
     title: string;
     footer: string;
-    author: {
-        name: string;
-        description: string;
-        image: string;
-    };
 }
 
-export function PostCard({image, category, title, footer, author,}: ArticleCardFooterProps) {
+export function PostCard({image, description, title, footer,}: ArticleCardFooterProps) {
     const {classes, theme} = useStyles();
 
     return (
-        <Card  withBorder p="lg" radius="md" className={classes.card}>
+        <Card withBorder p="lg" radius="md" className={classes.card}>
             <Card.Section mb="sm">
                 <Image src={image} alt={title} height={125}/>
             </Card.Section>
 
-            <Badge>{category}</Badge>
-
             <Text weight={700} className={classes.title} mt="xs">
                 {title}
             </Text>
-
-            <Group mt="lg">
-                <Avatar src={author.image} radius="sm"/>
-                <div>
-                    <Text weight={500}>{author.name}</Text>
-                    <Text size="xs" color="dimmed">
-                        {author.description}
-                    </Text>
-                </div>
-            </Group>
+            <Text size="sm" color="dimmed">
+                {description}
+            </Text>
 
             <Card.Section className={classes.footer}>
                 <Group position="apart">

@@ -30,7 +30,7 @@ export default function Projects() {
             </Head>
             <Container>
                 <Skeleton visible={onLoad} animate={true}>
-                    <DisplayGrid data={projectsData} onLoad={onLoad}/>
+                    <DisplayGrid isOrganisations={false} data={projectsData} onLoad={onLoad}/>
                 </Skeleton>
             </Container>
         </Layout>

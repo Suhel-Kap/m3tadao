@@ -1,4 +1,4 @@
-import {Tabs, Grid, Container, Title, Center, Paper} from "@mantine/core"
+import {Tabs, Grid, Container, Title, Center, Paper, Skeleton} from "@mantine/core"
 import {PostCard} from "../PostCard"
 import PostData from "../PostCard/data.json"
 import {ChatRoom} from "../ChatRoom"
@@ -10,8 +10,8 @@ import useContract from "../../hooks/useContract"
 const defaultActive = "first"
 
 export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
-    console.log("postCount navtabs", postCount)
     const [active, setActive] = useState(defaultActive)
+    const [isLoading, setIsLoading] = useState(true)
     const [posts, setPosts] = useState([])
     const {getLensPost} = useContract()
     useEffect(() => {
@@ -21,14 +21,29 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
     }, [isPostCountFetched])
     console.log(posts)
 
+    const postCards = posts.map((post, index) => {
+        return (
+            <Grid.Col lg={4} md={6}>
+                <Skeleton visible={isLoading} animate={true}>
+                    <Container size={400} px="xs">
+                        <PostCard
+                            footer={`${Math.floor(Math.random() * 11)} people liked this post`}
+                            image={post.image}
+                            title={post.title}
+                            description={post.description}
+                        />
+                    </Container>
+                </Skeleton>
+            </Grid.Col>
+        )
+    })
+
     const initializePosts = async () => {
         for (let i = 1; i <= postCount; i++) {
             const postFromLens = await getLensPost(profId, i)
             const postArray = postFromLens.split(",")
-            console.log("postArray", postArray)
             const response = await fetch("https://" + postArray[2] + ".ipfs.w3s.link/json")
             const jsonObj = await response.json()
-            console.log("jsonObj", jsonObj)
             const post = {
                 id: jsonObj.metadata_id,
                 title: jsonObj.content,
@@ -37,6 +52,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
                 authorAddress: jsonObj.address
             }
             setPosts((oldPosts) => [...oldPosts, post])
+            setIsLoading(false)
         }
     }
     return (
@@ -60,23 +76,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
             <Tabs.Panel value={"first"}>
                 <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
                     <Grid>
-                        <Grid.Col lg={4} md={6}>
-                            <Link href={"/post"} passHref style={{cursor: "pointer"}}>
-                                <Container size={400} px="xs">
-                                    <PostCard {...PostData} />
-                                </Container>
-                            </Link>
-                        </Grid.Col>
-                        <Grid.Col lg={4} md={6}>
-                            <Container size={400} px="xs">
-                                <PostCard {...PostData} />
-                            </Container>
-                        </Grid.Col>
-                        <Grid.Col lg={4} md={6}>
-                            <Container size={400} px="xs">
-                                <PostCard {...PostData} />
-                            </Container>
-                        </Grid.Col>
+                        {postCards}
                     </Grid>
                 </Paper>
             </Tabs.Panel>
