@@ -77,8 +77,10 @@ export function DisplayGrid({onLoad, data, isOrganisations}) {
     const {classes} = useStyles();
 
     const cards = data && data.map((article) => (
-        <Skeleton visible={onLoad}>
-            <Card key={article[1]} p="md" radius="md" component="a" href={isOrganisations ? `/organisation?accHex=${article[3]}` : `/project?accHex=${article[3]}`} className={classes.card}>
+        <Skeleton key={article[1]} visible={onLoad}>
+            <Card p="md" radius="md" component="a"
+                  href={isOrganisations ? `/organisation?accHex=${article[3]}&accId=${article[2]}` : `/project?accHex=${article[3]}`}
+                  className={classes.card}>
                 <AspectRatio mb={"xs"} ratio={1920 / 1080}>
                     <Image src={"https://" + article[6] + ".ipfs.w3s.link/image"}/>
                 </AspectRatio>

@@ -12,8 +12,8 @@ import {schema} from "./schema";
 import {IconAlertCircle, IconWorldWww, IconCheck} from "@tabler/icons";
 import {GalleryInput} from "../GalleryInput";
 import useContract from "../../hooks/useContract";
-import { showNotification, updateNotification } from '@mantine/notifications'
-import { useRouter } from 'next/router'
+import {showNotification, updateNotification} from '@mantine/notifications'
+import {useRouter} from 'next/router'
 
 export function CreateProject() {
     const [active, setActive] = useState(0)
@@ -21,7 +21,7 @@ export function CreateProject() {
     const [mainCapsule, setMainCapsule] = useState<File>();
     const [gallery, setGallery] = useState<File[]>([]);
     const [members, membersHandlers] = useListState<string>([]);
-    const { createSubProject } = useContract()
+    const {createSubProject} = useContract()
     const router = useRouter()
     const defaultTags = [
         'game', 'protocol', 'application', 'utilities', 'storage', 'networks',
@@ -33,6 +33,7 @@ export function CreateProject() {
     ];
 
     const handleSubmit = async () => {
+        console.log(form.values)
         showNotification({
             id: 'load-data',
             loading: true,
@@ -41,9 +42,10 @@ export function CreateProject() {
             autoClose: false,
             disallowClose: true,
         })
-        try{
+        console.log(router.query.accId)
+        try {
             await createSubProject(
-                "id",
+                router.query.accId,
                 form.values.projectName,
                 form.values.type,
                 image,
@@ -54,7 +56,6 @@ export function CreateProject() {
                 form.values.shortDescription,
                 form.values.youTubeLink,
                 form.values.tags,
-
             )
             updateNotification({
                 id: 'load-data',
@@ -66,6 +67,7 @@ export function CreateProject() {
             })
             router.push("/home")
         } catch (e) {
+            console.log(e)
             updateNotification({
                 id: 'load-data',
                 color: 'red',
@@ -118,13 +120,14 @@ export function CreateProject() {
         <>
             <Stepper active={active} breakpoint="sm" style={{marginTop: 75}}>
                 <Stepper.Step my={"sm"} label="Basic Info">
-                	<Title mt="lg">Basic Info</Title>
-                        <Text color="dimmed">
-                            This is your public project info.
-                        </Text>
+                    <Title mt="lg">Basic Info</Title>
+                    <Text color="dimmed">
+                        This is your public project info.
+                    </Text>
                     <Title my={"sm"} order={4}>Project Image</Title>
                     <ImageInput width={600} height={300} onChange={setImage} value={image}/>
-                    <Title my={"sm"} order={4}>Project Name (cannot be changed) <span style={{color: "red"}}>*</span></Title>
+                    <Title my={"sm"} order={4}>Project Name (cannot be changed) <span
+                        style={{color: "red"}}>*</span></Title>
                     <NameInput
                         parentId={"fdsfsf"} // TODO: pass the organisation name here
                         required

@@ -20,15 +20,17 @@ const Organisation = () => {
     const [projectsData, setProjectsData] = useState([])
     const [members, setMembers] = useState([])
     const [name, setName] = useState("")
+    const [accId, setAccId] = useState("")
+
     const router = useRouter()
 
     useEffect(() => {
         initialize()
+        setAccId(router.query.accId)
     }, [router.query])
 
     const initialize = async () => {
         const accHex = router.query.accHex
-        console.log(accHex)
 
         const query = {
             query: fetchOrganisationDetails,
@@ -115,7 +117,7 @@ const Organisation = () => {
                                                 {maxWidth: 'lg', cols: 2, spacing: 'md'},
                                                 {maxWidth: 'sm', cols: 1, spacing: 'sm'},
                                             ]}>
-                                                <Link href={"/create-project"} passHref>
+                                                <Link href={`/create-project?accId=${accId}`} passHref>
                                                     <Grid.Col>
                                                         <Paper radius="md" withBorder p="lg" sx={(theme) => ({
                                                             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,

@@ -168,8 +168,8 @@ const useContract = () => {
             imageURI = ""
         }
 
-        const metaURIObject = {displayName, description,website, youTubeLink, tags}
-        const metaURI = await uploadJsonToIpfs(externalJson, "json")
+        const metaURIObject = {displayName, description, website, youTubeLink, tags}
+        const metaURI = await uploadJsonToIpfs(metaURIObject, "json")
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,
             m3taDaoAbi,
@@ -209,7 +209,7 @@ const useContract = () => {
         var tx = await m3taDaoContractInstance.createSubProject(ProjectStruct, {
             gasLimit: 5000000,
         })
-        return await tx
+        return await tx.wait()
     }
 
     const createRelease = async (
@@ -253,7 +253,6 @@ const useContract = () => {
             signer
         )
 
-        
         let postGaleryURI
         if (postGalery) {
             postGaleryURI = await uploadFileToIpfs(postGalery, "image")
@@ -283,7 +282,7 @@ const useContract = () => {
         )
 
         var tx = await m3taDaoContractInstance.createPost(accountID, postID, {gasLimit: 5000000})
-        return await  tx
+        return await tx
     }
 
     return {

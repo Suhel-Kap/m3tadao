@@ -11,15 +11,15 @@ export default function Organisations() {
     const {getOrganisationsData} = useTableland()
     const [organisationsData, setOrganisationData] = useState([])
 
-    useEffect(()=>{
+    useEffect(() => {
         initialize()
-    },[])
+    }, [])
 
-    const initialize = async()=>{
+    const initialize = async () => {
         const organisationsDataFromTableland = await getOrganisationsData()
-        console.log("organisationsDataFromTableland",organisationsDataFromTableland)
+        console.log("organisationsDataFromTableland", organisationsDataFromTableland)
         setOrganisationData(organisationsDataFromTableland)
-        setOnLoad(true)
+        setOnLoad(false)
     }
     return (
         <Layout>
@@ -30,11 +30,6 @@ export default function Organisations() {
             <Container>
                 <Center>
                     <Button.Group>
-                        <Button component={"a"}
-                                radius="md"
-                                mt="xl"
-                                size="md"
-                                variant={"light"} onClick={() => setOnLoad(!onLoad)}>Load</Button>
                         <Link href={"/create-organisation"} passHref>
                             <Button
                                 component={"a"}
@@ -49,7 +44,7 @@ export default function Organisations() {
                         </Link>
                     </Button.Group>
                 </Center>
-                <DisplayGrid onLoad={onLoad} data={organisationsData} isOrganisations={true} />
+                <DisplayGrid onLoad={onLoad} data={organisationsData} isOrganisations={true}/>
             </Container>
         </Layout>
     )
