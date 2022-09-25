@@ -36,7 +36,7 @@ export function EditOrganisation(props) {
     const defaultTags = [
         'finance', 'digital marketing', 'development', 'design', 'game', 'protocol', 'application', 'utilities', 'storage', 'networks', 'social', 'communication', 'nft', 'defi', 'media', 'music',
     ]
-    
+
     useEffect(() => {
         membersHandlers.setState([...props.members])
         // props.members.map((member) => {
@@ -47,7 +47,7 @@ export function EditOrganisation(props) {
     const removeMember = (member: string) => {
         membersHandlers.filter(
             (other: string) => other.toLowerCase() !== member.toLowerCase()
-        );
+        )
     };
 
     const addMember = (member: string) => {

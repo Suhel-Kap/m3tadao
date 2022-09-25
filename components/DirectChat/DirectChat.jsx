@@ -45,15 +45,10 @@ export function DirectChat(props) {
     const createConversation = async () => {
         // "0x9e03C44b5A09db89bf152F8C5500dF3360c1C5bF"
         const addressOfUser2 = addressInputRef.current
-        console.log("1",addressInputRef)
-        console.log("2",addressOfUser2)
         // Start a conversation with addressOfUser2
         const conversationWithUser = await xmtp.conversations.newConversation(addressOfUser2)
-        console.log("conversationWithUser", conversationWithUser)
         setConversation(conversationWithUser)
-        console.log("conversation", conversation)
         await renderChats(conversationWithUser)
-        console.log("stuff")
         listenForMessage(conversationWithUser)
     }
     const renderChats = async (conversationWithUser) => {

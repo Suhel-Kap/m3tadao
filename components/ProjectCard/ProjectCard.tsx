@@ -6,9 +6,10 @@ interface ProjectInfoActionProps {
     name: string;
     shortDescription: string;
     projectId: string;
+    organisationName: string;
 }
 
-export function ProjectCard({avatar, name, shortDescription, projectId}: ProjectInfoActionProps) {
+export function ProjectCard({avatar, name, shortDescription, projectId, organisationName}: ProjectInfoActionProps) {
     return (
         <Paper radius="md" withBorder p="lg"
                sx={(theme) => ({
@@ -24,7 +25,7 @@ export function ProjectCard({avatar, name, shortDescription, projectId}: Project
                 {shortDescription}
             </Text>
 
-            <Link href={`/project?projId=${projectId}`} passHref>
+            <Link href={`/project?projId=${projectId}&orgName=${organisationName}`} passHref>
                 <Button component={"a"} variant="default" fullWidth mt="md">
                     Show Details
                 </Button>

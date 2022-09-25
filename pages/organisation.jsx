@@ -41,7 +41,6 @@ const Organisation = () => {
 
         // const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data.accounts
         const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data?.account
-        console.log("graphRes", graphRes)
         setName(graphRes.name)
         setProjectsData(graphRes.projects)
         setMembers(graphRes.members.filter(mem => mem.id !== m3taDao))
@@ -49,7 +48,7 @@ const Organisation = () => {
 
     const projects = projectsData.map((project, index) => {
         return (
-            <ProjectCard projectId={project.id} avatar={project.avatar} name={project.name}
+            <ProjectCard organisationName={name} projectId={project.id} avatar={project.avatar} name={project.name}
                          shortDescription={project.shortDescription}/>
         )
     })

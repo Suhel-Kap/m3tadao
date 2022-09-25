@@ -10,7 +10,9 @@ import {useEffect, useState} from "react";
 
 export default function Project() {
     const router = useRouter()
+    const orgName = router.query.orgName
     const [data, setData] = useState(null)
+    const [name, setName] = useState("project")
     useEffect(() => {
         const projectId = router.query.projId
         const query = {
@@ -21,6 +23,7 @@ export default function Project() {
         }
         graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
             console.log("res", res)
+            setName(res.data.project.name)
             setData(res.data.project)
         })
     }, [])
@@ -32,12 +35,13 @@ export default function Project() {
             </Head>
             <Group position={"apart"} p={"xl"} mx={"xl"} my={"sm"}>
                 <Title>
-                    Welcome to your project 👋
+                    Welcome to {name} 👋
                 </Title>
                 <Button.Group>
-                    <Link href={"/create-release"} passHref>
+                    <Link href={`https://app.valist.io/-/account/${orgName}/project/${name}/create/release`} passHref>
                         <Button
                             component={"a"}
+                            target={"_blank"}
                             radius="md"
                             mt="xl"
                             size="md"

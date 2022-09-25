@@ -68,6 +68,7 @@ const UserProfile: NextPage = () => {
     }
 
     const fetchExternalURIs = async (cid: string) => {
+        // TODO: fetch from IPFS
         // const response = await fetch("https://" + cid + ".ipfs.w3s.link/json")
         // const externalProfileData: any = await response.json()
         // console.log(externalProfileData)
