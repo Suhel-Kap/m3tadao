@@ -1,5 +1,5 @@
 import { ethers } from "ethers"
-import { contractAddresses, m3taDaoAbi, lensAbi } from "../constants/"
+import { contractAddresses, m3taDaoAbi, lensAbi, valistAbi } from "../constants/"
 import { useAccount, useSigner } from "wagmi"
 import { uploadFileToIpfs, uploadJsonToIpfs } from "../utils/uploadToIpfs"
 import { v4 as uuidv4 } from "uuid"
@@ -142,6 +142,22 @@ const useContract = () => {
             [...members, contractAddresses.m3taDao],
         ]
         var tx = await m3taDaoContractInstance.createProjectAccount(accountStruct, {
+            gasLimit: 5000000,
+        })
+
+        return await tx.wait()
+    }
+
+    const updateProjectAccountRequirements = async (accountID, requirements) => {
+        const requirementsURI = await uploadJsonToIpfs(requirements, "json")
+
+        const m3taDaoContractInstance = new ethers.Contract(
+            contractAddresses.m3taDao,
+            m3taDaoAbi,
+            signer
+        )
+
+        var tx = await m3taDaoContractInstance.updateAccountMetadata(accountID, requirementsURI, {
             gasLimit: 5000000,
         })
 
@@ -362,9 +378,38 @@ const useContract = () => {
         return await tx.wait()
     }
 
+    const addValistMember = async (accountID, newUserWalletAddress) => {
+        const valistContractInstance = new ethers.Contract(
+            contractAddresses.valist,
+            valistAbi,
+            signer
+        )
+
+        var tx = await valistContractInstance.addAccountMember(accountID, newUserWalletAddress, {
+            gasLimit: 5000000,
+        })
+        return await tx.wait()
+    }
+
+    const deleteValistMember = async (accountID, newUserWalletAddress) => {
+        const valistContractInstance = new ethers.Contract(
+            contractAddresses.valist,
+            valistAbi,
+            signer
+        )
+
+        var tx = await valistContractInstance.removeAccountMember(
+            accountID,
+            newUserWalletAddress,
+            { gasLimit: 5000000 }
+        )
+        return await tx.wait()
+    }
+
     return {
         createLensProfile,
         createProjectAccount,
+        updateProjectAccountRequirements,
         createSubProject,
         createRelease,
         createPost,
@@ -373,6 +418,9 @@ const useContract = () => {
         getLensPostCount,
         getLensPost,
         createFollow,
+        addValistMember,
+        deleteValistMember,
+        // updateProjectAccount,
     }
 }
 
