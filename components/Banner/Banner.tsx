@@ -23,6 +23,7 @@ import {showNotification, updateNotification} from "@mantine/notifications"
 import useContract from "../../hooks/useContract"
 import {useRouter} from "next/router"
 import useTableland from "../../hooks/useTableland"
+import useEPNS from "../../hooks/useEPNS";
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -79,6 +80,7 @@ export function Banner({
     const interestBadges = interests?.map((interest) => <Badge color={"green"}>{interest}</Badge>)
 
     const router = useRouter()
+    const {optIn} = useEPNS()
 
     const {createFollow} = useContract()
     const {getUserData} = useTableland()
@@ -242,20 +244,32 @@ export function Banner({
             {isOwner && (
                 <Stack m={"md"}>
                     <Center mb={0}>
-                        <Button
-                            radius="md"
-                            mt="xl"
-                            size="md"
-                            fullWidth={false}
-                            variant="gradient"
-                            gradient={{from: "indigo", to: "cyan"}}
-                            color={theme.colorScheme === "dark" ? undefined : "dark"}
-                            onClick={() => {
-                                console.log("hehe")
-                            }}
-                        >
-                            Verify Profile on Worldcoin
-                        </Button>
+                        <Button.Group>
+                            <Button
+                                radius="md"
+                                mt="xl"
+                                size="md"
+                                fullWidth={false}
+                                color={theme.colorScheme === "dark" ? undefined : "dark"}
+                                onClick={() => {
+                                    console.log("hehe")
+                                }}
+                            >
+                                Verify Profile on Worldcoin
+                            </Button>
+                            <Button
+                                radius="md"
+                                mt="xl"
+                                size="md"
+                                fullWidth={false}
+                                color={theme.colorScheme === "dark" ? undefined : "dark"}
+                                onClick={() => {
+                                    optIn()
+                                }}
+                            >
+                                Opt In To EPNS Notification Channel
+                            </Button>
+                        </Button.Group>
                     </Center>
                 </Stack>
             )}

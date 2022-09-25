@@ -1,11 +1,27 @@
-import {useState} from 'react';
-import {createStyles, Header, Container, Group, Burger, Paper, Transition, Title, Stack} from '@mantine/core';
+import {useEffect, useState} from 'react';
+import {
+    createStyles,
+    Header,
+    Container,
+    Group,
+    Burger,
+    Paper,
+    Button,
+    Transition,
+    Title,
+    Stack,
+    Menu
+} from '@mantine/core'
+import {v4 as uuidv4} from "uuid"
 import {useDisclosure} from '@mantine/hooks';
 import {DarkModeToggle} from "../DarkModeToggle";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import Link from 'next/link';
 import {useRouter} from "next/router";
-import {useAccount} from "wagmi";
+import {useAccount} from "wagmi"
+import {NotificationItem, chainNameType} from "@epnsproject/sdk-uiweb"
+import useEPNS from "../../hooks/useEPNS"
+
 
 const HEADER_HEIGHT = 60;
 
@@ -87,6 +103,50 @@ export function HeaderSimple() {
     const [opened, {toggle, close}] = useDisclosure(false);
     const [active, setActive] = useState(currentPath || null);
     const {classes, cx} = useStyles()
+    const {receiveNotifs} = useEPNS()
+    const [notifications, setNotifications] = useState([])
+
+    const notif = <div>
+        {notifications && notifications.map((oneNotification, i) => {
+            const {
+                cta,
+                title,
+                message,
+                app,
+                icon,
+                image,
+                url,
+                blockchain,
+                notification
+            } = oneNotification;
+
+            return (
+                <NotificationItem
+                    key={uuidv4()} // any unique id
+                    notificationTitle={title}
+                    notificationBody={message}
+                    cta={cta}
+                    app={app}
+                    icon={icon}
+                    image={image}
+                    url={url}
+                    theme={"dark"}
+                    chainName={blockchain as chainNameType} // if using Typescript
+                />
+            );
+        })}
+    </div>
+
+    const getNotifs = async () => {
+        return await receiveNotifs(address)
+    }
+
+    useEffect(() => {
+        getNotifs().then(res => {
+            console.log("fsdf", res)
+            setNotifications(res)
+        })
+    }, [])
 
     const links = [
         {
@@ -131,6 +191,17 @@ export function HeaderSimple() {
                     {items}
                 </Group>
                 <Group position={"right"} className={classes.links}>
+                    <Menu>
+                        <Menu.Target>
+                            <Button>Notifications</Button>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Item>
+                                {notif}
+                            </Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
+
                     <DarkModeToggle/>
                     <ConnectButton showBalance={false}/>
                 </Group>
@@ -140,6 +211,7 @@ export function HeaderSimple() {
                         <Paper className={classes.dropdown} withBorder style={styles}>
                             {items}
                             <Stack pl={"2%"} align={"flex-start"} justify={"flex-start"}>
+                                {notif}
                                 <DarkModeToggle/>
                                 <ConnectButton showBalance={false}/>
                             </Stack>

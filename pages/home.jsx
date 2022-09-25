@@ -1,5 +1,5 @@
 import {Layout} from "../components/Layout"
-import {Center, Button, Modal, Title, Container, Grid, useMantineTheme, ScrollArea,} from "@mantine/core"
+import {Center, Button, Modal, Title, Container, Grid, ScrollArea,} from "@mantine/core"
 import {CreatePost} from "../components/CreatePost"
 import Head from "next/head"
 import makeBlockie from "ethereum-blockies-base64";
@@ -7,14 +7,9 @@ import {IconCirclePlus} from "@tabler/icons"
 import {useEffect, useState} from "react"
 import {HomePost} from "../components/HomePost/HomePost"
 import {HomeProjectCard} from "../components/HomeProjectCard"
-import useTableland from "../hooks/useTableland";
 
 export default function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    useEffect(() => {
-        console.log("hello")
-    }, [])
-
 
     const postModal = (
         <Modal
