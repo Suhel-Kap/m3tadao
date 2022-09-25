@@ -148,8 +148,25 @@ const useContract = () => {
         return await tx.wait()
     }
 
-    const updateProjectAccountRequirements = async (accountID, requirements) => {
+    const updateProjectAccountRequirements = async (
+        accountID,
+        profHex,
+        hireTitle,
+        hireDescription
+    ) => {
         const requirementsURI = await uploadJsonToIpfs(requirements, "json")
+
+        //     struct HireReqStruct
+        // {
+        //     address profAddress="dontcare";
+        //     uint256 hireID="dontcare";
+        //     uint256 accountID;
+        //     string  profHex;
+        //     string  metadataTable="dontcare";
+        //     string  hireTitle;
+        //     string  hireDescription;
+
+        // }
 
         const m3taDaoContractInstance = new ethers.Contract(
             contractAddresses.m3taDao,

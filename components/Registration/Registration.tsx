@@ -25,6 +25,7 @@ import useContract from "../../hooks/useContract"
 import { useAccount } from "wagmi"
 import { showNotification, updateNotification } from "@mantine/notifications"
 import { useRouter } from "next/router"
+import useTableland from "../../hooks/useTableland"
 
 export function Registration() {
     const [active, setActive] = useState(0)
@@ -38,14 +39,27 @@ export function Registration() {
 
     const { isConnected, isDisconnected, status } = useAccount()
 
+    const { getUserExists } = useTableland()
+
     useEffect(() => {
-        console.log("checking")
-        console.log("isConnected", isConnected)
-        if (isConnected) {
-            router.push("/")
+        checkStatus()
+    }, [])
+
+    const checkStatus = async () => {
+        const isUserExists = await getUserExists()
+        if (isUserExists) {
+            router.push("/home")
         }
-        console.log("checked")
-    }, [status])
+    }
+
+    // useEffect(() => {
+    //     console.log("checking")
+    //     console.log("isConnected", isConnected)
+    //     if (isConnected) {
+    //         router.push("/")
+    //     }
+    //     console.log("checked")
+    // }, [status])
 
     const form = useForm({
         initialValues: {
