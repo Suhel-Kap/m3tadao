@@ -6,7 +6,7 @@ interface Im3taUser  {
 
  function createProfile(DataTypes.ProfileTableStruct memory vars) external;
 
- function updateProfile(uint256 profileId, string calldata imageURI) external;
+ function updateProfile(uint256 profileId, string calldata imageURI, string memory profileURI, string memory externalURIs) external;
  
  function getProfIdByAddress(address owner) external view returns ( uint256);
 

@@ -4,41 +4,48 @@ pragma solidity 0.8.12;
  * @title DataTypes
  * @author M3taDao & Lens Protocol
  *
- * @notice A standard library of data types used throughout the Lens Protocol.
+ * @notice A standard library of data types used throughout the M3TADAO Protocol Which Combines Lens - Valist - Tableland - WorldCoin Contracts.
  */
 library DataTypes {   
-    struct AccountStruct {
-        uint accountID;
+
+    struct AccountStruct 
+    {
         address founderAddress;
-        string accountHex;
-        string accountName;
-        string metaURI;
-        string AccountType;
-        string groupID;
-        string imageURI;
-        string metadataTable;
-        string description;
+        uint256 id;
+        uint    accountID;
+        string  accountHex;
+        string  accountName;
+        string  metaURI;
+        string  AccountType;
+        string  requirements;
+        string  imageURI;
+        string  bannerURI;
+        string  metadataTable;
+        string  description;
         address[] members;
     }
     
     struct ProjectStruct {
         address sender;
-        uint accountID;
-        uint projectID;
-        string metadataTable;
-        string projectHex;
-        string projectName;
-        string metaURI;
-        string projectType;
-        string imageURI;
-        string description;
+        uint256 id;
+        uint256 accountID;
+        uint256 projectID;
+        string  metadataTable;
+        string  projectHex;
+        string  projectName;
+        string  metaURI;
+        string  projectType;
+        string  imageURI;
+        string  description;
         address[] members;
     }
 
-    struct ReleaseStruct {
+    struct ReleaseStruct 
+    {
         address sender;
-        uint releaseID;
-        uint projectID;
+        uint256 id;
+        uint256 releaseID;
+        uint256 projectID;
         string metadataTable;
         string releaseHex;
         string releaseName;
@@ -49,10 +56,24 @@ library DataTypes {
         string releaseURI;
     }
 
-    struct PostStruct{
+        struct HireReqStruct 
+    {
+        address profAddress;
+        uint256 hireID;
+        uint256 accountID;
+        string  profHex;
+        string  metadataTable;
+        string  hireTitle;
+        string  hireDescription;
+        
+    }
+    // " (hireID text, profHex text, profAddress text, identifier text, hireTitle text, hireDescription text);"
+
+    struct PostStruct
+    {
         address posterAddress;
         uint256 postID;
-        uint    accountID;
+        string  accountID;
         string  metadataTable;
         string  postDescription;    
         string  postTitle; 
@@ -70,7 +91,8 @@ library DataTypes {
      * @param followModuleInitData The follow module initialization data, if any.
      * @param followNFTURI The URI to use for the follow NFT.
      */
-    struct CreateProfileData {
+    struct CreateProfileData 
+    {
         address to;
         string handle;
         string imageURI;
@@ -79,20 +101,25 @@ library DataTypes {
         string followNFTURI;
     }
 
-    struct ProfTableStruct{
+    struct ProfTableStruct
+    {
         string metadataTable;
         uint256 profID;
+        string profHex;
         string description;
-        string groupID;
+        string externalURIs;
         string profileURI;
+        
     }
 
-     struct ProfileTableStruct{
+    struct ProfileTableStruct
+    {
         CreateProfileData profile;
         ProfTableStruct tableData;
     }
 
-        struct ProfileTableStruct2{
+    struct ProfileTableStruct2
+    {
         CreateProfileData profile;
         ProfTableStruct2 tableData;
     }

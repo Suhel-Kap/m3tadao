@@ -41,6 +41,7 @@ interface IValist {
   /// @param _projectID ID of the project.
   /// @param _metaURI Metadata URI.
   function setProjectMetaURI(uint _projectID, string calldata _metaURI) external;
+  
 
   function isAccountMember(uint _accountID, address _member) external view returns (bool);
 

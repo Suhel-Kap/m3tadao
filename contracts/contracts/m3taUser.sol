@@ -3,16 +3,17 @@ pragma solidity ^0.8.12;
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@tableland/evm/contracts/ITablelandTables.sol";
 import "@tableland/evm/contracts/utils/TablelandDeployments.sol";
+import "./Ownable.sol";
 import "./Im3taQuery.sol";
 import "./IMockProfileCreationProxy.sol";
 import "./ILensHub.sol";
 // import "./IHumanCheck.sol";
 
 
-contract m3taUser
+contract m3taUser is Ownable
 {
     // IHumanCheck private humanCheck;
-    Im3taQuery private _queryContract;
+    Im3taQuery private queryContract;
     IMockProfileCreationProxy private MockProfileCreationProxy;
     ILensHub private LensHub;
     ITablelandTables private _tableland;
@@ -28,11 +29,10 @@ contract m3taUser
     uint256 private _profileTableId;
 
     // constructor( Im3taQuery initqueryContract,IHumanCheck humancheckContract)  {
-    constructor( Im3taQuery initqueryContract)  {
+    constructor(Im3taQuery initqueryContract)  {
 
 
-
-         _queryContract = initqueryContract;
+        queryContract = initqueryContract;
         //  humanCheck = humancheckContract;
         // Initializing the Lens Protocol Profile Creator to interact with
         MockProfileCreationProxy = IMockProfileCreationProxy(0x420f0257D43145bb002E69B14FF2Eb9630Fc4736);
@@ -48,7 +48,7 @@ contract m3taUser
 
         _profileTableId = _tableland.createTable(
             address(this),
-            _queryContract.getCreateLensProfileTableStatement(_profileTablePrefix, _chainID)
+            queryContract.getCreateLensProfileTableStatement(_profileTablePrefix, _chainID)
         );
 
         _profileTable = string.concat(
@@ -74,64 +74,52 @@ contract m3taUser
     // Creates a Lens Profile and adds the Profile Data into M3taUser table for later indexing
     function createProfile(DataTypes.ProfileTableStruct memory vars)  external  {
         // With that modifier as a function we eliminate the callBack attack!
-        // onlyM3taDao();
+        onlyM3taDao();
         
-        // require(_profileOwners[vars.profile.to] == 0  , "Only one Profile per Address can get created");
+        require(_profileOwners[vars.profile.to] == 0  , "Only one Profile per Address can get created");
+
         // calling Lens Proxy Profile Creator to create a new Profile for the User
         MockProfileCreationProxy.proxyCreateProfile(vars.profile);
         // Getting Profile Data
         vars.profile.handle = string.concat(vars.profile.handle,".test");
         // Connect the Profile ID with the ownerAddress to give him acccess in the m3taDao Dapp
         vars.tableData.profID = LensHub.getProfileIdByHandle(vars.profile.handle);
+        // Used to index profile data using GraphQL 
+        vars.tableData.profHex = Strings.toHexString(vars.tableData.profID);
+        
         _profileOwners[vars.profile.to] = vars.tableData.profID;
+
         vars.tableData.metadataTable = _profileTable;
         
         // Writing the Profile Data into m3taUser Tableland Table to be used as the indexer
         writeTable(vars);
     }
 
-    // function verifyProfile(uint256 profileID,uint256 root,uint256 nullifierHash,uint256[8] calldata proof) public payable {
-    //     humanCheck.verify(profileID,root,nullifierHash,proof);
-    // }
-
     function writeTable(DataTypes.ProfileTableStruct memory vars) private {
             _tableland.runSQL(
             address(this),
             _profileTableId,
             // Getting the insert Profile statement from the Query Contract to add the profile into the Table
-            _queryContract.getProfileInsertStatement(vars)
+            queryContract.getProfileInsertStatement(vars)
         );    
     }
 
-    // function createProfile1(DataTypes.ProfileTableStruct2 memory vars , uint256[8] calldata proof)  external  {
+    function updateProfile(uint256 profileId, string calldata imageURI, string memory profileURI, string memory externalURIs) external {
+        string memory imageuri = imageURI;
+        require(_profileOwners[msg.sender] == profileId, "Anothorized action only profile owner can update his profile metadata");
 
-    //     verifyAndExecute(vars.profile.to,vars.tableData.root,vars.tableData.nullifierHash,proof);
-    //     // With that modifier as a function we eliminate the callBack attack!
-    //     // onlyM3taDao();
-    //     require(_profileOwners[vars.profile.to] == 0  , "Only one Profile per Address can get created");
-    //     // calling Lens Proxy Profile Creator to create a new Profile for the User
-    //     MockProfileCreationProxy.proxyCreateProfile(vars.profile);
-    //     // Getting Profile Data
-    //     vars.profile.handle = string.concat(vars.profile.handle,".test");
-    //     // Connect the Profile ID with the ownerAddress to give him acccess in the m3taDao Dapp
-    //     vars.tableData.profID = LensHub.getProfileIdByHandle(vars.profile.handle);
-    //     _profileOwners[vars.profile.to] = vars.tableData.profID;
-    //     vars.tableData.metadataTable = _profileTable;
-    //     // Writing the Profile Data into m3taUser Tableland Table to be used as the indexer
-    //     writeTable2(vars);
-    // }
-
-    // function writeTable2(DataTypes.ProfileTableStruct2 memory vars) private {
-    //         _tableland.runSQL(
-    //         address(this),
-    //         _profileTableId,
-    //         // Getting the insert Profile statement from the Query Contract to add the profile into the Table
-    //         _queryContract.getProfileInsertStatement2(vars)
-    //     );    
-    // }
-
-    function updateProfile(uint256 profileId, string calldata imageURI) external {
         LensHub.setProfileImageURI(profileId, imageURI);
+
+        updateTable(profileId,imageuri,profileURI,externalURIs);
+
+    }
+
+    function updateTable(uint256 profileId, string memory imageURI, string memory profileURI, string memory externalURIs) private {
+            _tableland.runSQL(
+            address(this),
+            _profileTableId,
+            queryContract.getUpdateLensProfileStatement(_profileTable,profileId,imageURI,profileURI,externalURIs)        
+            );
     }
 
     function getProfIdByAddress(address owner) public view returns ( uint256){
@@ -142,17 +130,20 @@ contract m3taUser
         return _baseURIString;
     }
 
+    function setBaseURI(string memory baseURI) public onlyOwner {
+        _baseURIString = baseURI;
+    }
 
     function metadataURI() public view returns (string memory) {
-        return _queryContract.metadataURI(_profileTable,_baseURI());
+        return queryContract.metadataURI(_profileTable,_baseURI());
     }
 
     function getTableName() public view returns ( string memory){
         return _profileTable;
     }
 
-    // function setM3taDaoAddress(address m3tadao) public onlyOwner{
-    //     M3taDaoAddress = m3tadao; 
-    // }
+    function setM3taDaoAddress(address m3tadao) public onlyOwner{
+        M3taDaoAddress = m3tadao; 
+    }
  
 }

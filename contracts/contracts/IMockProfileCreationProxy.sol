@@ -11,8 +11,5 @@ import "./DataTypes.sol";
  * You'll find all the events and external functions, as well as the reasoning behind them here.
  */
 interface IMockProfileCreationProxy {
-   
     function proxyCreateProfile(DataTypes.CreateProfileData memory vars) external;
-
-   
 }

@@ -75,4 +75,8 @@ contract HumanCheck {
 
         emit ProfileVerified(profileId);
     }
+
+    function isVerifiedProfile(uint256 profileId) public view returns(bool) {
+        return isVerified[profileId];
+    }
 }
