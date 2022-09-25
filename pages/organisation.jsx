@@ -13,6 +13,7 @@ import {fetchOrganisationDetails} from "../constants/graphql/queries"
 import {graphql} from "@valist/sdk"
 import {m3taDao} from "../constants/contractAddresses.json"
 import {HiringRequestTable} from "../components/HiringRequestTable";
+import {RequirementsCard} from "../components/RequirementsCard";
 
 const Organisation = () => {
     const [activeTab, setActiveTab] = useState("first")
@@ -81,24 +82,13 @@ const Organisation = () => {
                 >
                     New Post
                 </Button>
-                <Link href={"/create-organisation"} passHref>
-                    <Button
-                        component={"a"}
-                        radius="md"
-                        mt="xl"
-                        size="md"
-                        variant={"light"}
-                        // color={theme.colorScheme === 'dark' ? undefined : 'dark'}
-                    >
-                        New Organisation
-                    </Button>
-                </Link>
             </Button.Group>
         </Group>
         {postModal}
         <Tabs variant="outline" defaultValue={activeTab} onTabChange={setActiveTab}>
             <Tabs.List grow position="center" mb={75}>
                 <Tabs.Tab value="first">Projects</Tabs.Tab>
+                <Tabs.Tab value={"requirements"}>Requirements</Tabs.Tab>
                 <Tabs.Tab value="fourth">Hiring Requests</Tabs.Tab>
                 <Tabs.Tab value="third">Manage Organisation</Tabs.Tab>
             </Tabs.List>
@@ -142,6 +132,20 @@ const Organisation = () => {
                             </Grid>
                         </Center>
                     </Paper>
+                </Container>
+            </Tabs.Panel>
+            <Tabs.Panel value={"requirements"}>
+                <Container size={"lg"} mb={"xl"}>
+                    <SimpleGrid cols={2} spacing={"md"} breakpoints={[{maxWidth: 600, cols: 1, spacing: 'sm'},]}>
+                        <RequirementsCard
+                            description={"We are looking for project managers."}
+                            title={"Project manager"} price={"20 MATIC"} deadline={"30 Sept 2022"}
+                            badges={["Defi", "Design", "Management"]}/>
+                        <RequirementsCard
+                            description={"We need people who can help us with marketing."}
+                            title={"Digital Marketer"} price={"50 MATIC"} deadline={"26 Sept 2022"}
+                            badges={["Defi", "Design", "Management"]}/>
+                    </SimpleGrid>
                 </Container>
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>

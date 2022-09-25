@@ -30,13 +30,18 @@ export function HiringRequestTable({someotheredata}: UsersStackProps) {
         setReceiver(address)
         setIsModalOpen(true)
     }
-    
+
     // TODO: set data to actual end
     const data = [
         {
-            title: "some title",
-            description: "some description",
+            title: "Project Manager",
+            description: "Hey there!I have a lot of experience in management and I think I am the best fit for this position :)",
             address: "0x044B595C9b94A17Adc489bD29696af40ccb3E4d2",
+        },
+        {
+            title: "Digital Marketing",
+            description: "Hey! I have done a lot of stuff in digital marketing and I think I am the best fit for this position :)",
+            address: "0x9e03C44b5A09db89bf152F8C5500dF3360c1C5bF",
         }
     ]
     const rows = data.map((item) => (
@@ -46,7 +51,7 @@ export function HiringRequestTable({someotheredata}: UsersStackProps) {
                     <Avatar size={40} src={makeBlockie(item.address)} radius={40}/>
                     <div>
                         <Text size="sm" weight={500}>
-                            {item.address}
+                            {item.address.slice(0, 6) + "..." + item.address.slice(-4)}
                         </Text>
                     </div>
                 </Group>

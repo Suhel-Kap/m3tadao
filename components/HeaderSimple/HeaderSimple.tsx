@@ -99,7 +99,7 @@ export function HeaderSimple() {
         },
         {
             "link": `/user-profile?address=${address}`,
-            "label": "Settings"
+            "label": "Your Profile"
         },
 
     ]

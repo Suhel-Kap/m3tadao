@@ -19,9 +19,9 @@ import {
     IconCheck,
     IconAlertCircle,
 } from "@tabler/icons"
-import { showNotification, updateNotification } from "@mantine/notifications"
+import {showNotification, updateNotification} from "@mantine/notifications"
 import useContract from "../../hooks/useContract"
-import { useRouter } from "next/router"
+import {useRouter} from "next/router"
 import useTableland from "../../hooks/useTableland"
 
 const useStyles = createStyles((theme) => ({
@@ -49,19 +49,19 @@ interface UserCardImageProps {
 }
 
 export function Banner({
-    image,
-    avatar,
-    name,
-    designation,
-    stats,
-    website,
-    interests,
-    skills,
-    github,
-    twitter,
-    isOwner,
-}: UserCardImageProps) {
-    const { classes, theme } = useStyles()
+                           image,
+                           avatar,
+                           name,
+                           designation,
+                           stats,
+                           website,
+                           interests,
+                           skills,
+                           github,
+                           twitter,
+                           isOwner,
+                       }: UserCardImageProps) {
+    const {classes, theme} = useStyles()
     console.log("stats", stats)
 
     const items = stats.map((stat) => (
@@ -80,8 +80,8 @@ export function Banner({
 
     const router = useRouter()
 
-    const { createFollow } = useContract()
-    const { getUserData } = useTableland()
+    const {createFollow} = useContract()
+    const {getUserData} = useTableland()
 
     const handleFollow = async () => {
         showNotification({
@@ -103,7 +103,7 @@ export function Banner({
                 color: "teal",
                 title: "Success",
                 message: "Followed successfully",
-                icon: <IconCheck size={16} />,
+                icon: <IconCheck size={16}/>,
                 autoClose: 2000,
             })
 
@@ -116,7 +116,7 @@ export function Banner({
                 color: "red",
                 title: "Error",
                 message: "Failed to follow",
-                icon: <IconAlertCircle size={16} />,
+                icon: <IconAlertCircle size={16}/>,
                 autoClose: 2000,
             })
         }
@@ -151,21 +151,21 @@ export function Banner({
                 {twitter && (
                     <Link href={twitter ? twitter : "https://twitter.com"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconBrandTwitter size={32} />
+                            <IconBrandTwitter size={32}/>
                         </ActionIcon>
                     </Link>
                 )}
                 {github && (
                     <Link href={github ? github : "https://github.com"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconBrandGithub size={32} />
+                            <IconBrandGithub size={32}/>
                         </ActionIcon>
                     </Link>
                 )}
                 {website && (
                     <Link href={website ? website : "#"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconWorldWww size={32} />
+                            <IconWorldWww size={32}/>
                         </ActionIcon>
                     </Link>
                 )}
@@ -228,13 +228,33 @@ export function Banner({
                             size="md"
                             fullWidth={false}
                             variant="gradient"
-                            gradient={{ from: "indigo", to: "cyan" }}
+                            gradient={{from: "indigo", to: "cyan"}}
                             color={theme.colorScheme === "dark" ? undefined : "dark"}
                             onClick={() => {
                                 handleFollow()
                             }}
                         >
                             Follow
+                        </Button>
+                    </Center>
+                </Stack>
+            )}
+            {isOwner && (
+                <Stack m={"md"}>
+                    <Center mb={0}>
+                        <Button
+                            radius="md"
+                            mt="xl"
+                            size="md"
+                            fullWidth={false}
+                            variant="gradient"
+                            gradient={{from: "indigo", to: "cyan"}}
+                            color={theme.colorScheme === "dark" ? undefined : "dark"}
+                            onClick={() => {
+                                console.log("hehe")
+                            }}
+                        >
+                            Verify Profile on Worldcoin
                         </Button>
                     </Center>
                 </Stack>

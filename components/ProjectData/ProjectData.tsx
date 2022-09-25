@@ -1,29 +1,10 @@
-import {Anchor, Group, Paper, SimpleGrid, Skeleton, Table, Tabs, Text} from '@mantine/core'
+import {Anchor, Group, Paper, Skeleton, Table, Tabs, Text} from '@mantine/core'
 import {StyledTabs} from '../StyledTabs'
 import {EditProject} from "../EditProject"
-import {MemberCard} from "../MemberCard";
-import {RequirementsCard} from "../RequirementsCard";
+import {MemberCard} from "../MemberCard"
 import {useEffect, useState} from "react"
 import {m3taDao} from "../../constants/contractAddresses.json"
-import {IconBrandYoutube} from "@tabler/icons";
-
-const data = [
-    {
-        version: "1.0.0",
-        releaseDate: "2021-05-01",
-        metadataUrl: "https://bafkreihyg36athx2x4ygvhil4pjmqgx57lj25glnke22knpsc3whp2wuiu.ipfs.gateway.valist.io/"
-    },
-    {
-        version: "1.0.1",
-        releaseDate: "2021-05-02",
-        metadataUrl: "https://bafkreihyg36athx2x4ygvhil4pjmqgx57lj25glnke22knpsc3whp2wuiu.ipfs.gateway.valist.io/"
-    },
-    {
-        version: "1.0.2",
-        releaseDate: "2021-05-03",
-        metadataUrl: "https://bafkreihyg36athx2x4ygvhil4pjmqgx57lj25glnke22knpsc3whp2wuiu.ipfs.gateway.valist.io/"
-    }
-]
+import {IconBrandYoutube} from "@tabler/icons"
 
 export function ProjectData(props: any) {
     const propsData = props.data
@@ -70,9 +51,6 @@ export function ProjectData(props: any) {
                 <Tabs.Tab value="readme">
                     Readme
                 </Tabs.Tab>
-                <Tabs.Tab value={"requirements"}>
-                    Requirements
-                </Tabs.Tab>
                 <Tabs.Tab value="versions">
                     Versions
                 </Tabs.Tab>
@@ -83,22 +61,6 @@ export function ProjectData(props: any) {
                     Settings
                 </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value={"requirements"}>
-                <SimpleGrid cols={2} spacing={"md"} breakpoints={[{maxWidth: 600, cols: 1, spacing: 'sm'},]}>
-                    <RequirementsCard
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
-                        title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
-                        badges={["Defi", "Design", "Management"]}/>
-                    <RequirementsCard
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
-                        title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
-                        badges={["Defi", "Design", "Management"]}/>
-                    <RequirementsCard
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum "}
-                        title={"Project manager"} price={"25 MATIC"} deadline={"30 Sept 2022"}
-                        badges={["Defi", "Design", "Management"]}/>
-                </SimpleGrid>
-            </Tabs.Panel>
             <Tabs.Panel value={"readme"}>
                 <Skeleton animate={true} visible={loading}>
                     <Paper shadow="xl" radius="lg" p="md">

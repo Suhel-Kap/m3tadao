@@ -1,35 +1,20 @@
-import { Layout } from "../components/Layout"
-import {
-    Center,
-    Button,
-    Modal,
-    ActionIcon,
-    Title,
-    Text,
-    Group,
-    Container,
-    SimpleGrid,
-    Skeleton,
-    Grid,
-    useMantineTheme,
-    ScrollArea,
-} from "@mantine/core"
-import { CreatePost } from "../components/CreatePost"
+import {Layout} from "../components/Layout"
+import {Center, Button, Modal, Title, Container, Grid, useMantineTheme, ScrollArea,} from "@mantine/core"
+import {CreatePost} from "../components/CreatePost"
 import Head from "next/head"
-import { IconCirclePlus } from "@tabler/icons"
-import { useEffect, useState } from "react"
-import { AuthorCard } from "../components/AuthorCard"
-import { HomePost } from "../components/HomePost/HomePost"
-import { HomeProjectCard } from "../components/HomeProjectCard"
+import makeBlockie from "ethereum-blockies-base64";
+import {IconCirclePlus} from "@tabler/icons"
+import {useEffect, useState} from "react"
+import {HomePost} from "../components/HomePost/HomePost"
+import {HomeProjectCard} from "../components/HomeProjectCard"
+import useTableland from "../hooks/useTableland";
 
 export default function Home() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     useEffect(() => {
         console.log("hello")
     }, [])
-    const theme = useMantineTheme()
-    const PRIMARY_COL_HEIGHT = 300
-    const SECONDARY_COL_HEIGHT = PRIMARY_COL_HEIGHT / 2 - theme.spacing.md / 2
+
 
     const postModal = (
         <Modal
@@ -42,7 +27,7 @@ export default function Home() {
             onClose={() => setIsModalOpen(false)}
         >
             <Center>
-                <CreatePost />
+                <CreatePost/>
             </Center>
         </Modal>
     )
@@ -60,75 +45,35 @@ export default function Home() {
                 <Center m={"lg"}>
                     <Button
                         onClick={() => setIsModalOpen(true)}
-                        leftIcon={<IconCirclePlus size={14} />}
+                        leftIcon={<IconCirclePlus size={14}/>}
                     >
                         Create Post
                     </Button>
                 </Center>
                 <Container my="md">
-                    <Grid spacing="md" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+                    <Grid spacing="md" breakpoints={[{maxWidth: "sm", cols: 1}]}>
                         <Grid.Col lg={7}>
                             <Title my={"sm"}>Latest Posts</Title>
                             <ScrollArea
-                                style={{ height: "80vh" }}
+                                style={{height: "80vh"}}
                                 scrollbarSize={4}
                                 scrollHideDelay={500}
                             >
                                 <HomePost
-                                    postedAt={"2 days ago"}
-                                    image={"./hero.webp"}
+                                    postedAt={"1 day ago"}
+                                    image={"https://images.pexels.com/photos/3013440/pexels-photo-3013440.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
                                     body={
-                                        "Lorem ipsum doler Lorem ipsum dolerLorem ipsum dolerLorem ipsum doler"
+                                        "Hey all and welcome to Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3."
                                     }
                                     author={{
-                                        name: "Suhel",
-                                        image: "https://avatars.githubusercontent.com/u/30869493?v=4",
+                                        name: "moog3",
+                                        image: makeBlockie("0x87f5311daD4AbC84a79d31F6c19566129417F026"),
                                     }}
                                 />
                                 <HomePost
                                     postedAt={"2 days ago"}
                                     body={
-                                        "Lorem ipsum doler Lorem ipsum dolerLorem ipsum dolerLorem ipsum doler"
-                                    }
-                                    author={{
-                                        name: "Suhel",
-                                        image: "https://avatars.githubusercontent.com/u/30869493?v=4",
-                                    }}
-                                />
-                                <HomePost
-                                    postedAt={"2 days ago"}
-                                    body={
-                                        "Lorem ipsum doler Lorem ipsum dolerLorem ipsum dolerLorem ipsum doler"
-                                    }
-                                    author={{
-                                        name: "Suhel",
-                                        image: "https://avatars.githubusercontent.com/u/30869493?v=4",
-                                    }}
-                                />
-                                <HomePost
-                                    postedAt={"2 days ago"}
-                                    body={
-                                        "Lorem ipsum doler Lorem ipsum dolerLorem ipsum dolerLorem ipsum doler"
-                                    }
-                                    author={{
-                                        name: "Suhel",
-                                        image: "https://avatars.githubusercontent.com/u/30869493?v=4",
-                                    }}
-                                />
-                                <HomePost
-                                    postedAt={"2 days ago"}
-                                    body={
-                                        "Lorem ipsum doler Lorem ipsum dolerLorem ipsum dolerLorem ipsum doler"
-                                    }
-                                    author={{
-                                        name: "Suhel",
-                                        image: "https://avatars.githubusercontent.com/u/30869493?v=4",
-                                    }}
-                                />
-                                <HomePost
-                                    postedAt={"2 days ago"}
-                                    body={
-                                        "Lorem ipsum doler Lorem ipsum dolerLorem ipsum dolerLorem ipsum doler"
+                                        "Hey guys! It's nice to be here on this amazing platform"
                                     }
                                     author={{
                                         name: "Suhel",
@@ -140,51 +85,23 @@ export default function Home() {
                         <Grid.Col lg={5}>
                             <Title my={"sm"}>Latest Projects</Title>
                             <ScrollArea
-                                style={{ height: "80vh" }}
+                                style={{height: "80vh"}}
                                 scrollbarSize={4}
                                 scrollHideDelay={500}
                             >
                                 <HomeProjectCard
                                     title={"m3tadao"}
                                     description={
-                                        "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum"
+                                        "Hey all and welcome to m3tadao. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3."
                                     }
-                                    image={"./hero.webp"}
+                                    image={"https://images.pexels.com/photos/13291092/pexels-photo-13291092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
                                 />
                                 <HomeProjectCard
-                                    title={"m3tadao"}
+                                    title={"moog3"}
                                     description={
-                                        "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum"
+                                        "Moog3 is a new type of NFTs that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3. We are a DAO that is focused on creating a community of artists and developers to create a new type of NFTs. We are currently working on a new project called Moog3."
                                     }
-                                    image={"./hero.webp"}
-                                />
-                                <HomeProjectCard
-                                    title={"m3tadao"}
-                                    description={
-                                        "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum"
-                                    }
-                                    image={"./hero.webp"}
-                                />
-                                <HomeProjectCard
-                                    title={"m3tadao"}
-                                    description={
-                                        "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum"
-                                    }
-                                    image={"./hero.webp"}
-                                />
-                                <HomeProjectCard
-                                    title={"m3tadao"}
-                                    description={
-                                        "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum"
-                                    }
-                                    image={"./hero.webp"}
-                                />
-                                <HomeProjectCard
-                                    title={"m3tadao"}
-                                    description={
-                                        "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum"
-                                    }
-                                    image={"./hero.webp"}
+                                    image={"https://images.pexels.com/photos/12346579/pexels-photo-12346579.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"}
                                 />
                             </ScrollArea>
                         </Grid.Col>
