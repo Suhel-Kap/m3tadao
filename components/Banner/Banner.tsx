@@ -19,11 +19,11 @@ import {
     IconCheck,
     IconAlertCircle,
 } from "@tabler/icons"
-import {showNotification, updateNotification} from "@mantine/notifications"
+import { showNotification, updateNotification } from "@mantine/notifications"
 import useContract from "../../hooks/useContract"
-import {useRouter} from "next/router"
+import { useRouter } from "next/router"
 import useTableland from "../../hooks/useTableland"
-import useEPNS from "../../hooks/useEPNS";
+import useEPNS from "../../hooks/useEPNS"
 
 const useStyles = createStyles((theme) => ({
     card: {
@@ -50,19 +50,19 @@ interface UserCardImageProps {
 }
 
 export function Banner({
-                           image,
-                           avatar,
-                           name,
-                           designation,
-                           stats,
-                           website,
-                           interests,
-                           skills,
-                           github,
-                           twitter,
-                           isOwner,
-                       }: UserCardImageProps) {
-    const {classes, theme} = useStyles()
+    image,
+    avatar,
+    name,
+    designation,
+    stats,
+    website,
+    interests,
+    skills,
+    github,
+    twitter,
+    isOwner,
+}: UserCardImageProps) {
+    const { classes, theme } = useStyles()
     console.log("stats", stats)
 
     const items = stats.map((stat) => (
@@ -76,14 +76,22 @@ export function Banner({
         </div>
     ))
 
-    const skillBadges = skills?.map((skill) => <Badge color={"red"}>{skill}</Badge>)
-    const interestBadges = interests?.map((interest) => <Badge color={"green"}>{interest}</Badge>)
+    const skillBadges = skills?.map((skill, index) => (
+        <Badge key={index} color={"red"}>
+            {skill}
+        </Badge>
+    ))
+    const interestBadges = interests?.map((interest, index) => (
+        <Badge key={index} color={"green"}>
+            {interest}
+        </Badge>
+    ))
 
     const router = useRouter()
-    const {optIn} = useEPNS()
+    const { optIn } = useEPNS()
 
-    const {createFollow} = useContract()
-    const {getUserData} = useTableland()
+    const { createFollow } = useContract()
+    const { getUserData } = useTableland()
 
     const handleFollow = async () => {
         showNotification({
@@ -105,7 +113,7 @@ export function Banner({
                 color: "teal",
                 title: "Success",
                 message: "Followed successfully",
-                icon: <IconCheck size={16}/>,
+                icon: <IconCheck size={16} />,
                 autoClose: 2000,
             })
 
@@ -118,7 +126,7 @@ export function Banner({
                 color: "red",
                 title: "Error",
                 message: "Failed to follow",
-                icon: <IconAlertCircle size={16}/>,
+                icon: <IconAlertCircle size={16} />,
                 autoClose: 2000,
             })
         }
@@ -153,21 +161,21 @@ export function Banner({
                 {twitter && (
                     <Link href={twitter ? twitter : "https://twitter.com"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconBrandTwitter size={32}/>
+                            <IconBrandTwitter size={32} />
                         </ActionIcon>
                     </Link>
                 )}
                 {github && (
                     <Link href={github ? github : "https://github.com"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconBrandGithub size={32}/>
+                            <IconBrandGithub size={32} />
                         </ActionIcon>
                     </Link>
                 )}
                 {website && (
                     <Link href={website ? website : "#"} passHref>
                         <ActionIcon component={"a"} target={"_blank"}>
-                            <IconWorldWww size={32}/>
+                            <IconWorldWww size={32} />
                         </ActionIcon>
                     </Link>
                 )}
@@ -230,7 +238,7 @@ export function Banner({
                             size="md"
                             fullWidth={false}
                             variant="gradient"
-                            gradient={{from: "indigo", to: "cyan"}}
+                            gradient={{ from: "indigo", to: "cyan" }}
                             color={theme.colorScheme === "dark" ? undefined : "dark"}
                             onClick={() => {
                                 handleFollow()

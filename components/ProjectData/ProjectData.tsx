@@ -1,10 +1,10 @@
-import {Anchor, Group, Paper, Skeleton, Table, Tabs, Text} from '@mantine/core'
-import {StyledTabs} from '../StyledTabs'
-import {EditProject} from "../EditProject"
-import {MemberCard} from "../MemberCard"
-import {useEffect, useState} from "react"
-import {m3taDao} from "../../constants/contractAddresses.json"
-import {IconBrandYoutube} from "@tabler/icons"
+import { Anchor, Group, Paper, Skeleton, Table, Tabs, Text } from "@mantine/core"
+import { StyledTabs } from "../StyledTabs"
+import { EditProject } from "../EditProject"
+import { MemberCard } from "../MemberCard"
+import { useEffect, useState } from "react"
+import { m3taDao } from "../../constants/contractAddresses.json"
+import { IconBrandYoutube } from "@tabler/icons"
 
 export function ProjectData(props: any) {
     const propsData = props.data
@@ -17,7 +17,7 @@ export function ProjectData(props: any) {
         description: "",
         website: "",
         youtubeLink: "",
-        tags: []
+        tags: [],
     })
 
     useEffect(() => {
@@ -25,10 +25,12 @@ export function ProjectData(props: any) {
             let temp = Object.keys(propsData.members).map(function (key) {
                 return propsData.members[key].id
             })
-            temp = temp.filter(mem => mem !== m3taDao)
+            temp = temp.filter((mem) => mem !== m3taDao)
             setMemberData(temp)
             setReleaseData(propsData.releases)
-            const response = fetch(`https://${propsData.metaURI}.ipfs.gateway.valist.io/json`).then(res => res.json().then(data => setMeta(data)))
+            const response = fetch(
+                `https://${propsData.metaURI}.ipfs.gateway.valist.io/json`
+            ).then((res) => res.json().then((data) => setMeta(data)))
             setLoading(false)
         }
     }, [props.data])
@@ -36,69 +38,72 @@ export function ProjectData(props: any) {
     const rows = releaseData.map((row) => (
         <tr key={row.name}>
             <td>{row.name}</td>
-            <td><Anchor href={row.metaURI} target={"_blank"} weight={700}>view metadata</Anchor></td>
+            <td>
+                <Anchor href={row.metaURI} target={"_blank"} weight={700}>
+                    view metadata
+                </Anchor>
+            </td>
         </tr>
     ))
 
-
-    const memberRows = memberData.map((row) => (
-        <MemberCard address={row} name={"Project Admin"}/>
+    const memberRows = memberData.map((row, index) => (
+        <MemberCard key={index} address={row} name={"Project Admin"} />
     ))
 
     return (
         <StyledTabs defaultValue={"readme"}>
             <Tabs.List my={"md"}>
-                <Tabs.Tab value="readme">
-                    Readme
-                </Tabs.Tab>
-                <Tabs.Tab value="versions">
-                    Versions
-                </Tabs.Tab>
-                <Tabs.Tab value="Members">
-                    Members
-                </Tabs.Tab>
-                <Tabs.Tab value={"settings"}>
-                    Settings
-                </Tabs.Tab>
+                <Tabs.Tab value="readme">Readme</Tabs.Tab>
+                <Tabs.Tab value="versions">Versions</Tabs.Tab>
+                <Tabs.Tab value="Members">Members</Tabs.Tab>
+                <Tabs.Tab value={"settings"}>Settings</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value={"readme"}>
                 <Skeleton animate={true} visible={loading}>
                     <Paper shadow="xl" radius="lg" p="md">
                         <Group>
-                            {meta.website &&
+                            {meta.website && (
                                 <Text p={"md"} size="xl" weight={700} mb="x">
-                                    <Anchor href={meta.website} target={"_blank"}
-                                            weight={700}>{meta.displayName}</Anchor>
+                                    <Anchor href={meta.website} target={"_blank"} weight={700}>
+                                        {meta.displayName}
+                                    </Anchor>
                                 </Text>
-                            }
-                            {meta.youtubeLink &&
+                            )}
+                            {meta.youtubeLink && (
                                 <Text p={"md"} size="xl" weight={700} mb="x">
-                                    <Anchor href={meta.youtubeLink} target={"_blank"}
-                                            weight={700}><IconBrandYoutube/></Anchor>
+                                    <Anchor href={meta.youtubeLink} target={"_blank"} weight={700}>
+                                        <IconBrandYoutube />
+                                    </Anchor>
                                 </Text>
-                            }
+                            )}
                         </Group>
-                        <Text p={"md"}>
-                            {meta.description}
-                        </Text>
+                        <Text p={"md"}>{meta.description}</Text>
                     </Paper>
                 </Skeleton>
             </Tabs.Panel>
             <Tabs.Panel value={"versions"}>
                 <Paper shadow="xl" radius="lg" p="md">
-                    <Table striped highlightOnHover horizontalSpacing="sm" verticalSpacing="sm" fontSize="md">
+                    <Table
+                        striped
+                        highlightOnHover
+                        horizontalSpacing="sm"
+                        verticalSpacing="sm"
+                        fontSize="md"
+                    >
                         <thead>
-                        <tr>
-                            <th>Version</th>
-                            <th>Metadata URL</th>
-                        </tr>
+                            <tr>
+                                <th>Version</th>
+                                <th>Metadata URL</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {rows.length > 0 ? rows :
-                            <tr>
-                                <td>No releases</td>
-                            </tr>
-                        }
+                            {rows.length > 0 ? (
+                                rows
+                            ) : (
+                                <tr>
+                                    <td>No releases</td>
+                                </tr>
+                            )}
                         </tbody>
                     </Table>
                 </Paper>
@@ -110,9 +115,9 @@ export function ProjectData(props: any) {
             </Tabs.Panel>
             <Tabs.Panel value={"settings"}>
                 <Paper shadow="xl" radius="lg" p="md">
-                    <EditProject/>
+                    <EditProject />
                 </Paper>
             </Tabs.Panel>
         </StyledTabs>
-    );
+    )
 }

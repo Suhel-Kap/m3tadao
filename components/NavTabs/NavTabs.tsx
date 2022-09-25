@@ -1,19 +1,19 @@
-import {Tabs, Grid, Container, Title, Center, Paper, Skeleton} from "@mantine/core"
-import {PostCard} from "../PostCard"
+import { Tabs, Grid, Container, Title, Center, Paper, Skeleton } from "@mantine/core"
+import { PostCard } from "../PostCard"
 import PostData from "../PostCard/data.json"
-import {ChatRoom} from "../ChatRoom"
-import {useEffect, useState} from "react"
-import {ManageProfile} from "../ManageProfile"
+import { ChatRoom } from "../ChatRoom"
+import { useEffect, useState } from "react"
+import { ManageProfile } from "../ManageProfile"
 import Link from "next/link"
 import useContract from "../../hooks/useContract"
 
 const defaultActive = "first"
 
-export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
+export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
     const [active, setActive] = useState(defaultActive)
     const [isLoading, setIsLoading] = useState(true)
     const [posts, setPosts] = useState([])
-    const {getLensPost} = useContract()
+    const { getLensPost } = useContract()
     useEffect(() => {
         if (isPostCountFetched) {
             initializePosts()
@@ -23,7 +23,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
 
     const postCards = posts.map((post, index) => {
         return (
-            <Grid.Col lg={4} md={6}>
+            <Grid.Col key={index} lg={4} md={6}>
                 <Skeleton visible={isLoading} animate={true}>
                     <Container size={400} px="xs">
                         <PostCard
@@ -49,7 +49,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
                 title: jsonObj.content,
                 description: jsonObj.description,
                 image: "https://" + jsonObj.image + ".ipfs.w3s.link/image",
-                authorAddress: jsonObj.address
+                authorAddress: jsonObj.address,
             }
             setPosts((oldPosts) => [...oldPosts, post])
             setIsLoading(false)
@@ -75,9 +75,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
 
             <Tabs.Panel value={"first"}>
                 <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
-                    <Grid>
-                        {postCards}
-                    </Grid>
+                    <Grid>{postCards}</Grid>
                 </Paper>
             </Tabs.Panel>
             <Tabs.Panel value={"second"}>
@@ -85,7 +83,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
                     Your Conversations
                 </Title>
                 <Paper shadow="xl" radius="lg" p="md">
-                    {active === "second" ? <ChatRoom isActive={active === "second"}/> : null}
+                    {active === "second" ? <ChatRoom isActive={active === "second"} /> : null}
                     <Center>
                         <Title order={6} color={"dimmed"}>
                             Powered by XMTP
@@ -95,7 +93,7 @@ export function NavTabs({isOwner, profId, postCount, isPostCountFetched}) {
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>
                 <Paper shadow="xl" radius="lg" p="md">
-                    <ManageProfile/>
+                    <ManageProfile />
                 </Paper>
             </Tabs.Panel>
         </Tabs>

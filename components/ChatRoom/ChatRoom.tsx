@@ -8,7 +8,8 @@ import { DirectChat } from "../DirectChat"
 import XMTPContext from "../../context/XMTPProvider"
 
 export class GroupMessageCodec {
-    constructor(authorityId, typeId) {
+    GROUP_MESSAGE_CONTENT_TYPE: ContentTypeId
+    constructor(authorityId: string, typeId: string) {
         this.GROUP_MESSAGE_CONTENT_TYPE = new ContentTypeId({
             authorityId: authorityId,
             typeId: typeId,
@@ -21,7 +22,7 @@ export class GroupMessageCodec {
         return this.GROUP_MESSAGE_CONTENT_TYPE
     }
 
-    encode(content) {
+    encode(content: any) {
         return {
             type: this.GROUP_MESSAGE_CONTENT_TYPE,
             parameters: {},
@@ -30,7 +31,7 @@ export class GroupMessageCodec {
         }
     }
 
-    decode(content) {
+    decode(content: { content: BufferSource | undefined }) {
         const bytes = new TextDecoder().decode(content.content)
         return JSON.parse(bytes)
     }
@@ -81,7 +82,7 @@ export function ChatRoom({ isActive }) {
         initializeConversationsListener(ctx.XMTP)
     }
 
-    const initializeConversationsListener = async (xmtp) => {
+    const initializeConversationsListener = async (xmtp: Client | null) => {
         const allConversations = await xmtp.conversations.list()
         // console.log(allConversations)
         for (const conversation of allConversations) {
