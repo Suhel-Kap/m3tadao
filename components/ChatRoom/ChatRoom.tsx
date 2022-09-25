@@ -1,10 +1,10 @@
-import { Grid, Text, NavLink, Center, Title, Skeleton } from "@mantine/core"
-import { Client, ContentTypeId } from "@xmtp/xmtp-js"
-import { useContext, useEffect, useState } from "react"
-import { IconChevronRight } from "@tabler/icons"
-import { useAccount, useSigner } from "wagmi"
+import {Grid, Text, NavLink, Center, Title, Skeleton} from "@mantine/core"
+import {Client, ContentTypeId} from "@xmtp/xmtp-js"
+import {useContext, useEffect, useState} from "react"
+import {IconChevronRight} from "@tabler/icons"
+import {useAccount, useSigner} from "wagmi"
 import XmtpChat from "../Chats/XmtpChat"
-import { DirectChat } from "../DirectChat"
+import {DirectChat} from "../DirectChat"
 import XMTPContext from "../../context/XMTPProvider"
 
 export class GroupMessageCodec {
@@ -39,14 +39,14 @@ export class GroupMessageCodec {
 export function ChatRoom() {
     const ctx = useContext(XMTPContext)
     const [active, setActive] = useState(0)
-    const { data: signer, isLoading } = useSigner()
-    const { address } = useAccount()
+    const {data: signer, isLoading} = useSigner()
+    const {address} = useAccount()
     const [conversations, setConversations] = useState([])
     // const [xmtp, setXmtp] = useState()
     const [isConversationLoading, setIsConversationLoading] = useState(true)
     const dataDefault = [
         {
-            title: "General Chat",
+            title: "Chat Room 1",
             groupId: "1234",
             groupChat: true,
         },
@@ -120,11 +120,11 @@ export function ChatRoom() {
 
     const items = data.map((item, index) => (
         <NavLink
-            sx={(theme) => ({ width: "85%", [theme.fn.smallerThan("md")]: { width: "100%" } })}
+            sx={(theme) => ({width: "85%", [theme.fn.smallerThan("md")]: {width: "100%"}})}
             key={item.groupId || item.otherUser}
             active={index === active}
             label={item.title}
-            rightSection={<IconChevronRight size={14} stroke={1.5} />}
+            rightSection={<IconChevronRight size={14} stroke={1.5}/>}
             onClick={() => {
                 console.log("index", index)
                 setActive(index)
@@ -132,7 +132,7 @@ export function ChatRoom() {
         />
     ))
     const skeletonItems = new Array(10).fill(
-        <Skeleton height={24} mt={6} width="100%" radius="xl" />
+        <Skeleton height={24} mt={6} width="100%" radius="xl"/>
     )
 
     return (
@@ -152,7 +152,7 @@ export function ChatRoom() {
                     <Grid.Col lg={9} md={10}>
                         <Text>
                             {data[active].groupChat ? (
-                                <XmtpChat xmtp={ctx.XMTP} />
+                                <XmtpChat xmtp={ctx.XMTP}/>
                             ) : (
                                 ctx.XMTP && (
                                     <DirectChat
