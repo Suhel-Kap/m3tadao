@@ -19,6 +19,10 @@ To complete that task
    The contract interaction hook is located here : 
    
    https://github.com/Suhel-Kap/m3tadao/blob/worldcoin/hooks/useWorldcoin.js
+   
+   
+  Here is a screenshot of a verified profile => 
+  
 
 
 
