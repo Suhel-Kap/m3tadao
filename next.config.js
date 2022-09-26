@@ -6,11 +6,15 @@ const nextConfig = {
 
 module.exports = {
     ...nextConfig,
-    webpack5: true,
-    webpack: (config) => {
-        config.resolve.fallback = { fs: false, path: false }
-
-        return config
+    typescript: {
+        // !! WARN !!
+        // Dangerously allow production builds to successfully complete even if
+        // your project has type errors.
+        // !! WARN !!
+        ignoreBuildErrors: true,
+    },
+    future: {
+        webpack5: true,
     },
     // future: {
     //     webpack5: true,

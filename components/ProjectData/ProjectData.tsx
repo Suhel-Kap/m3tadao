@@ -3,7 +3,6 @@ import { StyledTabs } from "../StyledTabs"
 import { EditProject } from "../EditProject"
 import { MemberCard } from "../MemberCard"
 import { useEffect, useState } from "react"
-import { m3taDao } from "../../constants/contractAddresses.json"
 import { IconBrandYoutube } from "@tabler/icons"
 
 export function ProjectData(props: any) {
@@ -25,7 +24,7 @@ export function ProjectData(props: any) {
             let temp = Object.keys(propsData.members).map(function (key) {
                 return propsData.members[key].id
             })
-            temp = temp.filter((mem) => mem !== m3taDao)
+            temp = temp.filter((mem) => mem !== "0x28fb200c401bcc2eb407d29aed6b5bae2d3f98c3")
             setMemberData(temp)
             setReleaseData(propsData.releases)
             const response = fetch(
@@ -47,7 +46,7 @@ export function ProjectData(props: any) {
     ))
 
     const memberRows = memberData.map((row, index) => (
-        <MemberCard key={index} address={row} name={"Project Admin"} />
+        <MemberCard address={row} name={"Project Admin"} key={index} />
     ))
 
     return (

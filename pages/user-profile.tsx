@@ -26,7 +26,7 @@ const UserProfile: NextPage = () => {
     const {getLensPostCount} = useContract()
     useEffect(() => {
         if (router.query) {
-            initialize()
+            initialize().then()
         }
     }, [router.query])
 
@@ -93,10 +93,6 @@ const UserProfile: NextPage = () => {
         console.log("ex", externalProfileData)
         setStats((oldStats) => ({...oldStats, ...externalProfileData}))
     }
-
-    const {Main} = useSuperFluid()
-    const provider = useProvider()
-    const {data: signer, isLoading} = useSigner()
 
     return (
         <>

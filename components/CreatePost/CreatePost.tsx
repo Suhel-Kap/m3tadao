@@ -53,7 +53,7 @@ export function CreatePost() {
                 autoClose: 2000,
             })
 
-            router.reload()
+            // router.reload()
             // router.push("/home")
         } catch (e) {
             console.log(e)

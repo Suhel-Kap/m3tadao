@@ -75,7 +75,10 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
 
             <Tabs.Panel value={"first"}>
                 <Paper shadow="xl" radius="lg" p="md" pt={"lg"}>
-                    <Grid>{postCards}</Grid>
+                    <Grid>
+                        {postCards}
+                        {posts.length === 0 && <Title order={3}>This user is yet to post</Title>}
+                    </Grid>
                 </Paper>
             </Tabs.Panel>
             <Tabs.Panel value={"second"}>

@@ -1,17 +1,18 @@
 import Head from "next/head"
-import { useAccount, useSigner } from "wagmi"
-import { useRouter } from "next/router"
-import { useEffect } from "react"
-import { AppProps } from "next/app"
+import {useAccount, useSigner} from "wagmi"
+import {useRouter} from "next/router"
+import {useEffect} from "react"
+import {AppProps} from "next/app"
+
 const AuthWrapper = (props) => {
     // const {Component, pageProps} = props
     const router = useRouter()
-    const { data: signer } = useSigner()
+    const {data: signer} = useSigner()
 
-    const { isConnected, isDisconnected, status } = useAccount()
+    const {isConnected, isDisconnected, status} = useAccount()
 
     useEffect(() => {
-        console.log(signer)
+        console.log("authwrapper", signer)
         if (isDisconnected && router.pathname !== "/" && router.pathname !== "/registration") {
             console.log("reached")
             router.push("/")
@@ -23,8 +24,8 @@ const AuthWrapper = (props) => {
             {isConnected
                 ? props.children
                 : router.pathname === "/" || router.pathname === "/registration"
-                ? props.children
-                : null}
+                    ? props.children
+                    : null}
         </>
     )
 }

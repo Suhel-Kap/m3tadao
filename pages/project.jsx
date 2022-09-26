@@ -1,5 +1,5 @@
 import Head from "next/head";
-import {Button, Container, Group, Title} from "@mantine/core";
+import {Button, Container, Group, Text, Title} from "@mantine/core";
 import Link from "next/link";
 import {Layout} from "../components/Layout";
 import {ProjectData} from "../components/ProjectData";
@@ -21,12 +21,13 @@ export default function Project() {
                 projId: projectId
             }
         }
+        console.log("query", query)
         graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
             console.log("res", res)
             setName(res.data.project.name)
             setData(res.data.project)
         })
-    }, [])
+    }, [router.query])
 
     return (
         <Layout>
@@ -34,9 +35,12 @@ export default function Project() {
                 <title>Project - m3tadao</title>
             </Head>
             <Group position={"apart"} p={"xl"} mx={"xl"} my={"sm"}>
-                <Title>
-                    Welcome to {name} 👋
-                </Title>
+                <Group>
+                    <Title>
+                        Welcome to {name} 👋
+                    </Title>
+                    <Text color={"dimmed"} size={"sm"}>Powered by Valist</Text>
+                </Group>
                 <Button.Group>
                     <Link href={`https://app.valist.io/-/account/${orgName}/project/${name}/create/release`} passHref>
                         <Button
