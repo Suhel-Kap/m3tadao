@@ -8,12 +8,12 @@ import axios from "axios"
 import useWorldcoin from "../../hooks/useWorldcoin"
 import { Button } from "@mantine/core"
 
-const WorldIDWidget =
-    dynamic <
-    WidgetProps >
-    (() => import("@worldcoin/id").then((mod) => mod.WorldIDWidget), { ssr: false })
+const WorldIDWidget = dynamic<WidgetProps>(
+    () => import("@worldcoin/id").then((mod) => mod.WorldIDWidget),
+    { ssr: false }
+)
 
-export default function Worldcoin({ profId }) {
+export function Worldcoin({ profId }) {
     const { verifyProfile } = useWorldcoin()
 
     const decode = (hash) => {
@@ -37,25 +37,23 @@ export default function Worldcoin({ profId }) {
     }
 
     return (
-        <Button>
-            <WorldIDWidget
-                actionId="wid_staging_2ef14547b3882ab92e3ed9ce378062f7" // obtain this from developer.worldcoin.org
-                signal={profId}
-                enableTelemetry
-                onSuccess={(verificationResponse) => {
-                    handleOnSuccess(verificationResponse)
-                    console.log(verificationResponse)
-                    // sendReq({
-                    //     action_id: "wid_staging_3b9e688b2f1b9fa2957249b3df8edb9f",
-                    //     signal: { profId },
-                    //     proof: decode(verificationResponse.proof),
-                    //     nullifier_hash: verificationResponse.nullifier_hash,
-                    //     merkle_root: verificationResponse.merkle_root,
-                    // })
-                }}
-                onError={(error) => console.error(error)}
-            />
-        </Button>
+        <WorldIDWidget
+            actionId="wid_staging_2ef14547b3882ab92e3ed9ce378062f7" // obtain this from developer.worldcoin.org
+            signal={profId}
+            enableTelemetry
+            onSuccess={(verificationResponse) => {
+                handleOnSuccess(verificationResponse)
+                console.log(verificationResponse)
+                // sendReq({
+                //     action_id: "wid_staging_3b9e688b2f1b9fa2957249b3df8edb9f",
+                //     signal: { profId },
+                //     proof: decode(verificationResponse.proof),
+                //     nullifier_hash: verificationResponse.nullifier_hash,
+                //     merkle_root: verificationResponse.merkle_root,
+                // })
+            }}
+            onError={(error) => console.error(error)}
+        />
     )
 }
 

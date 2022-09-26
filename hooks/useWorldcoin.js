@@ -16,13 +16,9 @@ const useWorldcoin = () => {
             signer
         )
 
-        var tx = await humanCheckContractInstance.createLensProfile(
-            profId,
-            root,
-            nullifierHash,
-            proof,
-            { gasLimit: 5000000 }
-        )
+        var tx = await humanCheckContractInstance.verify(profId, root, nullifierHash, proof, {
+            gasLimit: 5000000,
+        })
         return await tx.wait()
     }
 

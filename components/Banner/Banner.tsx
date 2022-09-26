@@ -20,7 +20,7 @@ import {
     IconAlertCircle,
 } from "@tabler/icons"
 import { showNotification, updateNotification } from "@mantine/notifications"
-import Worldcoin from "../Worldcoin/Worldcoin"
+import { Worldcoin } from "../Worldcoin"
 import useContract from "../../hooks/useContract"
 import { useRouter } from "next/router"
 import useTableland from "../../hooks/useTableland"
