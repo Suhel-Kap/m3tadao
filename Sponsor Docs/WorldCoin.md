@@ -23,6 +23,7 @@ To complete that task
    
   Here is a screenshot of a verified profile => 
   
+  ![image](../public/worldcoin.png)
 
 
 
