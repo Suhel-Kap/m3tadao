@@ -1,29 +1,29 @@
-import type {NextPage} from "next"
+import type { NextPage } from "next"
 import Head from "next/head"
-import {Banner} from "../components/Banner"
-import {NavTabs} from "../components/NavTabs"
+import { Banner } from "../components/Banner"
+import { NavTabs } from "../components/NavTabs"
 import defaultStats from "../components/Banner/stats.json"
-import {useAccount, useProvider, useSigner} from "wagmi"
-import {useEffect, useState} from "react"
-import {useRouter} from "next/router"
-import {Layout} from "../components/Layout"
-import {Stack} from "@mantine/core"
+import { useAccount, useProvider, useSigner } from "wagmi"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import { Layout } from "../components/Layout"
+import { Stack } from "@mantine/core"
 import useSuperFluid from "../hooks/useSuperFluid"
 import useTableland from "../hooks/useTableland"
-import {graphql} from "@valist/sdk"
-import {fetchUserProfile} from "../constants/graphql/queries"
+import { graphql } from "@valist/sdk"
+import { fetchUserProfile } from "../constants/graphql/queries"
 import useContract from "../hooks/useContract"
 
 const UserProfile: NextPage = () => {
-    const {isConnected, isDisconnected, status} = useAccount()
+    const { isConnected, isDisconnected, status } = useAccount()
     const router = useRouter()
-    const {address} = useAccount()
+    const { address } = useAccount()
     const [profId, setProfId] = useState()
     const isOwner = address === router.query.address
     const [stats, setStats] = useState(defaultStats)
     const [isPostCountFetched, setIsPostCountFetched] = useState(false)
-    const {getUserData} = useTableland()
-    const {getLensPostCount} = useContract()
+    const { getUserData } = useTableland()
+    const { getLensPostCount } = useContract()
     useEffect(() => {
         if (router.query) {
             initialize().then()
@@ -42,7 +42,7 @@ const UserProfile: NextPage = () => {
             avatar: "https://" + user[4] + ".ipfs.w3s.link/image",
             name: user[3],
         }
-        setStats((oldStats) => ({...oldStats, ...userStats}))
+        setStats((oldStats) => ({ ...oldStats, ...userStats }))
         fetchPostsCount(user[1])
         fetchExternalURIs(user[7])
 
@@ -69,7 +69,7 @@ const UserProfile: NextPage = () => {
                 label: "Posts",
             },
         ]
-        setStats((oldStats) => ({...oldStats, stats: lensStats}))
+        setStats((oldStats) => ({ ...oldStats, stats: lensStats }))
     }
 
     const fetchPostsCount = async (profileId) => {
@@ -82,7 +82,7 @@ const UserProfile: NextPage = () => {
                 value: totalPosts,
                 label: "Posts",
             }
-            return {...oldStats, stats}
+            return { ...oldStats, stats }
         })
         setIsPostCountFetched(true)
     }
@@ -91,7 +91,7 @@ const UserProfile: NextPage = () => {
         const response = await fetch("https://" + cid + ".ipfs.w3s.link/json")
         const externalProfileData = await response.json()
         console.log("ex", externalProfileData)
-        setStats((oldStats) => ({...oldStats, ...externalProfileData}))
+        setStats((oldStats) => ({ ...oldStats, ...externalProfileData }))
     }
 
     return (
@@ -112,8 +112,8 @@ const UserProfile: NextPage = () => {
                 {/*}}>*/}
                 {/*    superfluid*/}
                 {/*</button>*/}
-                <Stack m={"sm"} sx={{height: "100%"}}>
-                    <Banner isOwner={isOwner} {...stats} />
+                <Stack m={"sm"} sx={{ height: "100%" }}>
+                    <Banner isOwner={isOwner} {...stats} profId={profId} />
                     <NavTabs
                         isOwner={isOwner}
                         isPostCountFetched={isPostCountFetched}

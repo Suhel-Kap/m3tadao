@@ -20,6 +20,7 @@ import {
     IconAlertCircle,
 } from "@tabler/icons"
 import { showNotification, updateNotification } from "@mantine/notifications"
+import Worldcoin from "../Worldcoin/Worldcoin"
 import useContract from "../../hooks/useContract"
 import { useRouter } from "next/router"
 import useTableland from "../../hooks/useTableland"
@@ -47,6 +48,7 @@ interface UserCardImageProps {
     skills: string[]
     designation: string
     isOwner: boolean
+    profId: string
 }
 
 export function Banner({
@@ -61,6 +63,7 @@ export function Banner({
     github,
     twitter,
     isOwner,
+    profId,
 }: UserCardImageProps) {
     const { classes, theme } = useStyles()
     console.log("stats", stats)
@@ -253,7 +256,8 @@ export function Banner({
                 <Stack m={"md"}>
                     <Center mb={0}>
                         <Button.Group>
-                            <Button
+                            <Worldcoin profId={profId} />
+                            {/* <Button
                                 radius="md"
                                 mt="xl"
                                 size="md"
@@ -264,7 +268,7 @@ export function Banner({
                                 }}
                             >
                                 Verify Profile on Worldcoin
-                            </Button>
+                            </Button> */}
                             <Button
                                 radius="md"
                                 mt="xl"
