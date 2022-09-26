@@ -1,4 +1,4 @@
-Tableland in m3tadao is the most used tech. With tableland we are indexing all data into our tables
+Tableland in m3tadao is the most used tech. With tableland we are indexing all the data that m3tadao is creating (text and CIDs for images and json files) into our tables 
 We have created this tables into our contracts, that way only our contracts are having the access control to write&update table raws
 
 TABLES : 
