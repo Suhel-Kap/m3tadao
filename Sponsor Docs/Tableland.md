@@ -22,14 +22,14 @@ created by our contract. Here is a query to take m3tadao current registed users
        https://testnet.tableland.network/query?s=SELECT%20*%20FROM%20M3taHire_80001_3143
 
 
-=> We are also introducing a Storage Contract to Store all of our SQL Statements so other contracts that Integrate Tableland does not have to 
-waste the contract limit size in bytes!!!
+=> We are also introducing a Storage Contract to Store all of our SQL Statements so m3tadao contracts that Integrate Tableland does not have to 
+waste the contract limit size in bytes for sql string statements!!!
 
 => The Query Contract is located in that address on mumbai testnet => [0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443](https://mumbai.polygonscan.com/address/0x469205fE9B115195BA73509FC6F8561c49b9E1e2#code)
        
-Tableland was a pretty nice integration because it gaves us the oportunity to index our signed user data by making a query with his wallet data.
+Tableland was a pretty nice integration because it gaves us the oportunity to index our signed user data by making a query with his wallet address.
 
-in that manner we are getting fast profile loading times and we also have the proper IDs to then fetch with that IDs more specific data using TheGraph!
+in that manner we are getting fast profile loading times and we also have the proper IDs to then fetch with that IDs( valist account Hex & Lens profileIdHex ) more specific data using TheGraph!
 
 Also it gave us the oppportunity to keep our Database safe cause of the ac only by the contract but moreover for creating the Hiring table anf Post table to 
 
