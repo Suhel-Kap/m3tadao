@@ -3,7 +3,6 @@ import {StyledTabs} from '../StyledTabs'
 import {EditProject} from "../EditProject"
 import {MemberCard} from "../MemberCard"
 import {useEffect, useState} from "react"
-import {m3taDao} from "../../constants/contractAddresses.json"
 import {IconBrandYoutube} from "@tabler/icons"
 
 export function ProjectData(props: any) {
@@ -25,7 +24,7 @@ export function ProjectData(props: any) {
             let temp = Object.keys(propsData.members).map(function (key) {
                 return propsData.members[key].id
             })
-            temp = temp.filter(mem => mem !== m3taDao)
+            temp = temp.filter(mem => mem !== "0x28fb200c401bcc2eb407d29aed6b5bae2d3f98c3")
             setMemberData(temp)
             setReleaseData(propsData.releases)
             const response = fetch(`https://${propsData.metaURI}.ipfs.gateway.valist.io/json`).then(res => res.json().then(data => setMeta(data)))
@@ -33,8 +32,8 @@ export function ProjectData(props: any) {
         }
     }, [props.data])
 
-    const rows = releaseData.map((row) => (
-        <tr key={row.name}>
+    const rows = releaseData.map((row: any, index) => (
+        <tr key={index}>
             <td>{row.name}</td>
             <td><Anchor href={row.metaURI} target={"_blank"} weight={700}>view metadata</Anchor></td>
         </tr>

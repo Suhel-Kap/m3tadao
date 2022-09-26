@@ -115,9 +115,6 @@ export function HeaderSimple() {
                 app,
                 icon,
                 image,
-                url,
-                blockchain,
-                notification
             } = oneNotification;
 
             return (
@@ -129,9 +126,9 @@ export function HeaderSimple() {
                     app={app}
                     icon={icon}
                     image={image}
-                    url={url}
-                    theme={"dark"}
-                    chainName={blockchain as chainNameType} // if using Typescript
+                    url={"https://m3tadao.vercel.app"}
+                    theme={"white"}
+                    chainName={"POLYGON_TEST_MUMBAI"} // if using Typescript
                 />
             );
         })}

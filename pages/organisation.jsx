@@ -11,7 +11,6 @@ import {CreatePost} from "../components/CreatePost";
 import {useRouter} from "next/router";
 import {fetchOrganisationDetails} from "../constants/graphql/queries"
 import {graphql} from "@valist/sdk"
-import {m3taDao} from "../constants/contractAddresses.json"
 import {HiringRequestTable} from "../components/HiringRequestTable";
 import {RequirementsCard} from "../components/RequirementsCard";
 
@@ -26,7 +25,7 @@ const Organisation = () => {
     const router = useRouter()
 
     useEffect(() => {
-        initialize()
+        initialize().then()
         setAccId(router.query.accId)
     }, [router.query])
 
@@ -43,7 +42,7 @@ const Organisation = () => {
         const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data?.account
         setName(graphRes.name)
         setProjectsData(graphRes.projects)
-        setMembers(graphRes.members.filter(mem => mem.id !== m3taDao.toLowerCase()))
+        setMembers(graphRes.members.filter(mem => mem.id !== "0x28fb200c401bcc2eb407d29aed6b5bae2d3f98c3"))
     }
 
     const projects = projectsData.map((project, index) => {
@@ -70,9 +69,12 @@ const Organisation = () => {
             <title>Organisation - m3tadao</title>
         </Head>
         <Group position={"apart"} p={"xl"} mx={"xl"} my={"sm"}>
-            <Title>
-                Welcome to {name} 👋
-            </Title>
+            <Group>
+                <Title>
+                    Welcome to {name} 👋
+                </Title>
+                <Text color={"dimmed"} size={"sm"}>Powered by Valist</Text>
+            </Group>
             <Button.Group>
                 <Button
                     radius="md"

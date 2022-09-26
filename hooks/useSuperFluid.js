@@ -33,7 +33,7 @@ const useSuperFluid = () => {
             console.log(result)
 
             // let Xtokens
-            let flowRate = ((totalTokens * 10 ** 18) / (duration * 3600)).toFixed(0) // X tokens per day
+            let flowRate = ((totalTokens * 10 ** 18) / (duration * 3600)) //.toFixed(0) // X tokens per day
 
             let factor = (duration * 3600).toFixed(0)  // 1 day stream
             const plannedStreamConfig = {

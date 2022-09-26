@@ -1,5 +1,5 @@
 import {Layout} from "../components/Layout"
-import {Center, Button, Modal, Title, Container, Grid, ScrollArea,} from "@mantine/core"
+import {Center, Button, Modal, Text, Title, Container, Grid, ScrollArea,} from "@mantine/core"
 import {CreatePost} from "../components/CreatePost"
 import Head from "next/head"
 import makeBlockie from "ethereum-blockies-base64";
@@ -18,7 +18,7 @@ export default function Home() {
             transition="fade"
             transitionDuration={500}
             transitionTimingFunction="ease"
-            title={<Title>Add a post</Title>}
+            title={<Title>Add a post <Text color={"dimmed"} size={"sm"}>Powered by Lens</Text></Title>}
             onClose={() => setIsModalOpen(false)}
         >
             <Center>
