@@ -1,8 +1,12 @@
-Tableland in m3tadao is the most used tech. With tableland we are indexing all the data that m3tadao is creating (text and CIDs for images and json files) into our tables 
-We have created this tables into our contracts, that way only our contracts are having the access control to write&update table raws
+Tableland in m3tadao is the most used tech. With tableland we are inserting all the data that m3tadao is creating (text and CIDs for images and json files) into our tables. 
+We have created this tables into our contracts, that way only our contracts are having the access control to write&update into them.
 
+One future usecase that tableland can give as is when we will start deploying our Contracts in other evm chains we also can make join queries 
+to fetch data from other chains and display user contents from all the supported EVMs by m3tadao. In that case users won't  have to change metamask 
+network to see the data they want for other chains and also we will render each page fast with preloaded data from all the different Chains.
+ 
 TABLES : 
-=> m3taUser where we are storing all the LensProfiles data + (some additional data like all cids to win some recursive cid lookUp time)
+=> m3taUser where we are storing all the LensProfiles data + (some additional data like all cids to win some recursive cid lookUps time)
 created by our contract. Here is a query to take m3tadao current registed users
 (https://testnet.tableland.network/query?s=SELECT%20*%20FROM%20M3taUser_80001_3140)
           
@@ -22,8 +26,10 @@ created by our contract. Here is a query to take m3tadao current registed users
        https://testnet.tableland.network/query?s=SELECT%20*%20FROM%20M3taHire_80001_3143
 
 
-=> We are also introducing a Storage Contract to Store all of our SQL Statements so m3tadao contracts that Integrate Tableland does not have to 
+=> We are also introducing a Storage Contract to Store all of our SQL Statements.That way m3tadao contracts that Integrate Tableland does not have to 
 waste the contract limit size in bytes for sql string statements!!!
+
+=> This is our main Contract that is mainly uses Tableland => https://github.com/Suhel-Kap/m3tadao/blob/main/contracts/contracts/m3taDao.sol
 
 => The Query Contract is located in that address on mumbai testnet => [0x7Db13fC6D1eBD131E2e6CA3bD7b3cD1e4eBB8443](https://mumbai.polygonscan.com/address/0x469205fE9B115195BA73509FC6F8561c49b9E1e2#code)
        
@@ -31,10 +37,9 @@ Tableland was a pretty nice integration because it gaves us the oportunity to in
 
 in that manner we are getting fast profile loading times and we also have the proper IDs to then fetch with that IDs( valist account Hex & Lens profileIdHex ) more specific data using TheGraph!
 
-Also it gave us the oppportunity to keep our Database safe cause of the ac only by the contract but moreover for creating the Hiring table anf Post table to 
+Also it gave us the oppportunity to keep our Database safe cause of the ac only by the contract, it is used as Our 1st layres frontend indexer and finally  for 
 
-cover our Organizations usecases!
-
+creating the Hiring table and the Post table to cover our Organizations usecases!
 
 Here is the hook where we are making the Queries from the backend : https://github.com/Suhel-Kap/m3tadao/blob/mantine/hooks/useTableland.js
 
