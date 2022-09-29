@@ -1,8 +1,8 @@
 import {useEffect, useRef, useState} from "react"
 import {AsyncInput} from "../AsyncInput"
-import {graphql} from "@valist/sdk"
+import {ApolloClient, InMemoryCache, ApolloProvider, gql} from '@apollo/client'
 import {useRouter} from "next/router"
-import {GraphqlQuery} from "@valist/sdk/dist/graphql"
+import {ACCOUNTS_SEARCH__QUERY} from "../../constants/graphql/queries";
 
 export interface NameInputProps {
     parentId: string | number;
@@ -21,13 +21,17 @@ export function NameInput(props: NameInputProps) {
     const [loading, setLoading] = useState(false)
     const [exists, setExists] = useState(false)
     const [error, setError] = useState<string>()
-    const [query, setQuery] = useState<GraphqlQuery>()
+    const [query, setQuery] = useState()
     const router = useRouter()
+    const client = new ApolloClient({
+        uri: 'https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai',
+        cache: new InMemoryCache(),
+    })
     useEffect(() => {
         const name = props.value
         if(router.pathname === "/create-organisation" || router.pathname === "/create-release") { // TODO: fix this
             setQuery({
-                query: graphql.ACCOUNTS_SEARCH__QUERY,
+                query: gql(ACCOUNTS_SEARCH__QUERY),
                 variables: {
                     search: props.value,
                 }
@@ -35,7 +39,7 @@ export function NameInput(props: NameInputProps) {
         }
         if(router.pathname === "/create-project"){
             setQuery({
-                query: "\n query UniqueProject($project: String, $accountName: String){ accounts(where:{name: $accountName}){ projects(where: {name_contains: $project}){ id, name } }}\n",
+                query: gql`\n query UniqueProject($project: String, $accountName: String){ accounts(where:{name: $accountName}){ projects(where: {name_contains: $project}){ id, name } }}\n`,
                 variables: {
                     project: name,
                     accountName: props.parentId
@@ -60,7 +64,7 @@ export function NameInput(props: NameInputProps) {
                 setLoading(false)
                 return
             }
-            graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
+            client.query(query).then(res => {
                 if (router.pathname === "/create-organisation" && res.data.accounts.length > 0) {
                     setError("Name already exists")
                     setExists(true)
