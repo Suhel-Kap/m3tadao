@@ -1,7 +1,6 @@
 import { Tabs, Grid, Container, Title, Center, Paper, Skeleton } from "@mantine/core"
 import { PostCard } from "../PostCard"
 import PostData from "../PostCard/data.json"
-import { ChatRoom } from "../ChatRoom"
 import { useEffect, useState } from "react"
 import { ManageProfile } from "../ManageProfile"
 import Link from "next/link"
@@ -67,7 +66,6 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
                 <Tabs.Tab value="first">Posts</Tabs.Tab>
                 {isOwner && (
                     <>
-                        <Tabs.Tab value="second">Your Chats</Tabs.Tab>
                         <Tabs.Tab value="third">Manage Profile</Tabs.Tab>
                     </>
                 )}
@@ -79,19 +77,6 @@ export function NavTabs({ isOwner, profId, postCount, isPostCountFetched }) {
                         {postCards}
                         {posts.length === 0 && <Title order={3}>This user is yet to post</Title>}
                     </Grid>
-                </Paper>
-            </Tabs.Panel>
-            <Tabs.Panel value={"second"}>
-                <Title order={4} align={"center"} mb={"lg"} mt={0}>
-                    Your Conversations
-                </Title>
-                <Paper shadow="xl" radius="lg" p="md">
-                    {active === "second" ? <ChatRoom isActive={active === "second"} /> : null}
-                    <Center>
-                        <Title order={6} color={"dimmed"}>
-                            Powered by XMTP
-                        </Title>
-                    </Center>
                 </Paper>
             </Tabs.Panel>
             <Tabs.Panel value={"third"}>
