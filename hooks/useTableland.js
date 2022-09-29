@@ -18,13 +18,14 @@ const useTableland = () => {
     const { data: signer, isError, isLoading } = useSigner()
     const { address } = useAccount()
 
-    const getUserExists = async () => {
+    const getUserExists = async (addr = address) => {
+
         const tableland = await connect({ network: "testnet", chain: "polygon-mumbai" })
         // console.log("address", address)
         const { columns, rows } = await tableland.read(
             `SELECT * FROM ${
                 tableNames["m3taUser"]
-            } WHERE ownerAddress='${address.toLowerCase()}';`
+            } WHERE ownerAddress='${addr.toLowerCase()}';`
         )
 
         // const { columns, rows } = await tableland.read(`SELECT * FROM ${tableNames["m3taUser"]};`)

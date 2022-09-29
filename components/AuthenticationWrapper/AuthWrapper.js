@@ -1,8 +1,6 @@
-import Head from "next/head"
 import {useAccount, useSigner} from "wagmi"
 import {useRouter} from "next/router"
 import {useEffect} from "react"
-import {AppProps} from "next/app"
 
 const AuthWrapper = (props) => {
     // const {Component, pageProps} = props

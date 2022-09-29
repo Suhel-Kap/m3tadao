@@ -18,14 +18,15 @@ export const getServerSideProps = async ({ req, res }) => {
 
 const Home = () => {
     const router = useRouter()
+    const {address} = useAccount()
     const { status: sessionStatus } = useSession()
     const { getUserExists } = useTableland()
     useEffect(() => {
-        sessionStatus === "authenticated" && checkStatus()
-    }, [sessionStatus])
+        sessionStatus === "authenticated" && address && checkStatus()
+    }, [sessionStatus, address])
 
     const checkStatus = async () => {
-        const isUserExists = await getUserExists()
+        const isUserExists = await getUserExists(address)
         if (isUserExists) {
             router.push("/home")
         } else {

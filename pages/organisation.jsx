@@ -1,19 +1,6 @@
 import { Layout } from "../components/Layout"
 import Head from "next/head"
-import {
-    Text,
-    Container,
-    Grid,
-    Tabs,
-    Title,
-    Paper,
-    Center,
-    Stack,
-    SimpleGrid,
-    Button,
-    Group,
-    Modal,
-} from "@mantine/core"
+import {Text, Container, Grid, Tabs, Title, Paper, Center, Stack, SimpleGrid, Button, Group, Modal,} from "@mantine/core"
 import { ProjectCard } from "../components/ProjectCard"
 import { useEffect, useState } from "react"
 import { IconPlus } from "@tabler/icons"
@@ -23,7 +10,7 @@ import { MemberCard } from "../components/MemberCard"
 import { CreatePost } from "../components/CreatePost"
 import { useRouter } from "next/router"
 import { fetchOrganisationDetails } from "../constants/graphql/queries"
-import { graphql } from "@valist/sdk"
+import {ApolloClient, InMemoryCache, ApolloProvider, gql} from '@apollo/client'
 import { HiringRequestTable } from "../components/HiringRequestTable"
 import { RequirementsCard } from "../components/RequirementsCard"
 
@@ -36,6 +23,10 @@ const Organisation = () => {
     const [accId, setAccId] = useState("")
 
     const router = useRouter()
+    const client = new ApolloClient({
+        uri: 'https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai',
+        cache: new InMemoryCache(),
+    })
 
     useEffect(() => {
         initialize().then()
@@ -46,7 +37,7 @@ const Organisation = () => {
         const accHex = router.query.accHex
 
         const query = {
-            query: fetchOrganisationDetails,
+            query: gql(fetchOrganisationDetails),
             variables: {
                 accHex: accHex,
             },
@@ -54,10 +45,7 @@ const Organisation = () => {
 
         // const graphRes = (await graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query)).data.accounts
         const graphRes = (
-            await graphql.fetchGraphQL(
-                "https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai",
-                query
-            )
+            await client.query(query)
         ).data?.account
         setName(graphRes.name)
         setProjectsData(graphRes.projects)

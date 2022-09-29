@@ -5,28 +5,35 @@ import {Layout} from "../components/Layout";
 import {ProjectData} from "../components/ProjectData";
 import {useRouter} from "next/router"
 import {fetchProjectDetails} from "../constants/graphql/queries"
-import {graphql} from "@valist/sdk"
+import {ApolloClient, InMemoryCache, ApolloProvider, gql} from '@apollo/client'
 import {useEffect, useState} from "react";
 
 export default function Project() {
     const router = useRouter()
-    const orgName = router.query.orgName
+    const client = new ApolloClient({
+        uri: 'https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai',
+        cache: new InMemoryCache(),
+    })
+    // const orgName = router.query.orgName
     const [data, setData] = useState(null)
     const [name, setName] = useState("project")
     useEffect(() => {
         const projectId = router.query.accHex
-        const query = {
-            query: fetchProjectDetails,
+        client.query({
+            query: gql(fetchProjectDetails),
             variables: {
                 projId: projectId
             }
-        }
-        console.log("query", query)
-        graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
+        }).then(res => {
             console.log("res", res)
             setName(res.data.project.name)
             setData(res.data.project)
         })
+        // graphql.fetchGraphQL("https://api.thegraph.com/subgraphs/name/valist-io/valistmumbai", query).then(res => {
+        //     console.log("res", res)
+        //     setName(res.data.project.name)
+        //     setData(res.data.project)
+        // })
     }, [router.query])
 
     return (
@@ -42,7 +49,7 @@ export default function Project() {
                     <Text color={"dimmed"} size={"sm"}>Powered by Valist</Text>
                 </Group>
                 <Button.Group>
-                    <Link href={`https://app.valist.io/-/account/${orgName}/project/${name}/create/release`} passHref>
+                    <Link href={`https://app.valist.io/-/account/baetr/project/${name}/create/release`} passHref>
                         <Button
                             component={"a"}
                             target={"_blank"}

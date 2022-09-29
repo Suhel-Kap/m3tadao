@@ -8,9 +8,8 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { Layout } from "../components/Layout"
 import { Stack } from "@mantine/core"
-import useSuperFluid from "../hooks/useSuperFluid"
 import useTableland from "../hooks/useTableland"
-import { graphql } from "@valist/sdk"
+import {ApolloClient, InMemoryCache, ApolloProvider, gql} from '@apollo/client'
 import { fetchUserProfile } from "../constants/graphql/queries"
 import useContract from "../hooks/useContract"
 
@@ -24,6 +23,10 @@ const UserProfile: NextPage = () => {
     const [isPostCountFetched, setIsPostCountFetched] = useState(false)
     const { getUserData } = useTableland()
     const { getLensPostCount } = useContract()
+    const client = new ApolloClient({
+        uri: 'https://api-mumbai.lens.dev/',
+        cache: new InMemoryCache(),
+    })
     useEffect(() => {
         if (router.query) {
             initialize().then()
@@ -47,13 +50,13 @@ const UserProfile: NextPage = () => {
         fetchExternalURIs(user[7])
 
         const query = {
-            query: fetchUserProfile,
+            query: gql(fetchUserProfile),
             variables: {
                 profHex: profileHex,
             },
         }
 
-        const graphRes = (await graphql.fetchGraphQL("https://api-mumbai.lens.dev/", query)).data
+        const graphRes = (await client.query(query)).data
             .profiles.items[0].stats
         const lensStats = [
             {
